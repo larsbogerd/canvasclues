@@ -1,0 +1,25 @@
+services:
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4
+    container_name: codenames-mysql
+    restart: always
+    environment:
+      TZ: Europe/Amsterdam
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: codenames_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - ./sqldata:/var/lib/mysql:Z
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:Z
+    ports:
+      - "3306:3306"

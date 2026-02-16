@@ -67,7 +67,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-
 # Default ignored files
 /shelf/
 /workspace.xml
@@ -118,3 +117,6 @@ __screenshots__/
 
 # Sensitive stuff
 .env
+
+# MySQL localdata
+sqldata/
