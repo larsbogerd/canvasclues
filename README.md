@@ -70,8 +70,6 @@ Documentation:
 
 # Build and Test
 
-> Note: Most parts are still **TBD** depending on code.
-
 > Note: Detailed setup and configuration instructions for the back-end and front-end are documented in their respective README files:
 > - `BACK-END.md`
 > - `FRONT-END.md`
@@ -85,30 +83,38 @@ From the root of the repository (where `compose.yaml` is located):
 docker compose up -d
 ```
 
-Check if it’s running:
+To wipe and compose a fresh database, use the provided scripts from the project root:
 
-```bash
-docker compose ps
-```
+- **Mac/Linux:** `./clean-db.sh`
+- **Windows:** `clean-db.bat`
 
-Stop the containers when finished:
-
-```bash
-docker compose down
-```
+This stops containers (if still running), cleans the database, and starts fresh.
 
 ---
 
 ## 2) Run the back-end (Spring Boot)
 
-(**TBD**)
+Open the project in IntelliJ and run `NamesApplication`.
+The back-end starts on port **8082**.
 
 ---
 
 ## 3) Run the front-end (Vue)
 
-(**TBD**)
+From the project root:
+> Make sure the back-end is running first.
 
+```bash
+cd src/front-end
+npm install && npm run dev
+```
+
+---
+Stop the containers when finished:
+
+```bash
+docker compose down
+```
 ---
 
 # Contribute

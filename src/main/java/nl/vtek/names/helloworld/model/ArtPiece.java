@@ -1,4 +1,4 @@
-package nl.vtek.names.model;
+package nl.vtek.names.helloworld.model;
 
 
 import jakarta.persistence.Column;

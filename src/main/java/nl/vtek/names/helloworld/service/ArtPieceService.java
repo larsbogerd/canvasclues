@@ -1,6 +1,7 @@
-package nl.vtek.names.controller;
+package nl.vtek.names.helloworld.service;
 
-import nl.vtek.names.model.ArtPiece;
+import nl.vtek.names.helloworld.repository.ArtPieceRepo;
+import nl.vtek.names.helloworld.model.ArtPiece;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -32,9 +32,49 @@ From the project root:
 docker compose up -d
 ````
 
+To wipe and compose a fresh database, use the provided scripts from the project root:
+
+- **Mac/Linux:** `./clean-db.sh`
+- **Windows:** `clean-db.bat`
+
+---
+### 2. Run the application
+
+Open the project in IntelliJ and run `NamesApplication`.
+The back-end starts on port **8082**.
+
 ---
 
-### 2. ???
+## Package Structure
+
+### `art` – Artwork fetching
+Calls the Art Institute of Chicago API, maps responses to `ArtWork` entities, and exposes a random artwork endpoint (16 IIIF image URLs).
+
+### `game` – Game logic & persistence
+Creates games by pulling random artworks into `GameCard` entities, persists them to MySQL, and retrieves them by `gameId`.
+
+### `helloworld` – Legacy/sandbox
+Used for initial setup and testing. Not part of the game flow.
+
+---
+
+## API Endpoints
+
+### Game
+
+| Method | Endpoint                | Description                                                                                             |
+|--------|-------------------------|---------------------------------------------------------------------------------------------------------|
+| POST   | `/api/v1/game/start`    | Start a new game. Creates 16 cards, returns them with a shared `gameId` and stores them in the database |
+| GET    | `/api/v1/game/{gameId}` | Retrieve an existing game's cards (ordered by position)                                                 |
+
+### Artwork (testing purposes)
+
+| Method | Endpoint                           | Description                                                           |
+|--------|------------------------------------|-----------------------------------------------------------------------|
+| GET    | `/api/v1/artworks?page=1&limit=25` | Fetch paginated artworks from AIC API. Can define page and pull limit |
+| GET    | `/api/v1/artworks/random`          | Fetch 16 random artwork images (used internally by game/start)        |
+
+---
 
 ## Configuration
 
@@ -44,12 +84,29 @@ Application configuration is handled via:
 src/main/resources/application.properties
 ```
 
-> Environment variable setup is currently **TBD** and will be documented once finalized.
+Key properties:
+- `spring.datasource.url` – MySQL connection URL
+- `spring.jpa.hibernate.ddl-auto=update` – Hibernate auto-creates/updates tables
 
 ---
 
 
+## Spring Data JPA – Query Methods
+
+Spring Data generates SQL queries from repository method names. No manual SQL needed.
+
+Examples:
+- `findByGameId(int gameId)` → `SELECT * FROM game_cards WHERE game_id = ?`
+- `findByGameIdOrderByPositionAsc(int gameId)` → same, ordered by position
+- `findByGameIdAndIsSpymasterPick(int gameId, boolean isSpymasterPick)` → filter by game and spymaster selection
+
+Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+
+---
+
 ## Future Improvements (TBD)
 
+* Hint entity + endpoints
+* Guess/operative phase logic
+* Card color assignment (`GameCardColor` enum is ready)
 * API documentation
-* Docker setup
