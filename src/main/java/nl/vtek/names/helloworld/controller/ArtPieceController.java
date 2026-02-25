@@ -23,16 +23,11 @@ public class ArtPieceController {
     @GetMapping
     public List<ArtPiece> getArtPieces() {
         return artPieceService.getAllArtPieces();
-    };
+    }
 
     @PostMapping
     public void addArtPiece(@RequestBody ArtPiece artPiece) {
         ArtPieceService.insertArtPiece(artPiece);
         artPieceRepo.save(artPiece);
     }
-
-
-
-
-
 }
