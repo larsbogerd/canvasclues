@@ -1,16 +1,17 @@
 <script setup>
 
-import Card from "@/components/card.vue";
+import Card from "@/components/Card.vue";
 const prop = defineProps({
       cards: Array,
 })
 
+const emit = defineEmits(['card-clicked'])
 
 </script>
 
 <template>
   <div class="grid">
-    <card v-for="(card,index) in prop.cards" :img-url="card.imageUrl"  :alt-text="card.altText" :key="index"/>
+    <card v-for="(card,index) in prop.cards" :id="card.id" :img-url="card.imageUrl"  :alt-text="card.altText" :key="index" @card-clicked="(id, clicked) => emit('card-clicked', id, clicked)"/>
   </div>
 </template>
 

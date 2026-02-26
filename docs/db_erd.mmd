@@ -1,0 +1,26 @@
+erDiagram
+  GAMES ||--o{ CARDS : has
+  GAMES ||--o{ HINTS : has
+
+  GAMES {
+    int id PK
+    timestamp created_at
+    varchar phase
+  }
+
+  CARDS {
+    UUID id PK
+    int game_id FK
+    varchar card_type
+    varchar image_url
+    varchar alt_text
+    boolean is_spymaster_pick
+    boolean is_revealed
+    int position
+  }
+
+  HINTS {
+    int id PK
+    int game_id FK
+    varchar hint_content
+  }

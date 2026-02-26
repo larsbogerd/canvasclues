@@ -1,6 +1,6 @@
 <script setup>
-import SelectFase from "@/components/pages/SelectFase.vue";
-import HintFase from "@/components/pages/HintFase.vue";
+import SpymasterPhase from "@/components/pages/SpymasterPhase.vue";
+import OperativePhase from "@/components/pages/OperativePhase.vue";
 import {onUpdated, ref} from "vue";
 
 let gameID = ref()
@@ -12,8 +12,8 @@ onUpdated(() => {
 
 <template>
   <div class="app">
-    <select-fase :gameID="gameID"/>
-    <hint-fase @game-started="(id) => gameID = id"/>
+    <spymaster-phase @game-started="(id) => gameID = id"/>
+    <operative-phase :gameID="gameID"/>
   </div>
 </template>
 

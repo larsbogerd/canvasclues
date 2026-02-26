@@ -14,7 +14,7 @@ public class GameCard {
     private int gameId;
     private int position;
 //    @Enumerated(EnumType.STRING)
-//    private GameCardColor cardColor;
+//    private GameCardType cardType;
     private String imageUrl;
     @Column(name="alt_text", length = 1000)
     private String altText;
@@ -73,12 +73,12 @@ public class GameCard {
         this.altText = altText;
     }
 
-//    public GameCardColor getCardColor() {
-//        return cardColor;
+//    public GameCardType getCardType() {
+//        return cardType;
 //    }
 //
-//    public void setCardColor(GameCardColor cardColor) {
-//        this.cardColor = cardColor;
+//    public void setCardType(GameCardType cardType) {
+//        this.cardType = cardType;
 //    }
 
     public boolean isSpymasterPick() {

@@ -1,0 +1,17 @@
+.card-base {
+    background-color: blue;
+    display: grid;
+    padding: 4rem;
+    border-radius: 20px;
+}
+
+.game-board {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+    grid-row-gap: 2vw;
+    grid-column-gap: 1vw;
+    width: 60%;
+    height: 100%;
+    padding: 1%;
+}

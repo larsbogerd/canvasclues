@@ -3,7 +3,7 @@ import axios from 'axios';
 import {ref, watch} from "vue";
 import {onMounted} from "vue";
 import InputField from "@/components/InputField.vue";
-import Grid from "@/components/grid.vue";
+import Grid from "@/components/Grid.vue";
 let hintInput = ref("");
 const cards = ref([]);
 const hint = ref(null);

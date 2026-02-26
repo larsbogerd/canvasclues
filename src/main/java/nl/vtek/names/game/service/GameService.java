@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -37,6 +38,21 @@ public class GameService {
     }
 
     public List<GameCard> getGame(int gameId) {
-        return gameCardRepository.findByGameIdOrderByPositionAsc(gameId);
+        return gameCardRepository.findByGameId(gameId);
+    }
+
+    public List<GameCard> updateCards(List<UUID> cardIds, Boolean isSpymasterPick, Boolean isRevealed) {
+        List<GameCard> cards = gameCardRepository.findAllById(cardIds);
+
+        for (GameCard card : cards) {
+            if (isSpymasterPick != null) {
+                card.setSpymasterPick(isSpymasterPick);
+            }
+            if (isRevealed != null) {
+                card.setRevealed(isRevealed);
+            }
+        }
+
+        return gameCardRepository.saveAll(cards);
     }
 }

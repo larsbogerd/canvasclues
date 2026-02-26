@@ -66,6 +66,7 @@ Used for initial setup and testing. Not part of the game flow.
 |--------|-------------------------|---------------------------------------------------------------------------------------------------------|
 | POST   | `/api/v1/game/start`    | Start a new game. Creates 16 cards, returns them with a shared `gameId` and stores them in the database |
 | GET    | `/api/v1/game/{gameId}` | Retrieve an existing game's cards (ordered by position)                                                 |
+| PATCH  | `/api/v1/game/cards`    | Batch update cards. Accepts `{ cardIds: [...], spymasterPick: bool, revealed: bool }` — sets whichever field is provided |
 
 ### Artwork (testing purposes)
 

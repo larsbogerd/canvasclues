@@ -120,3 +120,4 @@ __screenshots__/
 
 # MySQL localdata
 sqldata/
+package-lock.json

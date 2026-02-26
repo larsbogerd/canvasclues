@@ -4,8 +4,9 @@ import nl.vtek.names.game.model.GameCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface GameCardRepository extends JpaRepository<GameCard, Integer> {
+public interface GameCardRepository extends JpaRepository<GameCard, UUID> {
 
-    List<GameCard> findByGameIdOrderByPositionAsc(int gameId);
+    List<GameCard> findByGameId(int gameId);
 }
