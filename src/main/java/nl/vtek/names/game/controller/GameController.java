@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/game")
 public class GameController {
 
@@ -23,19 +24,17 @@ public class GameController {
     public GameController(GameService gameService) {
         this.gameService = gameService;
     }
-    @CrossOrigin
+
     @PostMapping("/start")
     public List<GameCard> startGame() {
         return gameService.startGame();
     }
 
-    @CrossOrigin
     @GetMapping("/{gameId}")
     public List<GameCard> getGame(@PathVariable int gameId) {
         return gameService.getGame(gameId);
     }
 
-    @CrossOrigin
     @PatchMapping("/cards")
     public List<GameCard> updateCards(@RequestBody CardUpdateRequest request) {
         return gameService.updateCards(request.getCardIds(), request.getSpymasterPick(), request.getRevealed());

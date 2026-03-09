@@ -22,14 +22,16 @@ public class GameService {
         this.gameCardRepository = gameCardRepository;
     }
 
+    private static final int BOARD_SIZE = 16;
+
     public List<GameCard> startGame() {
         int gameId = ThreadLocalRandom.current().nextInt(1, 999999);
 
-        List<ArtWorkResponse> artworks = artWorkService.getRandomArtworks();
+        List<ArtWorkResponse> artworks = artWorkService.searchArtworks(BOARD_SIZE);
 
         List<GameCard> cards = new ArrayList<>();
         for (ArtWorkResponse artwork : artworks) {
-            cards.add(new GameCard(gameId, artwork.id(), artwork.imageUrl(), artwork.altText()));
+            cards.add(new GameCard(gameId, artwork.imageUrl(), artwork.altText()));
         }
 
         gameCardRepository.saveAll(cards);

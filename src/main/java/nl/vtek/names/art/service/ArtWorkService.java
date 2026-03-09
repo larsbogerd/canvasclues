@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class ArtWorkService {
@@ -22,26 +21,19 @@ public class ArtWorkService {
         this.artWorkMapper = artWorkMapper;
     }
 
-    public List<ArtWork> fetchArtworks(int page, int limit) {
-        return articClient.getArtworks(page, limit).pulledData().stream()
-                .map(artWorkMapper::toEntity)
-                .filter(artWork -> artWork.getImageId() != null)
-                .toList();
-    }
-
-    public List<ArtWorkResponse> getRandomArtworks() {
-        List<ArtWork> artworks = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            int randomPage = ThreadLocalRandom.current().nextInt(1, 999);
-            artworks.addAll(fetchArtworks(randomPage, 20));
-        }
+    public List<ArtWorkResponse> searchArtworks(int size) {
+        List<ArtWork> artworks = new ArrayList<>(
+                articClient.searchArtworks(100).pulledData().stream()
+                        .map(artWorkMapper::toEntity)
+                        .filter(artWork -> artWork.getImageId() != null)
+                        .toList()
+        );
 
         Collections.shuffle(artworks);
 
         List<ArtWorkResponse> responses = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            ArtWork artWork = artworks.get(i);
-            responses.add(artWorkMapper.toResponse(artWork, i + 1));
+        for (int i = 0; i < Math.min(size, artworks.size()); i++) {
+            responses.add(artWorkMapper.toResponse(artworks.get(i), i + 1));
         }
         return responses;
     }

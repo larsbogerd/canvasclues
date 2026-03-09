@@ -10,9 +10,8 @@ public class GameCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID uuid;
     private int gameId;
-    private int position;
 //    @Enumerated(EnumType.STRING)
 //    private GameCardType cardType;
     private String imageUrl;
@@ -24,9 +23,8 @@ public class GameCard {
     public GameCard() {
     }
 
-    public GameCard(int gameId, int position, String imageUrl, String altText) {
+    public GameCard(int gameId, String imageUrl, String altText) {
         this.gameId = gameId;
-        this.position = position;
         this.imageUrl = imageUrl;
         this.altText = altText;
         this.isSpymasterPick = false;
@@ -34,11 +32,11 @@ public class GameCard {
     }
 
     public UUID getId() {
-        return id;
+        return uuid;
     }
 
     public void setId(UUID id) {
-        this.id = id;
+        this.uuid = id;
     }
 
     public int getGameId() {
@@ -47,14 +45,6 @@ public class GameCard {
 
     public void setGameId(int gameId) {
         this.gameId = gameId;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public String getImageUrl() {

@@ -70,10 +70,9 @@ Used for initial setup and testing. Not part of the game flow.
 
 ### Artwork (testing purposes)
 
-| Method | Endpoint                           | Description                                                           |
-|--------|------------------------------------|-----------------------------------------------------------------------|
-| GET    | `/api/v1/artworks?page=1&limit=25` | Fetch paginated artworks from AIC API. Can define page and pull limit |
-| GET    | `/api/v1/artworks/random`          | Fetch 16 random artwork images (used internally by game/start)        |
+| Method | Endpoint                    | Description                                                               |
+|--------|-----------------------------|---------------------------------------------------------------------------|
+| GET    | `/api/v1/artworks?limit=25` | Fetch 25 artworks from AIC API using ArtWork model. Can only define limit |
 
 ---
 

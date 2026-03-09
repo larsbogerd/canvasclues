@@ -1,8 +1,13 @@
 package nl.vtek.names.art.client;
 
 import nl.vtek.names.art.dto.ArticResponse;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class ArticClient {
@@ -15,19 +20,27 @@ public class ArticClient {
                 .build();
     }
 
-    // Optional query filters:
-    // &query[term][artwork_type_title]=Painting
-    // &query[term][department_title]=Modern Art
-    // &query[term][classification_title]=painting
-    // &query[term][artist_title]=Claude Monet
-    // &q=landscape  (free-text search)
+    public ArticResponse searchArtworks(int size) {
+        Map<String, Object> query = Map.of(
+                "query", Map.of(
+                        "bool", Map.of(
+                                "must", List.of(
+                                        Map.of("term", Map.of("is_public_domain", true)),
+                                        Map.of("term", Map.of("is_on_view", true)),
+                                        Map.of("exists", Map.of("field", "image_id"))
+                                )
+                        )
+                ),
+                // Based on max results -16.
+                "from", ThreadLocalRandom.current().nextInt(0, 2324),
+                "size", size
+        );
 
-    public ArticResponse getArtworks(int page, int limit) {
         return restClient
-                .get()
-                .uri("/artworks?page={page}&limit={limit}&fields=id,image_id,title,artist_display,date_display" +
-                        "&query[term][is_public_domain]=true" +
-                        "&query[exists][field]=image_id", page, limit)
+                .post()
+                .uri("/artworks/search?fields={fields}", "id,image_id,title,artist_display,date_display")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(query)
                 .retrieve()
                 .body(ArticResponse.class);
     }
