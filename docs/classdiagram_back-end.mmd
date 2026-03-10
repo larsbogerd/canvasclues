@@ -1,0 +1,151 @@
+---
+title: Back-end
+---
+classDiagram
+    %% Art package
+    class ArtWork {
+        -int id
+        -String imageId
+        -String title
+        -String artistDisplay
+        -String dateDisplay
+    }
+
+    class ArtWorkResponse {
+        <<record>>
+        +int id
+        +String imageUrl
+        +String altText
+    }
+
+    class ArticResponse {
+        <<record>>
+        +List~ArticDto~ pulledData
+    }
+
+    class ArticDto {
+        <<record>>
+        +int id
+        +String title
+        +String artistDisplay
+        +String imageId
+        +String dateDisplay
+    }
+
+    class ArtWorkMapper {
+        <<component>>
+        -String IIIF_ARTIC_BASE_URL
+        +toEntity(ArticDto) ArtWork
+        +toResponse(ArtWork, int) ArtWorkResponse
+    }
+
+    class ArtWorkService {
+        <<service>>
+        +searchArtworks(int) List~ArtWorkResponse~
+    }
+
+    class ArticClient {
+        <<component>>
+        -RestClient restClient
+        +searchArtworks(int) ArticResponse
+    }
+
+    class ArticApi {
+        <<external>>
+        api.artic.edu
+    }
+
+    class ArtWorkController {
+        <<restcontroller>>
+        +getArtworks(int) List~ArtWorkResponse~
+    }
+
+    ArtWork <.. ArtWorkMapper
+    ArtWorkResponse <.. ArtWorkMapper
+    ArticResponse <.. ArticClient
+    ArticResponse *-- ArticDto
+    ArticDto <.. ArtWorkMapper
+    ArtWorkMapper <-- ArtWorkService
+    ArticClient <-- ArtWorkService
+    ArtWorkService <-- ArtWorkController
+    ArticClient --> ArticApi
+
+    %% Game package
+    class GameCard {
+        -UUID uuid
+        -int gameId
+        -String imageUrl
+        -String altText
+        -boolean isSpymasterPick
+        -boolean isRevealed
+    }
+
+    class GameCardType {
+        <<enumeration>>
+        TEAM1
+        TEAM2
+        NEUTRAL
+        ASSASSIN
+    }
+
+
+    class CardUpdateRequest {
+        -List~UUID~ cardIds
+        -Boolean spymasterPick
+        -Boolean isRevealed
+    }
+
+    class GameCardRepository {
+        <<interface>>
+        +findByGameId(int) List~GameCard~
+    }
+
+    class GameService {
+        <<service>>
+        -int BOARD_SIZE = 16
+        +startGame() List~GameCard~
+        +getGame(int) List~GameCard~
+        +updateCards(List~UUID~, Boolean, Boolean) List~GameCard~
+    }
+
+    class GameController {
+        <<restcontroller>>
+        +startGame() List~GameCard~
+        +getGame(int) List~GameCard~
+        +updateCards(CardUpdateRequest) List~GameCard~
+    }
+
+    class Hint {
+        -Long id
+        -String hintContent
+        +getHintContent()
+        +setHintContent(String)
+    }
+
+    class HintRepo {
+        <<interface>>
+        +findTopByOrderByIdDesc() Optional~Hint~
+    }
+
+    class HintService {
+        <<service>>
+        +createHint(Hint)
+        +getNewestHint() Optional~Hint~
+        -validateHint(Hint)
+    }
+
+    class HintController {
+        <<restcontroller>>
+        +getNewestHint() ResponseEntity~Hint~
+        +createHint(Hint)
+    }
+
+    GameCard <.. GameCardRepository
+    GameCardRepository <-- GameService
+    GameService <-- GameController
+    GameController ..> CardUpdateRequest
+    GameService --> ArtWorkService
+
+    Hint <.. HintRepo
+    HintRepo <-- HintService
+    HintService <-- HintController
