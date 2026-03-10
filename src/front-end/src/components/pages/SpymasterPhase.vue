@@ -3,6 +3,7 @@ import inputField from "@/components/InputField.vue";
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
+import FaseLabel from "@/components/faseLabel.vue";
 const hintInput = ref("");
 const cards = ref([]);
 const selectedCards = ref([]);
@@ -97,17 +98,17 @@ async function patchCards() {
   }
 }
 
-
 </script>
 
 <template>
   <div class="screen">
-    <div class="grid">
       <grid :cards="cards" @card-clicked="handleCardClicked"/>
-    </div>
-    <div>
-      <p>Selected: {{ selectedCards.length }}</p>
-      <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="jou hint:" condition=""/>
+    <div style="text-align: center;">
+    <p>Selected: {{ selectedCards.length }}</p>
+      <div class="info">
+        <fase-label fase="Spymaster"/>
+        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="jou hint:" condition=""/>
+      </div>
     </div>
   </div>
 </template>
@@ -121,4 +122,10 @@ async function patchCards() {
   justify-items: center;
   align-items: center;
 }
+
+.info{
+  display: grid;
+  justify-items: center;
+}
+
 </style>

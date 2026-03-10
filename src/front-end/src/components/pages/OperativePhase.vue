@@ -4,9 +4,11 @@ import {ref, watch} from "vue";
 import {onMounted} from "vue";
 import InputField from "@/components/InputField.vue";
 import Grid from "@/components/Grid.vue";
+import FaseLabel from "@/components/faseLabel.vue";
 let hintInput = ref("");
 const cards = ref([]);
 const hint = ref(null);
+const selectedCards = ref([]);
 const prop = defineProps(
     {
     gameID: 0
@@ -16,7 +18,6 @@ const prop = defineProps(
 onMounted(() => {
   getHint();
 });
-
 
 watch(() => prop.gameID, (newId) => {
   if (newId) {
@@ -55,11 +56,15 @@ async function getGrid() {
 
 <template>
   <div class="screen">
-    <div class="grid">
       <grid :cards="cards"/>
-    </div>
-    <input-field readonly="readonly" name="end turn" v-on:submit="endTurn" v-model="hintInput"
-                 v-if="hint" :label="'jou hint is: '+hint.hintContent" :InputDisabled="true" />
+    <div style="text-align: center;">
+      <p>Selected: {{ selectedCards.length }}</p>
+      <div class="info">
+        <fase-label fase="Operative"/>
+        <input-field readonly="readonly" name="end turn" v-on:submit="endTurn" v-model="hintInput"
+                     v-if="hint" :label="'jou hint is: '+hint.hintContent" :InputDisabled="true" />
+      </div>
+  </div>
   </div>
 </template>
 
@@ -71,5 +76,9 @@ async function getGrid() {
   grid-template-columns: 1fr 1fr;
   justify-items: center;
   align-items: center;
+}
+.info{
+  display: grid;
+justify-items: center;
 }
 </style>

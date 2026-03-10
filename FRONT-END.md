@@ -28,7 +28,8 @@ From the project root:
 > make sure the back-end is running
 ```bash
 cd src/front-end
-npm install && npm run dev
+npm install 
+npm run dev
 ````
 
 ---
