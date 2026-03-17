@@ -8,12 +8,14 @@ const hintInput = ref("");
 const cards = ref([]);
 const selectedCards = ref([]);
 const emit = defineEmits(['game-started']);
+let gameId;
 
 async function submit(input) {
   let status;
   try {
     if (validateInput(input)) {
       await patchCards()
+
       status = await postHint(input)
       httpStatus(status)
     } else {
@@ -47,16 +49,7 @@ function validateInput(input) {
   return regex.test(input);
 }
 
-async function postHint(input) {
-  try {
-    const response = await axios.post('http://localhost:8082/api/v1/hints', {
-      hintContent: input
-    })
-    return response.status;
-  } catch (error) {
-    return error.status;
-  }
-}
+
 
 onMounted(startGame);
 
@@ -66,12 +59,23 @@ async function startGame() {
     cards.value = response.data;
     console.log("Fetched hints:", cards.value);
     for (const card of cards.value){
-      const gameID = card.gameId;
-      console.log(gameID);
-      emit('game-started', gameID);
+      gameId = card.gameId;
+      emit('game-started', gameId);
     }
   } catch(error) {
     console.log(error);
+  }
+}
+
+async function postHint(input) {
+  try {
+    const response = await axios.post('http://localhost:8082/api/v1/hints', {
+      hintContent: input,
+      gameId: gameId
+    })
+    return response.status;
+  } catch (error) {
+    return error.status;
   }
 }
 
@@ -107,7 +111,7 @@ async function patchCards() {
     <p>Selected: {{ selectedCards.length }}</p>
       <div class="info">
         <fase-label fase="Spymaster"/>
-        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="jou hint:" condition=""/>
+        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="jouw hint:" condition=""/>
       </div>
     </div>
   </div>

@@ -3,17 +3,17 @@ import SpymasterPhase from "@/components/pages/SpymasterPhase.vue";
 import OperativePhase from "@/components/pages/OperativePhase.vue";
 import {onUpdated, ref} from "vue";
 
-let gameID = ref()
+let gameId = ref()
 onUpdated(() => {
-  console.log(gameID.value)
+  console.log(gameId.value)
 });
 
 </script>
 
 <template>
   <div class="app">
-    <spymaster-phase @game-started="(id) => gameID = id"/>
-    <operative-phase :gameID="gameID"/>
+    <spymaster-phase @game-started="(id) => gameId = id"/>
+    <operative-phase :gameId="gameId"/>
   </div>
 </template>
 

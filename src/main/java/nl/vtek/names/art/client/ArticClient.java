@@ -32,7 +32,7 @@ public class ArticClient {
                         )
                 ),
                 // Based on max results -16.
-                "from", ThreadLocalRandom.current().nextInt(0, 2324),
+                "from", ThreadLocalRandom.current().nextInt(0, 500),
                 "size", size
         );
 

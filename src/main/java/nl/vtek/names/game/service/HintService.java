@@ -1,5 +1,6 @@
 package nl.vtek.names.game.service;
 
+import nl.vtek.names.game.dto.HintRequest;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.repository.HintRepo;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,12 @@ public class HintService {
         this.hintRepo = hintRepo;
     }
 
-    public void createHint(Hint hint) {
-        validateHint(hint);
+    public void createHint(HintRequest request) {
+
+        Hint hint = new Hint();
+        hint.setGameId(request.getGameId());
+        hint.setHintContent(request.getHintContent());
+
         hintRepo.save(hint);
     }
 

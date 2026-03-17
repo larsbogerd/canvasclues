@@ -12,11 +12,14 @@ public class Hint {
     @Column(nullable = false, length = 50)
     private String hintContent;
 
+    private int gameId;
+
 
     public Hint() {}
 
-    public Hint(String hintContent) {
+    public Hint(String hintContent, int gameId) {
         this.hintContent = hintContent;
+        this.gameId = gameId;
     }
 
 
@@ -28,4 +31,20 @@ public class Hint {
         this.hintContent = hintContent;
     }
 
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

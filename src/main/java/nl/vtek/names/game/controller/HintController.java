@@ -1,5 +1,6 @@
 package nl.vtek.names.game.controller;
 
+import nl.vtek.names.game.dto.HintRequest;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.repository.HintRepo;
 import nl.vtek.names.game.service.HintService;
@@ -29,8 +30,8 @@ public class HintController {
     }
 
     @PostMapping
-    public void createHint(@RequestBody Hint hint) {
-        hintService.createHint(hint);
+    public void createHint(@RequestBody HintRequest hintRequest) {
+        hintService.createHint(hintRequest);
 
     }
 

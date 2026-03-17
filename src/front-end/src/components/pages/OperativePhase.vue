@@ -62,7 +62,7 @@ async function getGrid() {
       <div class="info">
         <fase-label fase="Operative"/>
         <input-field readonly="readonly" name="end turn" v-on:submit="endTurn" v-model="hintInput"
-                     v-if="hint" :label="'jou hint is: '+hint.hintContent" :InputDisabled="true" />
+                     v-if="hint" :label="'jouw hint is: '+hint.hintContent" :InputDisabled="true" />
       </div>
   </div>
   </div>
