@@ -64,7 +64,7 @@ async function getGrid() {
         <input-field readonly="readonly" name="end turn" v-on:submit="endTurn" v-model="hintInput"
                      v-if="hint" :label="'jouw hint is: '+hint.hintContent" :InputDisabled="true" />
       </div>
-  </div>
+    </div>
   </div>
 </template>
 

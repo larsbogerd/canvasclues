@@ -1,6 +1,7 @@
 <script setup>
 import SpymasterPhase from "@/components/pages/SpymasterPhase.vue";
 import OperativePhase from "@/components/pages/OperativePhase.vue";
+import StartingPage from "@/components/pages/StartingPage.vue";
 import {onUpdated, ref} from "vue";
 
 let gameId = ref()
