@@ -37,6 +37,6 @@ public class GameController {
 
     @PatchMapping("/cards")
     public List<GameCard> updateCards(@RequestBody CardUpdateRequest request) {
-        return gameService.updateCards(request.getCardIds(), request.getSpymasterPick(), request.getRevealed());
+        return gameService.updateCards(request.getCardIds(), request.getSpymasterPick());
     }
 }

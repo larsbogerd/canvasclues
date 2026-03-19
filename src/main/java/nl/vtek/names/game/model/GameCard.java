@@ -18,7 +18,6 @@ public class GameCard {
     @Column(name="alt_text", length = 1000)
     private String altText;
     private boolean isSpymasterPick;
-    private boolean isRevealed;
 
     public GameCard() {
     }
@@ -28,7 +27,6 @@ public class GameCard {
         this.imageUrl = imageUrl;
         this.altText = altText;
         this.isSpymasterPick = false;
-        this.isRevealed = false;
     }
 
     public UUID getId() {
@@ -79,11 +77,4 @@ public class GameCard {
         this.isSpymasterPick = spymasterPick;
     }
 
-    public boolean isRevealed() {
-        return isRevealed;
-    }
-
-    public void setRevealed(boolean revealed) {
-        this.isRevealed = revealed;
-    }
 }

@@ -11,7 +11,7 @@ const hint = ref(null);
 const selectedCards = ref([]);
 const prop = defineProps(
     {
-    gameID: 0
+    gameId: 0
     }
 )
 
@@ -19,7 +19,7 @@ onMounted(() => {
   getHint();
 });
 
-watch(() => prop.gameID, (newId) => {
+watch(() => prop.gameId, (newId) => {
   if (newId) {
     getGrid();
   }
@@ -27,7 +27,8 @@ watch(() => prop.gameID, (newId) => {
 
 async function getHint() {
   try {
-    const response = await axios.get('http://localhost:8082/api/v1/hints');
+    const id = prop.gameId
+    const response = await axios.get(`http://localhost:8082/api/v1/hints/${id}`);
     hint.value = response.data;
 
     console.log("Fetched hint:", hint.value);
@@ -42,7 +43,7 @@ function endTurn() {
 
 async function getGrid() {
   try {
-    const id = prop.gameID
+    const id = prop.gameId
     console.log(id)
     const response = await axios.get(`http://localhost:8082/api/v1/game/${id}`);
     cards.value = response.data;

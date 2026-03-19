@@ -43,15 +43,12 @@ public class GameService {
         return gameCardRepository.findByGameId(gameId);
     }
 
-    public List<GameCard> updateCards(List<UUID> cardIds, Boolean isSpymasterPick, Boolean isRevealed) {
+    public List<GameCard> updateCards(List<UUID> cardIds, Boolean isSpymasterPick) {
         List<GameCard> cards = gameCardRepository.findAllById(cardIds);
 
         for (GameCard card : cards) {
             if (isSpymasterPick != null) {
                 card.setSpymasterPick(isSpymasterPick);
-            }
-            if (isRevealed != null) {
-                card.setRevealed(isRevealed);
             }
         }
 

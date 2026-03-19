@@ -22,9 +22,9 @@ public class HintController {
         this.hintRepo = hintRepo;
     }
 
-    @GetMapping
-    public ResponseEntity<Hint> getNewestHint() {
-        return hintService.getNewestHint()
+    @GetMapping("/{gameId}")
+    public ResponseEntity<Hint> getHintByGameId(@PathVariable int gameId) {
+        return hintService.getHintByGameId(gameId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

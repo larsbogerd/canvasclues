@@ -66,7 +66,14 @@ Used for initial setup and testing. Not part of the game flow.
 |--------|-------------------------|---------------------------------------------------------------------------------------------------------|
 | POST   | `/api/v1/game/start`    | Start a new game. Creates 16 cards, returns them with a shared `gameId` and stores them in the database |
 | GET    | `/api/v1/game/{gameId}` | Retrieve an existing game's cards (ordered by position)                                                 |
-| PATCH  | `/api/v1/game/cards`    | Batch update cards. Accepts `{ cardIds: [...], spymasterPick: bool, revealed: bool }` — sets whichever field is provided |
+| PATCH  | `/api/v1/game/cards`    | Batch update cards. Accepts `{ cardIds: [...], spymasterPick: bool }` — sets whichever field is provided |
+
+### Hint
+
+| Method | Endpoint                 | Description                                                        |
+|--------|--------------------------|--------------------------------------------------------------------|
+| GET    | `/api/v1/hints/{gameId}` | Retrieve the hint for a specific game. Returns 404 if none exists  |
+| POST   | `/api/v1/hints`          | Create a hint. Accepts `{ gameId: int, hintContent: string }`      |
 
 ### Artwork (testing purposes)
 
@@ -87,6 +94,11 @@ src/main/resources/application.properties
 Key properties:
 - `spring.datasource.url` – MySQL connection URL
 - `spring.jpa.hibernate.ddl-auto=update` – Hibernate auto-creates/updates tables
+- `spring.sql.init.mode=always` + `spring.jpa.defer-datasource-initialization=true` – runs `data.sql` after Hibernate sets up the schema
+
+### Database Seeding
+
+`src/main/resources/data.sql` seeds the database on every startup after Hibernate has created/updated the tables from the entity classes.
 
 ---
 
@@ -106,7 +118,6 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 
 ## Future Improvements (TBD)
 
-* Hint entity + endpoints
 * Guess/operative phase logic
 * Card color assignment (`GameCardColor` enum is ready)
 * API documentation

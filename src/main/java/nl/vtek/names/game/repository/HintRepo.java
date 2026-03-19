@@ -4,10 +4,10 @@ import nl.vtek.names.game.model.Hint;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-public interface HintRepo extends JpaRepository<Hint, Long> {
+public interface HintRepo extends JpaRepository<Hint, Integer> {
 
 
-    Optional<Hint> findTopByOrderByIdDesc();
+    Optional<Hint> findByGameId(int gameId);
 
 
 }

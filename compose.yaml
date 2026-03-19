@@ -11,6 +11,5 @@ services:
       MYSQL_PASSWORD: admin
     volumes:
       - ./sqldata:/var/lib/mysql:Z
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     ports:
       - "3306:3306"

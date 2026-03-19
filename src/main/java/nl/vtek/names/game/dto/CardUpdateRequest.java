@@ -7,7 +7,6 @@ public class CardUpdateRequest {
 
     private List<UUID> cardIds;
     private Boolean spymasterPick;
-    private Boolean isRevealed;
 
     public List<UUID> getCardIds() {
         return cardIds;
@@ -25,11 +24,4 @@ public class CardUpdateRequest {
         this.spymasterPick = spymasterPick;
     }
 
-    public Boolean getRevealed() {
-        return isRevealed;
-    }
-
-    public void setRevealed(Boolean revealed) {
-        isRevealed = revealed;
-    }
 }

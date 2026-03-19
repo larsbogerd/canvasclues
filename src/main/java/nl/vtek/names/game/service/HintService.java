@@ -28,8 +28,8 @@ public class HintService {
     }
 
 
-    public Optional<Hint> getNewestHint() {
-        return hintRepo.findTopByOrderByIdDesc();
+    public Optional<Hint> getHintByGameId(int gameId) {
+        return hintRepo.findByGameId(gameId);
     }
 
 
