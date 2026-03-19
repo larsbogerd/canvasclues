@@ -26,7 +26,7 @@ function buttonClick() {
           {{ props.label }}
         </label>
       </div>
-      <button class="text-newAmsterdam" type="submit" @click="buttonClick" :disabled="modelValue ===''">
+      <button class="text-newAmsterdam" type="submit" @click="buttonClick">
       {{ name }}
       </button>
     </div>

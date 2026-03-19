@@ -4,4 +4,6 @@
     --background-color: #b1b2b5;
     --text-color: #000000;
     --primary-shadow: #00000033;
+    --primary-good: #00ff00;
+    --primary-wrong: #ff0000;
 }

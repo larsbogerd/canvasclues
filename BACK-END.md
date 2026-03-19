@@ -54,7 +54,10 @@ Calls the Art Institute of Chicago API, maps responses to `ArtWork` entities, an
 Creates games by pulling random artworks into `GameCard` entities, persists them to MySQL, and retrieves them by `gameId`.
 
 ### `helloworld` – Legacy/sandbox
-Used for initial setup and testing. Not part of the game flow.
+Used for initial setup and testing. Not part of the game flow. Contains the `ArtPiece` entity and endpoints.
+
+### `utils` – Utility classes
+Shared utilities used across the application.
 
 ---
 
@@ -66,7 +69,8 @@ Used for initial setup and testing. Not part of the game flow.
 |--------|-------------------------|---------------------------------------------------------------------------------------------------------|
 | POST   | `/api/v1/game/start`    | Start a new game. Creates 16 cards, returns them with a shared `gameId` and stores them in the database |
 | GET    | `/api/v1/game/{gameId}` | Retrieve an existing game's cards (ordered by position)                                                 |
-| PATCH  | `/api/v1/game/cards`    | Batch update cards. Accepts `{ cardIds: [...], spymasterPick: bool }` — sets whichever field is provided |
+| PATCH  | `/api/v1/game/updatecards` | Update card selections. Accepts `{ cardIds: [...], spymasterPick: bool }` — sets whichever field is provided |
+| POST   | `/api/v1/game/checkcards`  | Compare spy and operative card choices and return validation results |
 
 ### Hint
 
@@ -79,7 +83,7 @@ Used for initial setup and testing. Not part of the game flow.
 
 | Method | Endpoint                    | Description                                                               |
 |--------|-----------------------------|---------------------------------------------------------------------------|
-| GET    | `/api/v1/artworks?limit=25` | Fetch 25 artworks from AIC API using ArtWork model. Can only define limit |
+| GET    | `/api/v1/artworks/test?size=25` | Fetch artworks from AIC API using ArtWork model. Size defaults to 25 |
 
 ---
 

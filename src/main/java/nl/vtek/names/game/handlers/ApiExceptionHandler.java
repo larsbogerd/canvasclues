@@ -17,8 +17,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeMismatchException(RuntimeException exception) {
-        String message = "Hint moet één woord zijn en mag geen cijfers bevatten";
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+    public ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -35,8 +37,13 @@ public class GameController {
         return gameService.getGame(gameId);
     }
 
-    @PatchMapping("/cards")
+    @PatchMapping("/updatecards")
     public List<GameCard> updateCards(@RequestBody CardUpdateRequest request) {
         return gameService.updateCards(request.getCardIds(), request.getSpymasterPick());
+    }
+
+    @PostMapping("/checkcards")
+    public Map<UUID, Boolean> compareSpyOperativeChoice(@RequestBody List<UUID> cardIds) {
+        return gameService.compareSpyOperativeChoice(cardIds);
     }
 }

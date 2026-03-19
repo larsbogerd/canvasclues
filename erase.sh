@@ -4,5 +4,3 @@ docker compose down
 echo "Removing existing database files..."
 rm -rf ./sqldata
 echo "Wiped database!"
-echo "Starting containers..."
-docker compose up -d

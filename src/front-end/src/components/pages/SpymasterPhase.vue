@@ -58,6 +58,7 @@ onMounted(startGame);
 
 async function startGame() {
   try {
+    let gameId;
     const response = await axios.post('http://localhost:8082/api/v1/game/start');
     cards.value = response.data;
     console.log("Fetched hints:", cards.value);
@@ -93,10 +94,11 @@ function handleCardClicked(id, clicked) {
 
 async function patchCards() {
   try {
-    const response = await axios.patch('http://localhost:8082/api/v1/game/cards', {
+    const response = await axios.patch('http://localhost:8082/api/v1/game/updatecards', {
       cardIds: selectedCards.value,
       spymasterPick: true
     })
+
     console.log("Patched cards:", response.data);
     return response.status;
   } catch (error) {
@@ -109,12 +111,12 @@ async function patchCards() {
 
 <template>
   <div class="screen">
-      <grid :cards="cards" @card-clicked="handleCardClicked"/>
+      <grid :cards="cards" @card-clicked="handleCardClicked" />
     <div style="text-align: center;">
     <p>Selected: {{ selectedCards.length }}</p>
       <div class="info">
         <fase-label fase="Spymaster"/>
-        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="jouw hint:" condition=""/>
+        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
       </div>
     </div>
   </div>

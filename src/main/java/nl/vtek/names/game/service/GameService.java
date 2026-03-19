@@ -7,7 +7,9 @@ import nl.vtek.names.game.repository.GameCardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,7 +28,6 @@ public class GameService {
 
     public List<GameCard> startGame() {
         int gameId = ThreadLocalRandom.current().nextInt(1, 999999);
-
         List<ArtWorkResponse> artworks = artWorkService.searchArtworks(BOARD_SIZE);
 
         List<GameCard> cards = new ArrayList<>();
@@ -53,5 +54,14 @@ public class GameService {
         }
 
         return gameCardRepository.saveAll(cards);
+    }
+
+    public Map<UUID, Boolean> compareSpyOperativeChoice(List<UUID> cardIds) {
+        List<GameCard> cards = gameCardRepository.findAllById(cardIds);
+        Map<UUID, Boolean> results = new HashMap<>();
+        for (GameCard card : cards) {
+            results.put(card.getId(), card.isSpymasterPick());
+        }
+        return results;
     }
 }

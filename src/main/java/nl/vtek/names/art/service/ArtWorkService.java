@@ -23,7 +23,7 @@ public class ArtWorkService {
 
     public List<ArtWorkResponse> searchArtworks(int size) {
         List<ArtWork> artworks = new ArrayList<>(
-                articClient.searchArtworks(100).pulledData().stream()
+                articClient.searchArtworks(size + 4).pulledData().stream()
                         .map(artWorkMapper::toEntity)
                         .filter(artWork -> artWork.getImageId() != null)
                         .toList()

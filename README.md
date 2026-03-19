@@ -47,12 +47,6 @@ Make sure the following tools are installed:
 Back-end dependencies are managed via **Maven** (`pom.xml`).  
 Front-end dependencies are managed via **npm** (`package.json`).
 
-Install front-end dependencies:
-
-```bash
-npm install
-````
-
 ---
 
 ## API references

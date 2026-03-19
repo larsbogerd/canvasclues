@@ -23,5 +23,4 @@ public class CardUpdateRequest {
     public void setSpymasterPick(Boolean spymasterPick) {
         this.spymasterPick = spymasterPick;
     }
-
 }
