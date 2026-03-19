@@ -1,49 +1,48 @@
 <script setup>
 import axios from 'axios';
-import {ref, watch} from "vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import InputField from "@/components/InputField.vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/faseLabel.vue";
+import {useRouter} from 'vue-router'
+
+const router = useRouter();
 let hintInput = ref("");
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
-const prop = defineProps(
-    {
-    gameId: 0
-    }
-)
+
 
 onMounted(() => {
   getHint();
+  getGrid();
 });
 
-watch(() => prop.gameId, (newId) => {
-  if (newId) {
-    getGrid();
-  }
-});
+async function getGameId(){
+  return 1;
+}
 
 async function getHint() {
   try {
-    const id = prop.gameId
+    const id = await getGameId()
+    console.log(id);
     const response = await axios.get(`http://localhost:8082/api/v1/hints/${id}`);
     hint.value = response.data;
 
     console.log("Fetched hint:", hint.value);
   } catch(error) {
-    console.log(error.status());
+    console.log(error.status);
   }
 }
 
 function endTurn() {
   console.log(hintInput.value);
+  router.push('/')
 }
 
 async function getGrid() {
   try {
-    const id = prop.gameId
+    const id = await getGameId()
     console.log(id)
     const response = await axios.get(`http://localhost:8082/api/v1/game/${id}`);
     cards.value = response.data;

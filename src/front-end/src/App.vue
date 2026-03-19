@@ -9,12 +9,12 @@ onUpdated(() => {
 });
 
 </script>
-
+<!--
+<spymaster-phase @game-started="(id) => gameID = id"/>
+<operative-phase :gameID="gameID"/>
+-->
 <template>
-  <div class="app">
-    <spymaster-phase @game-started="(id) => gameId = id"/>
-    <operative-phase :gameId="gameId"/>
-  </div>
+    <RouterView></RouterView>
 </template>
 
 <style scoped>

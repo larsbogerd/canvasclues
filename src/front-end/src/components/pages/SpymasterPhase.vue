@@ -4,10 +4,12 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/faseLabel.vue";
+import { useRouter } from 'vue-router'
 const hintInput = ref("");
 const cards = ref([]);
 const selectedCards = ref([]);
 const emit = defineEmits(['game-started']);
+const router = useRouter();
 let gameId;
 
 async function submit(input) {
@@ -18,6 +20,7 @@ async function submit(input) {
 
       status = await postHint(input)
       httpStatus(status)
+      await router.push('/Operative');
     } else {
       console.error("invalid input");
     }
