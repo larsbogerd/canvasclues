@@ -42,8 +42,8 @@ const emit = defineEmits(['card-clicked'])
 }
 
 .card {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   overflow: hidden;
   border-radius: 20px;

@@ -35,6 +35,18 @@
     src: url('./fonts/Fraunces_72pt_Soft-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'New Amsterdam';
+    src: url('./fonts/NewAmsterdam-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    src: url('./fonts/DMSans-regular.ttf') format('truetype');
+}
+
 body {
     font-family: 'Fraunces', sans-serif;
+    margin: 0;
+    padding: 0;
 }

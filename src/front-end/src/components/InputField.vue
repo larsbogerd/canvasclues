@@ -26,7 +26,7 @@ function buttonClick() {
           {{ props.label }}
         </label>
       </div>
-      <button class="text-newAmsterdam" type="submit" @click="buttonClick">
+      <button class="submit-btn" type="submit" @click="buttonClick">
       {{ name }}
       </button>
     </div>
@@ -36,67 +36,65 @@ function buttonClick() {
 <style scoped>
 
 .text-field {
-  width: 25.625rem;
-  height: 6.625rem;
-  background: var(--primary-color);
-  border-radius: 30px;
-  box-shadow: 4px 4px 4px 4px var(--primary-shadow);
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .fields {
-  box-sizing: border-box;
-  padding: 25px;
-  height: 3.438rem;
-  width: 25.625rem;
   display: flex;
-  flex-direction: row;
-  column-gap: 12px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.fields input {
-  padding: 0px 0px 0px 10px;
-  background: var(--background-color);
-  border: none;
-  border-radius: 20px;
-  height: 3.438rem;
-  width: 13.188rem;
-}
-
-.fields button {
-  background: var(--background-color);
-  border: none;
-  height: 3.438rem;
-  width: 7.75rem;
-  border-radius: 20px;
-}
-
-.input-field{
+.input-field {
   position: relative;
 }
+
 .input-field_input {
-  padding: 0px 0px 0px 10px;
-  background: var(--background-color);
-  border: none;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  background: white;
+  border: 1px solid #ccc;
   border-radius: 20px;
-  height: 3.438rem;
-  width: 13.188rem;
+  height: 3rem;
   cursor: text;
   outline: none;
 }
 
+.input-field_input:focus {
+  border-color: var(--primary-color);
+}
 
-.input-field_label{
+.input-field_label {
   position: absolute;
   top: 0;
   left: 0;
-  transform: translate(15px,15px);
+  transform: translate(16px, 12px);
   transition: opacity 200ms;
+  color: #999;
 }
 
 .input-field input:focus ~ .input-field_label,
-.input-field.has-value .input-field_label{
+.input-field.has-value .input-field_label {
   opacity: 0;
+}
 
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #E98689;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
 }
 
 </style>

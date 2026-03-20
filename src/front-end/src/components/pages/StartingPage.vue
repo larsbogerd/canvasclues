@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function goToSpyPhase() {
-  router.push('/Spy')
+  router.push('/spy')
 }
 </script>
 
@@ -159,8 +159,12 @@ html, body {
 
 .start-btn {
   background-color: #E98689;
-  color: white;
+  color: var(--background-color);
   border: none;
+}
+
+.start-btn:hover {
+  opacity: 0.9;
 }
 
 .secondary-btn {

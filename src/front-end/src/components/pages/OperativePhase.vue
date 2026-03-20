@@ -1,21 +1,22 @@
 <script setup>
 import axios from 'axios';
 import {onMounted, ref} from "vue";
-import InputField from "@/components/InputField.vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/faseLabel.vue";
 import {useRouter} from 'vue-router'
 
 const router = useRouter();
-let hintInput = ref("");
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
 
+const amount = ref(0);
 
-onMounted(() => {
-  getHint();
-  getGrid();
+onMounted (async () => {
+  await getHint();
+  await getGrid();
+  amount.value = await getCountOfCardsSelectedBySpymaster();
+  console.log(amount);
 });
 
 async function getGameId(){
@@ -25,7 +26,6 @@ async function getGameId(){
 async function getHint() {
   try {
     const id = await getGameId()
-    console.log(id);
     const response = await axios.get(`http://localhost:8082/api/v1/hints/${id}`);
     hint.value = response.data;
   } catch(error) {
@@ -53,8 +53,6 @@ function handleCardClicked(id, clicked) {
   } else {
     selectedCards.value = selectedCards.value.filter(cardId => cardId !== id);
   }
-  console.log("op Selected cards:", selectedCards.value);
-
 }
 
 async function getSelectedCards(){
@@ -62,7 +60,6 @@ async function getSelectedCards(){
     const response = await axios.post("http://localhost:8082/api/v1/game/checkcards",
       selectedCards.value
     )
-    console.log(response.data);
     return response;
   } catch(error){
     return error.status
@@ -72,7 +69,6 @@ async function getSelectedCards(){
 async function getGrid() {
   try {
     const id = await getGameId()
-    console.log(id)
     const response = await axios.get(`http://localhost:8082/api/v1/game/${id}`);
     cards.value = response.data;
   } catch(error) {
@@ -80,17 +76,32 @@ async function getGrid() {
   }
 }
 
+async function getCountOfCardsSelectedBySpymaster() {
+    let correctAmount = 0;
+  for (const card of cards.value){
+    if(card.spymasterPick === true){
+      correctAmount++
+    }
+  }
+  return correctAmount;
+}
 </script>
 
 <template>
   <div class="screen">
-    <grid :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
-    <div style="text-align: center;">
-      <p>Selected: {{ selectedCards.length }}</p>
-      <div class="info">
-        <fase-label fase="Operative"/>
-        <input-field readonly="readonly" name="end turn" v-on:submit="submit" v-model="hintInput"
-                     v-if="hint" :label="'jouw hint is: '+hint.hintContent"/>
+    <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
+    <div class="sidebar">
+      <fase-label fase="Operative"/>
+      <div class="hint-card" v-if="hint">
+        <div class="hint-header">
+          <span>{{ hint.hintContent }}</span>
+          <span class="hint-number">{{ amount }}</span>
+        </div>
+        <div class="hint-body">
+          <p>Nog {{ amount }} kunstwerken te vinden</p>
+          <p>Geselecteerd: {{ selectedCards.length }}</p>
+          <button class="end-turn-btn" @click="submit">Beëindig poging</button>
+        </div>
       </div>
     </div>
   </div>
@@ -98,16 +109,76 @@ async function getGrid() {
 
 <style scoped>
 .screen {
-  background-color: green;
+  background-color: var(--background-color);
   gap: 20px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   justify-items: center;
   align-items: center;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
-.info{
-  display: grid;
-justify-items: center;
+.grid {
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.hint-card {
+  background: white;
+  border-radius: 20px;
+  width: 340px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--primary-shadow);
+}
+
+.hint-header {
+  font-family: 'New Amsterdam', sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.hint-number {
+  color: #ff0000;
+  margin-left: 8px;
+}
+
+.hint-body {
+  padding: 20px 24px;
+}
+
+.hint-body p {
+  font-family: DM Sans, sans-serif;
+  font-size: 18px;
+  margin: 4px 0;
+  color: var(--text-color);
+}
+
+.end-turn-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #333333;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.end-turn-btn:hover {
+  opacity: 0.9;
 }
 </style>

@@ -20,7 +20,7 @@ async function submit(input) {
 
       status = await postHint(input)
       httpStatus(status)
-      await router.push('/Operative');
+      await router.push('/operative');
     } else {
       console.error("invalid input");
     }
@@ -111,12 +111,14 @@ async function patchCards() {
 
 <template>
   <div class="screen">
-      <grid :cards="cards" @card-clicked="handleCardClicked" />
-    <div style="text-align: center;">
-    <p>Selected: {{ selectedCards.length }}</p>
-      <div class="info">
-        <fase-label fase="Spymaster"/>
-        <input-field name="submit" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
+    <grid class="grid" :cards="cards" @card-clicked="handleCardClicked"/>
+    <div class="sidebar">
+      <fase-label fase="Spymaster"/>
+      <div class="hint-card">
+        <div class="hint-body">
+          <p>Geselecteerd: {{ selectedCards.length }}</p>
+          <input-field name="Bevestig hint" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
+        </div>
       </div>
     </div>
   </div>
@@ -124,17 +126,44 @@ async function patchCards() {
 
 <style scoped>
 .screen {
-  background-color: red;
+  background-color: var(--background-color);
   gap: 20px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   justify-items: center;
   align-items: center;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
-.info{
-  display: grid;
-  justify-items: center;
+.grid {
 }
 
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.hint-card {
+  background: white;
+  border-radius: 20px;
+  width: 340px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--primary-shadow);
+}
+
+.hint-body {
+  padding: 24px;
+}
+
+.hint-body p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  margin: 0 0 16px 0;
+  color: var(--text-color);
+}
 </style>

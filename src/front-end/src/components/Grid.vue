@@ -18,13 +18,12 @@ const emit = defineEmits(['card-clicked'])
 <style scoped>
 *{
   --grid-size:4;
+  --cell-size: min(200px, calc((100vh - 80px) / var(--grid-size) - 16px), calc((50vw - 80px) / var(--grid-size) - 16px));
 }
 .grid{
-  max-width: 872px;
-  max-height: 872px;
   display: grid;
-  grid: repeat(var(--grid-size),200px) / repeat(var(--grid-size),200px);
-  gap: 24px;
+  grid: repeat(var(--grid-size), var(--cell-size)) / repeat(var(--grid-size), var(--cell-size));
+  gap: 16px;
 }
 
 </style>
