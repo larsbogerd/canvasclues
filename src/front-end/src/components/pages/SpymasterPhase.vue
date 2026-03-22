@@ -58,7 +58,6 @@ onMounted(startGame);
 
 async function startGame() {
   try {
-    let gameId;
     const response = await axios.post('http://localhost:8082/api/v1/game/start');
     cards.value = response.data;
     console.log("Fetched hints:", cards.value);
