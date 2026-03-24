@@ -6,4 +6,8 @@
     --primary-shadow: #00000033;
     --primary-good: #66bb6a;
     --primary-wrong: #ef5350;
+
+    --font-main: 'Fraunces', serif;
+    --font-secondary: 'DM Sans', sans-serif;
+    --font-display: 'New Amsterdam', sans-serif;
 }

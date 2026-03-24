@@ -128,8 +128,7 @@ async function patchCards() {
   background-color: var(--background-color);
   gap: 20px;
   display: grid;
-  grid-template-columns: auto 1fr;
-  justify-items: center;
+  grid-template-columns: 2fr 1fr;
   align-items: center;
   width: 100vw;
   height: 100vh;
@@ -138,6 +137,7 @@ async function patchCards() {
 }
 
 .grid {
+  justify-self: center;
 }
 
 .sidebar {
@@ -160,7 +160,7 @@ async function patchCards() {
 }
 
 .hint-body p {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-secondary);
   font-size: 18px;
   margin: 0 0 16px 0;
   color: var(--text-color);

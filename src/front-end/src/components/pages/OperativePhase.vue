@@ -112,8 +112,7 @@ async function getCountOfCardsSelectedBySpymaster() {
   background-color: var(--background-color);
   gap: 20px;
   display: grid;
-  grid-template-columns: auto 1fr;
-  justify-items: center;
+  grid-template-columns: 2fr 1fr;
   align-items: center;
   width: 100vw;
   height: 100vh;
@@ -122,6 +121,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .grid {
+  justify-self: center;
 }
 
 .sidebar {
@@ -140,7 +140,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-header {
-  font-family: 'New Amsterdam', sans-serif;
+  font-family: var(--font-display);
   font-size: 32px;
   font-weight: bold;
   text-transform: uppercase;
@@ -159,7 +159,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-body p {
-  font-family: DM Sans, sans-serif;
+  font-family: var(--font-secondary);
   font-size: 18px;
   margin: 4px 0;
   color: var(--text-color);

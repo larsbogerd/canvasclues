@@ -89,7 +89,7 @@ html, body {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: #F4EFE6;
+  background-color: var(--background-color);
   overflow: hidden;
 }
 
@@ -130,14 +130,14 @@ html, body {
 }
 
 .title {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-main);
   font-size: 5.5rem;
   font-weight: 300;
   margin: 0;
 }
 
 .description {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-secondary);
   font-size: 1.5rem;
   font-weight: 300;
   margin: 0;
@@ -153,12 +153,12 @@ html, body {
 .secondary-btn {
   font-size: 1.2rem;
   padding: 0.6rem 4rem;
-  border-radius: 0.5rem;
+  border-radius: 20px;
   cursor: pointer;
 }
 
 .start-btn {
-  background-color: #E98689;
+  background-color: var(--primary-color);
   color: var(--background-color);
   border: none;
 }
@@ -170,6 +170,6 @@ html, body {
 .secondary-btn {
   background-color: transparent;
   color: black;
-  border: 2px solid #E98689;
+  border: 2px solid var(--primary-color);
 }
 </style>

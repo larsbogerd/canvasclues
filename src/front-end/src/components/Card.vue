@@ -10,17 +10,16 @@ let props = defineProps({
   color: String,
 })
 
+
 const emit = defineEmits(['card-clicked'])
 </script>
 
 <template>
-  <div v-if="color==='right'" class="card right" @click="clicked = !clicked; emit('card-clicked', props.id, clicked)"
-       :class="{ active: clicked }">
+  <div v-if="color==='right'" class="card right">
     <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
   </div>
 
-  <div v-else-if="color==='wrong'" class="card wrong"
-       @click="clicked = !clicked; emit('card-clicked', props.id, clicked)" :class="{ active: clicked }">
+  <div v-else-if="color==='wrong'" class="card wrong">
     <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
   </div>
 
@@ -32,15 +31,6 @@ const emit = defineEmits(['card-clicked'])
 
 <style scoped>
 
-.right {
-  border: 10px solid var(--primary-good) !important;
-
-}
-
-.wrong {
-  border: 10px solid var(--primary-wrong) !important;
-}
-
 .card {
   width: 100%;
   height: 100%;
@@ -50,8 +40,16 @@ const emit = defineEmits(['card-clicked'])
   user-select: none;
 }
 
+.right {
+  border: clamp(4px, 1vh, 12px) solid var(--primary-good) !important;
+}
+
+.wrong {
+  border: clamp(4px, 1vh, 12px) solid var(--primary-wrong) !important;
+}
+
 .active {
-  border: 10px solid var(--primary-color);
+  border: clamp(4px, 1vh, 12px) solid var(--primary-color);
   box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
 }
 

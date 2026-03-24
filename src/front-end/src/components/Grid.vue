@@ -16,14 +16,13 @@ const emit = defineEmits(['card-clicked'])
 </template>
 
 <style scoped>
-*{
-  --grid-size:4;
-  --cell-size: min(200px, calc((100vh - 80px) / var(--grid-size) - 16px), calc((50vw - 80px) / var(--grid-size) - 16px));
-}
-.grid{
+.grid {
   display: grid;
-  grid: repeat(var(--grid-size), var(--cell-size)) / repeat(var(--grid-size), var(--cell-size));
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   gap: 16px;
+  height: calc(100vh - 40px);
+  aspect-ratio: 1;
+  max-width: 100%;
 }
-
 </style>
