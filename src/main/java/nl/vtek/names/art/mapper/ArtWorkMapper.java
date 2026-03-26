@@ -23,7 +23,8 @@ public class ArtWorkMapper {
 
     public ArtWorkResponse toResponse(ArtWork artWork, int position) {
         String imageUrl = "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, artWork.getImageId());
-        String altText = "%s — %s, %s".formatted(artWork.getTitle(), artWork.getArtistDisplay(), artWork.getDateDisplay());
+        String altText = "%s — %s, %s".formatted(
+                artWork.getTitle(), artWork.getArtistDisplay(), artWork.getDateDisplay());
 
         return new ArtWorkResponse(position, imageUrl, altText);
     }

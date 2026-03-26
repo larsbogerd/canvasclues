@@ -2,12 +2,6 @@ erDiagram
   GAMES ||--o{ CARDS : has
   GAMES ||--o{ HINTS : has
 
-  GAMES {
-    int id PK
-    timestamp created_at
-    varchar phase
-  }
-
   CARDS {
     UUID id PK
     int game_id FK

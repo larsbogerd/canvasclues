@@ -24,7 +24,7 @@ public class GameService {
         this.gameCardRepository = gameCardRepository;
     }
 
-    private static final int BOARD_SIZE = 16;
+    public static final int BOARD_SIZE = 16;
 
     public List<GameCard> startGame() {
         int gameId = ThreadLocalRandom.current().nextInt(1, 999999);

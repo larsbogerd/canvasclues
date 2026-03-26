@@ -1,0 +1,43 @@
+package nl.vtek.names.integration;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import nl.vtek.names.game.model.Hint;
+import nl.vtek.names.game.repository.HintRepo;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class HintIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private HintRepo hintRepo;
+
+    @Test
+    void submitHint_savesToDatabase() throws Exception {
+        String json = """
+                { "gameId": 777777, "hintContent": "testhint" }
+                """;
+
+        mockMvc.perform(post("/api/v1/hints")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+
+        Optional<Hint> saved = hintRepo.findByGameId(777777);
+        assertThat(saved).isPresent();
+        assertThat(saved.get().getHintContent()).isEqualTo("testhint");
+    }
+}

@@ -1,6 +1,11 @@
 package nl.vtek.names.game.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.UUID;
 
@@ -12,10 +17,10 @@ public class GameCard {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private int gameId;
-//    @Enumerated(EnumType.STRING)
-//    private GameCardType cardType;
+    // @Enumerated(EnumType.STRING)
+    // private GameCardType cardType;
     private String imageUrl;
-    @Column(name="alt_text", length = 1000)
+    @Column(name = "alt_text", length = 1000)
     private String altText;
     private boolean isSpymasterPick;
 
@@ -61,13 +66,13 @@ public class GameCard {
         this.altText = altText;
     }
 
-//    public GameCardType getCardType() {
-//        return cardType;
-//    }
-//
-//    public void setCardType(GameCardType cardType) {
-//        this.cardType = cardType;
-//    }
+    // public GameCardType getCardType() {
+    //     return cardType;
+    // }
+
+    // public void setCardType(GameCardType cardType) {
+    //     this.cardType = cardType;
+    // }
 
     public boolean isSpymasterPick() {
         return isSpymasterPick;

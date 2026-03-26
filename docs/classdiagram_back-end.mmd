@@ -2,7 +2,7 @@
 title: Back-end
 ---
 classDiagram
-    %% Art package
+%% Art package
     class ArtWork {
         -int id
         -String imageId
@@ -70,7 +70,7 @@ classDiagram
     ArtWorkService <-- ArtWorkController
     ArticClient --> ArticApi
 
-    %% Game package
+%% Game package
     class GameCard {
         -UUID uuid
         -int gameId
@@ -87,10 +87,14 @@ classDiagram
         ASSASSIN
     }
 
-
     class CardUpdateRequest {
         -List~UUID~ cardIds
         -Boolean spymasterPick
+    }
+
+    class HintRequest {
+        -int gameId
+        -String hintContent
     }
 
     class GameCardRepository {
@@ -103,7 +107,8 @@ classDiagram
         -int BOARD_SIZE = 16
         +startGame() List~GameCard~
         +getGame(int) List~GameCard~
-        +updateCards(List~UUID~, Boolean, Boolean) List~GameCard~
+        +updateCards(List~UUID~, Boolean) List~GameCard~
+        +compareSpyOperativeChoice(List~UUID~) Map~UUID, Boolean~
     }
 
     class GameController {
@@ -111,31 +116,31 @@ classDiagram
         +startGame() List~GameCard~
         +getGame(int) List~GameCard~
         +updateCards(CardUpdateRequest) List~GameCard~
+        +compareSpyOperativeChoice(List~UUID~) Map~UUID, Boolean~
     }
 
     class Hint {
-        -Long id
+        -int hintId
         -String hintContent
-        +getHintContent()
-        +setHintContent(String)
+        -int gameId
     }
 
     class HintRepo {
         <<interface>>
-        +findTopByOrderByIdDesc() Optional~Hint~
+        +findByGameId(int) Optional~Hint~
     }
 
     class HintService {
         <<service>>
-        +createHint(Hint)
-        +getNewestHint() Optional~Hint~
+        +createHint(HintRequest) void
+        +getHintByGameId(int) Optional~Hint~
         -validateHint(Hint)
     }
 
     class HintController {
         <<restcontroller>>
-        +getNewestHint() ResponseEntity~Hint~
-        +createHint(Hint)
+        +getHintByGameId(int) ResponseEntity~Hint~
+        +createHint(HintRequest) void
     }
 
     GameCard <.. GameCardRepository
@@ -147,3 +152,4 @@ classDiagram
     Hint <.. HintRepo
     HintRepo <-- HintService
     HintService <-- HintController
+    HintController ..> HintRequest
