@@ -2,14 +2,13 @@
 import axios from 'axios';
 import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
-import FaseLabel from "@/components/faseLabel.vue";
+import FaseLabel from "@/components/FaseLabel.vue";
 import {useRouter} from 'vue-router'
 
 const router = useRouter();
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
-
 const amount = ref(0);
 
 onMounted (async () => {

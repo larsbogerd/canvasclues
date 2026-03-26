@@ -3,8 +3,8 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function goToSpyPhase() {
-  router.push('/spy')
+function goToGameHubPhase() {
+  router.push('/gamehub')
 }
 </script>
 
@@ -22,7 +22,7 @@ function goToSpyPhase() {
           Vind de verborgen verbanden tussen meesterwerken!
         </p>
         <div class="button-group">
-          <button @click="goToSpyPhase" class="start-btn">Start een spel</button>
+          <button @click="goToGameHubPhase" class="start-btn">Start een spel</button>
           <button @click="howToPlay" class="secondary-btn">Hoe werkt het?</button>
         </div>
       </div>

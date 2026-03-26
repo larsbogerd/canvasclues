@@ -3,7 +3,7 @@ import inputField from "@/components/InputField.vue";
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
-import FaseLabel from "@/components/faseLabel.vue";
+import FaseLabel from "@/components/FaseLabel.vue";
 import { useRouter } from 'vue-router'
 const hintInput = ref("");
 const cards = ref([]);
@@ -20,7 +20,7 @@ async function submit(input) {
 
       status = await postHint(input)
       httpStatus(status)
-      await router.push('/operative');
+      await router.push('/gamehub');
     } else {
       console.error("invalid input");
     }
@@ -51,8 +51,6 @@ function validateInput(input) {
   const regex = /^[a-zA-Z]+$/;
   return regex.test(input);
 }
-
-
 
 onMounted(startGame);
 
