@@ -4,8 +4,8 @@
 
 The back-end is built using **Spring Boot 4.0.2** and is responsible for:
 
-- Game logic (hint phase ↔ selection phase)
-- Managing game state
+- Game setup and persistence
+- Managing game state transitions
 - Integration with the external museum API (AIC)
 - Database communication (MySQL)
 - Exposing REST endpoints to the front-end
@@ -30,7 +30,7 @@ From the project root:
 
 ```bash
 docker compose up -d
-````
+```
 
 To wipe and compose a fresh database, use the provided scripts from the project root:
 
@@ -48,16 +48,30 @@ The back-end starts on port **8082**.
 ## Package Structure
 
 ### `art` – Artwork fetching
-Calls the Art Institute of Chicago API, maps responses to `ArtWork` entities, and exposes a random artwork endpoint (16 IIIF image URLs).
+Calls the Art Institute of Chicago API, maps responses to internal DTOs and models, and exposes a test endpoint for fetching random artworks.
 
 ### `game` – Game logic & persistence
-Creates games by pulling random artworks into `GameCard` entities, persists them to MySQL, and retrieves them by `gameId`.
-
-### `helloworld` – Legacy/sandbox
-Used for initial setup and testing. Not part of the game flow. Contains the `ArtPiece` entity and endpoints.
+Contains controllers, DTOs, mappers, entities, repositories, services, and exception handling for:
+- `Game`
+- `Card`
+- `Hint`
+- `GameState`
+- `CardType`
 
 ### `utils` – Utility classes
 Shared utilities used across the application.
+
+---
+
+## Domain Model
+
+- `Game` uses an integer primary key and tracks `state`, `maxScore`, `createdAt`, related `cards`, and related `hints`.
+- `Card` uses a UUID primary key and belongs to a `Game`.
+- `Hint` uses a UUID primary key and belongs to a `Game`.
+- `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
+- `CardType` currently supports `TEAM1`, `TEAM2`, `NEUTRAL`, and `ASSASSIN`.
+
+The branch refactors renamed older `GameCard` and phase naming to the current `Card` and `GameState` model.
 
 ---
 
@@ -65,25 +79,25 @@ Shared utilities used across the application.
 
 ### Game
 
-| Method | Endpoint                | Description                                                                                             |
-|--------|-------------------------|---------------------------------------------------------------------------------------------------------|
-| POST   | `/api/v1/game/start`    | Start a new game. Creates 16 cards, returns them with a shared `gameId` and stores them in the database |
-| GET    | `/api/v1/game/{gameId}` | Retrieve an existing game's cards (ordered by position)                                                 |
-| PATCH  | `/api/v1/game/updatecards` | Update card selections. Accepts `{ cardIds: [...], spymasterPick: bool }` — sets whichever field is provided |
-| POST   | `/api/v1/game/checkcards`  | Compare spy and operative card choices and return validation results |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
+| GET | `/api/v1/game/{gameId}` | Returns the stored `CardResponse[]` for a game |
+| PATCH | `/api/v1/game/updatecards` | Updates selected cards using `{ "cardIds": ["uuid"], "spymasterPick": true }` |
+| POST | `/api/v1/game/checkcards` | Accepts a JSON array of card UUIDs and returns a map of `cardId -> isSpymasterPick` |
 
 ### Hint
 
-| Method | Endpoint                 | Description                                                        |
-|--------|--------------------------|--------------------------------------------------------------------|
-| GET    | `/api/v1/hints/{gameId}` | Retrieve the hint for a specific game. Returns 404 if none exists  |
-| POST   | `/api/v1/hints`          | Create a hint. Accepts `{ gameId: int, hintContent: string }`      |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/hints/{gameId}` | Returns the hint for a game as `HintResponse`; responds with `404` if none exists |
+| POST | `/api/v1/hints` | Creates a hint using `{ "gameId": 1, "content": "museum" }` and moves the game to `READY` |
 
 ### Artwork (testing purposes)
 
-| Method | Endpoint                    | Description                                                               |
-|--------|-----------------------------|---------------------------------------------------------------------------|
-| GET    | `/api/v1/artworks/test?size=25` | Fetch artworks from AIC API using ArtWork model. Size defaults to 25 |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/artworks/test?size=25` | Fetches artwork data from the AIC API. `size` defaults to `25` |
 
 ---
 
@@ -97,7 +111,9 @@ src/main/resources/application.properties
 
 Key properties:
 - `spring.datasource.url` – MySQL connection URL
-- `spring.jpa.hibernate.ddl-auto=update` – Hibernate auto-creates/updates tables
+- `spring.datasource.username` / `spring.datasource.password` – database credentials
+- `server.port=8082` – application port
+- `spring.jpa.hibernate.ddl-auto=create` – recreates tables on startup
 - `spring.sql.init.mode=always` + `spring.jpa.defer-datasource-initialization=true` – runs `data.sql` after Hibernate sets up the schema
 
 ### Database Seeding
@@ -122,6 +138,8 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 
 ## Future Improvements (TBD)
 
-* Guess/operative phase logic
-* Card color assignment (`GameCardColor` enum is ready)
-* API documentation
+- Assign `CardType` values during game creation
+- Add scoring system that write the `Game`
+- Replace generic runtime exceptions with structured API errors
+- Add integration tests for the game and hint endpoints
+- Add OpenAPI or similar API documentation

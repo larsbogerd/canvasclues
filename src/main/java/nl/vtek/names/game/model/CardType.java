@@ -1,5 +1,5 @@
 package nl.vtek.names.game.model;
 
-public enum GameCardType {
+public enum CardType {
     TEAM1, TEAM2, NEUTRAL, ASSASSIN
 }

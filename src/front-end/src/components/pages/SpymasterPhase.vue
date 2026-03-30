@@ -71,7 +71,7 @@ async function startGame() {
 async function postHint(input) {
   try {
     const response = await axios.post('http://localhost:8082/api/v1/hints', {
-      hintContent: input,
+      content: input,
       gameId: gameId
     })
     return response.status;

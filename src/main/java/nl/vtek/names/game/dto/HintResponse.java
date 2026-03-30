@@ -1,11 +1,19 @@
 package nl.vtek.names.game.dto;
 
-public class HintRequest {
+import java.util.UUID;
 
+public class HintResponse {
+    private UUID id;
     private int gameId;
     private String content;
 
-    public HintRequest() {}
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public int getGameId() {
         return gameId;

@@ -5,50 +5,55 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+import java.util.UUID;
 
 @Entity
 public class Hint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hintId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, length = 50)
-    private String hintContent;
+    private String content;
 
-    private int gameId;
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
-
-    public Hint() {}
-
-    public Hint(String hintContent, int gameId) {
-        this.hintContent = hintContent;
-        this.gameId = gameId;
+    public Hint() {
     }
 
-
-    public String getHintContent() {
-        return hintContent;
+    public Hint(String content, Game game) {
+        this.content = content;
+        this.game = game;
     }
 
-    public void setHintContent(String hintContent) {
-        this.hintContent = hintContent;
+    public UUID getId() {
+        return id;
     }
 
-
-    public int getGameId() {
-        return gameId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public String getContent() {
+        return content;
     }
 
-    public int getHintId() {
-        return hintId;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public void setHintId(int hintId) {
-        this.hintId = hintId;
+    public Game getGame() {
+        return game;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
 }

@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.service.GameService;
+import nl.vtek.names.game.repository.CardRepository;
+import nl.vtek.names.game.model.Card;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
-import nl.vtek.names.game.model.GameCard;
-import nl.vtek.names.game.repository.GameCardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +30,7 @@ class GameIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private GameCardRepository gameCardRepository;
+    private CardRepository cardRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -40,7 +41,7 @@ class GameIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<GameCard> returnedCards = objectMapper.readValue(
+        List<CardResponse> returnedCards = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {}
         );
@@ -56,7 +57,7 @@ class GameIntegrationTest {
             assertThat(card.getAltText()).isNotEmpty();
         });
 
-        List<GameCard> dbCards = gameCardRepository.findByGameId(gameId);
+        List<Card> dbCards = cardRepository.findByGame_Id(gameId);
         assertThat(dbCards).hasSize(GameService.BOARD_SIZE);
     }
 
@@ -66,7 +67,7 @@ class GameIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<GameCard> returnedCards = objectMapper.readValue(
+        List<CardResponse> returnedCards = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {}
         );
@@ -77,7 +78,7 @@ class GameIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<GameCard> fetchedCards = objectMapper.readValue(
+        List<CardResponse> fetchedCards = objectMapper.readValue(
                 getResult.getResponse().getContentAsString(),
                 new TypeReference<>() {}
         );
@@ -85,8 +86,8 @@ class GameIntegrationTest {
         assertThat(fetchedCards).hasSize(GameService.BOARD_SIZE);
         assertThat(fetchedCards).allMatch(card -> card.getGameId() == gameId);
 
-        List<UUID> createdIds = returnedCards.stream().map(GameCard::getId).toList();
-        List<UUID> fetchedIds = fetchedCards.stream().map(GameCard::getId).toList();
+        List<UUID> createdIds = returnedCards.stream().map(CardResponse::getId).toList();
+        List<UUID> fetchedIds = fetchedCards.stream().map(CardResponse::getId).toList();
         assertThat(fetchedIds).containsExactlyInAnyOrderElementsOf(createdIds);
     }
 
@@ -96,7 +97,7 @@ class GameIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<GameCard> returnedCards = objectMapper.readValue(
+        List<CardResponse> returnedCards = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 new TypeReference<>() {}
         );
@@ -105,7 +106,7 @@ class GameIntegrationTest {
 
         List<UUID> pickedIds = returnedCards.stream()
                 .limit(3)
-                .map(GameCard::getId)
+                .map(CardResponse::getId)
                 .toList();
 
         String requestBody = objectMapper.writeValueAsString(
@@ -115,31 +116,22 @@ class GameIntegrationTest {
                 }}
         );
 
-        MvcResult updateResult = mockMvc.perform(patch("/api/v1/game/updatecards")
+        mockMvc.perform(patch("/api/v1/game/updatecards")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(status().isOk());
 
-        List<GameCard> pickedCards = objectMapper.readValue(
-                updateResult.getResponse().getContentAsString(),
-                new TypeReference<>() {}
-        );
-
-        assertThat(pickedCards).hasSize(3);
-        assertThat(pickedCards).allMatch(GameCard::isSpymasterPick);
-
-        List<GameCard> dbAllCards = gameCardRepository.findByGameId(gameId);
-        List<GameCard> dbPickedCards = dbAllCards.stream()
+        List<Card> dbAllCards = cardRepository.findByGame_Id(gameId);
+        List<Card> dbPickedCards = dbAllCards.stream()
                 .filter(card -> pickedIds.contains(card.getId()))
                 .toList();
-        List<GameCard> dbUnpickedCards = dbAllCards.stream()
+        List<Card> dbUnpickedCards = dbAllCards.stream()
                 .filter(card -> !pickedIds.contains(card.getId()))
                 .toList();
 
         assertThat(dbPickedCards).isNotEmpty();
         assertThat(dbUnpickedCards).isNotEmpty();
-        assertThat(dbPickedCards).allMatch(GameCard::isSpymasterPick);
-        assertThat(dbUnpickedCards).noneMatch(GameCard::isSpymasterPick);
+        assertThat(dbPickedCards).allMatch(Card::isSpymasterPick);
+        assertThat(dbUnpickedCards).noneMatch(Card::isSpymasterPick);
     }
 }

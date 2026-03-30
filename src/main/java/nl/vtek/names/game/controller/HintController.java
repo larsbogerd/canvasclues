@@ -1,8 +1,7 @@
 package nl.vtek.names.game.controller;
 
 import nl.vtek.names.game.dto.HintRequest;
-import nl.vtek.names.game.model.Hint;
-import nl.vtek.names.game.repository.HintRepo;
+import nl.vtek.names.game.dto.HintResponse;
 import nl.vtek.names.game.service.HintService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,16 +19,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class HintController {
 
     private final HintService hintService;
-    private final HintRepo hintRepo;
 
-
-    public HintController(HintService hintService, HintRepo hintRepo) {
+    public HintController(HintService hintService) {
         this.hintService = hintService;
-        this.hintRepo = hintRepo;
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<Hint> getHintByGameId(@PathVariable int gameId) {
+    public ResponseEntity<HintResponse> getHintByGameId(@PathVariable int gameId) {
         return hintService.getHintByGameId(gameId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

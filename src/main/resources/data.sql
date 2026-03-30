@@ -1,8 +1,12 @@
+-- Seed: game table
+INSERT IGNORE INTO game (id, state, max_score, created_at)
+VALUES (1, 'READY', 3, NOW());
+
 -- Seed: game board
-INSERT IGNORE INTO game_cards (uuid, game_id, alt_text, image_url, is_spymaster_pick)
+INSERT IGNORE INTO card (id, game_id, alt_text, image_url, is_spymaster_pick)
 VALUES
   (UUID_TO_BIN('05316ced-9f2b-42a1-8e24-16e2f519e257'), 1, 'Stacks of Wheat (End of Summer) – Claude Monet (French, 1840–1926), 1890/91', 'https://www.artic.edu/iiif/2/a38e2828-ec6f-ece1-a30f-70243449197b/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('0779a09c-6f86-4d14-a0fb-40de1013f9c9'), 1, 'The Bedroom – Vincent van Gogh (Dutch, 1853–1890), 1889', 'https://www.artic.edu/iiif/2/25c31d8d-21a4-9ea1-1d73-6a2eca4dda7e/full/!500,500/0/default.jpg', true),
+  (UUID_TO_BIN('0779a09c-6f86-4d14-a0fb-40de1013f9c9'), 1, 'The Bedroom – Vincent van Gogh (Dutch, 1853–1890), 1889', 'https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/!500,500/0/default.jpg', true),
   (UUID_TO_BIN('0daad8c3-35a5-4eed-8d4f-6628e1ea2654'), 1, 'The Assumption of the Virgin – El Greco (Doménikos Theotokópoulos) (Greek, 1541–1614), 1577', 'https://www.artic.edu/iiif/2/47fd1564-93f5-f30b-7786-013421133b4a/full/!500,500/0/default.jpg', false),
   (UUID_TO_BIN('226181d7-8122-4567-ba90-c885ae9cb3ba'), 1, 'At the Moulin Rouge – Henri de Toulouse-Lautrec (French, 1864–1901), 1892/95', 'https://www.artic.edu/iiif/2/defb4004-b500-218d-3d9b-9a02423f097d/full/!500,500/0/default.jpg', false),
   (UUID_TO_BIN('2e41d850-ea3c-452c-a803-54529c9e41d3'), 1, 'Veranda Post (Òpó Ògògá) – Olowe of Ise (died 1938), Yorùbá', 'https://www.artic.edu/iiif/2/fec5d023-0b46-45df-eb57-cbf64e24121d/full/!500,500/0/default.jpg', false),
@@ -19,6 +23,5 @@ VALUES
   (UUID_TO_BIN('c9ca8451-8d89-4030-904a-05f624d97785'), 1, 'The Basket of Apples – Paul Cezanne (French, 1839–1906), c. 1893', 'https://www.artic.edu/iiif/2/52ac8996-3460-cf71-cb42-5c4d0aa29b74/full/!500,500/0/default.jpg', false);
 
 -- Seed: hint table
-INSERT IGNORE INTO hint (hint_id, hint_content, game_id)
-VALUES (1, 'vangogh', 1);
-
+INSERT IGNORE INTO hint (id, content, game_id)
+VALUES (UUID_TO_BIN('cd5c469d-a519-4972-bc84-d0ec474f312b'), 'vangogh', 1);

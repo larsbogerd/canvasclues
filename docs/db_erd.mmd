@@ -1,18 +1,35 @@
 erDiagram
-  GAMES ||--o{ CARDS : has
-  GAMES ||--o{ HINTS : has
+  GAME ||--o{ CARD : has
+  GAME ||--o{ HINT : has
 
-  CARDS {
+  GAME {
+    int id PK
+    enum state "CREATING | READY | ARCHIVED"
+    int max_score
+    timestamp created_at
+  }
+
+  CARD {
     UUID id PK
     int game_id FK
-    varchar card_type
     varchar image_url
     varchar alt_text
+    enum type "TEAM1 | TEAM2 | NEUTRAL | ASSASSIN"
     boolean is_spymaster_pick
   }
 
-  HINTS {
-    int id PK
+  HINT {
+    UUID id PK
     int game_id FK
-    varchar hint_content
+    varchar content
+  }
+
+  SESSION-CONCEPT {
+    int session_id PK
+    int game_id FK
+    int hint_id FK
+    timestamp started_at
+    timestamp finished_at
+    int max_guesses
+    int score
   }

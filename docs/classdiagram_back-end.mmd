@@ -2,7 +2,7 @@
 title: Back-end
 ---
 classDiagram
-%% Art package
+    %% Art package
     class ArtWork {
         -int id
         -String imageId
@@ -70,16 +70,35 @@ classDiagram
     ArtWorkService <-- ArtWorkController
     ArticClient --> ArticApi
 
-%% Game package
-    class GameCard {
-        -UUID uuid
-        -int gameId
+    %% Game package
+    class Game {
+        <<entity>>
+        -int id
+        -GameState state
+        -int maxScore
+        -LocalDateTime createdAt
+        -List~Card~ cards
+        -List~Hint~ hints
+    }
+
+    class GameState {
+        <<enumeration>>
+        CREATING
+        READY
+        ARCHIVED
+    }
+
+    class Card {
+        <<entity>>
+        -UUID id
+        -Game game
+        -CardType type
         -String imageUrl
         -String altText
         -boolean isSpymasterPick
     }
 
-    class GameCardType {
+    class CardType {
         <<enumeration>>
         TEAM1
         TEAM2
@@ -87,69 +106,109 @@ classDiagram
         ASSASSIN
     }
 
-    class CardUpdateRequest {
+    class CardResponse {
+        <<dto>>
+        -UUID cardId
+        -int gameId
+        -String imageUrl
+        -String altText
+        -boolean spymasterPick
+        -CardType cardType
+    }
+
+    class HintResponse {
+        <<dto>>
+        -UUID id
+        -int gameId
+        -String content
+    }
+
+    class CardMapper {
+        <<mapper>>
+        +toCardResponse(List~Card~) List~CardResponse~
+    }
+
+    class GameMapper {
+        <<mapper>>
+        +toEntity() Game
+    }
+
+    class HintMapper {
+        <<mapper>>
+        +toHintResponse(Hint) HintResponse
+    }
+
+    class UpdateCardsRequest {
+        <<dto>>
         -List~UUID~ cardIds
         -Boolean spymasterPick
     }
 
     class HintRequest {
+        <<dto>>
         -int gameId
-        -String hintContent
+        -String content
     }
 
-    class GameCardRepository {
+    class GameRepository {
         <<interface>>
-        +findByGameId(int) List~GameCard~
+    }
+
+    class CardRepository {
+        <<interface>>
+    }
+
+    class HintRepo {
+        <<interface>>
+        +findByGame_Id(int) Optional~Hint~
     }
 
     class GameService {
         <<service>>
         -int BOARD_SIZE = 16
-        +startGame() List~GameCard~
-        +getGame(int) List~GameCard~
-        +updateCards(List~UUID~, Boolean) List~GameCard~
-        +compareSpyOperativeChoice(List~UUID~) Map~UUID, Boolean~
+        +startGame() List~CardResponse~
+        +getGame(int) List~CardResponse~
+        +updateCards(List~UUID~, Boolean) void
+        +checkCards(List~UUID~) Map~UUID, Boolean~
     }
 
     class GameController {
         <<restcontroller>>
-        +startGame() List~GameCard~
-        +getGame(int) List~GameCard~
-        +updateCards(CardUpdateRequest) List~GameCard~
-        +compareSpyOperativeChoice(List~UUID~) Map~UUID, Boolean~
+        +startGame() List~CardResponse~
+        +getGame(int) List~CardResponse~
+        +updateCards(UpdateCardsRequest) void
+        +checkCards(List~UUID~) Map~UUID, Boolean~
     }
 
     class Hint {
-        -int hintId
-        -String hintContent
-        -int gameId
-    }
-
-    class HintRepo {
-        <<interface>>
-        +findByGameId(int) Optional~Hint~
+        <<entity>>
+        -UUID id
+        -String content
+        -Game game
     }
 
     class HintService {
         <<service>>
         +createHint(HintRequest) void
-        +getHintByGameId(int) Optional~Hint~
-        -validateHint(Hint)
+        +getHintByGameId(int) Optional~HintResponse~
     }
 
     class HintController {
         <<restcontroller>>
-        +getHintByGameId(int) ResponseEntity~Hint~
+        +getHintByGameId(int) ResponseEntity~HintResponse~
         +createHint(HintRequest) void
     }
 
-    GameCard <.. GameCardRepository
-    GameCardRepository <-- GameService
+    Game "1" --> "*" Card
+    Game "1" --> "*" Hint
+    GameState <-- Game
+    CardType <-- Card
+
+    CardRepository <-- GameService
     GameService <-- GameController
-    GameController ..> CardUpdateRequest
+    GameController ..> UpdateCardsRequest
     GameService --> ArtWorkService
 
-    Hint <.. HintRepo
     HintRepo <-- HintService
     HintService <-- HintController
     HintController ..> HintRequest

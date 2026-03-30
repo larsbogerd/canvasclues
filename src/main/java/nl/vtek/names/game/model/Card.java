@@ -2,52 +2,66 @@ package nl.vtek.names.game.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "game_cards")
-public class GameCard {
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
-    private int gameId;
-    // @Enumerated(EnumType.STRING)
-    // private GameCardType cardType;
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+    @Enumerated(EnumType.STRING)
+    private CardType type;
     private String imageUrl;
     @Column(name = "alt_text", length = 1000)
     private String altText;
     private boolean isSpymasterPick;
 
-    public GameCard() {
+    public Card() {
     }
 
-    public GameCard(int gameId, String imageUrl, String altText) {
-        this.gameId = gameId;
+    public Card(Game game, String imageUrl, String altText) {
+        this.game = game;
         this.imageUrl = imageUrl;
         this.altText = altText;
         this.isSpymasterPick = false;
     }
 
     public UUID getId() {
-        return uuid;
+        return id;
     }
 
     public void setId(UUID id) {
-        this.uuid = id;
+        this.id = id;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public CardType getType() {
+        return type;
+    }
+
+    public void setType(CardType type) {
+        this.type = type;
     }
 
     public String getImageUrl() {
@@ -66,20 +80,11 @@ public class GameCard {
         this.altText = altText;
     }
 
-    // public GameCardType getCardType() {
-    //     return cardType;
-    // }
-
-    // public void setCardType(GameCardType cardType) {
-    //     this.cardType = cardType;
-    // }
-
     public boolean isSpymasterPick() {
         return isSpymasterPick;
     }
 
     public void setSpymasterPick(boolean spymasterPick) {
-        this.isSpymasterPick = spymasterPick;
+        isSpymasterPick = spymasterPick;
     }
-
 }

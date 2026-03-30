@@ -3,7 +3,7 @@ package nl.vtek.names.game.dto;
 import java.util.List;
 import java.util.UUID;
 
-public class CardUpdateRequest {
+public class UpdateCardsRequest {
 
     private List<UUID> cardIds;
     private Boolean spymasterPick;

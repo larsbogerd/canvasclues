@@ -1,7 +1,7 @@
 package nl.vtek.names.game.controller;
 
-import nl.vtek.names.game.dto.CardUpdateRequest;
-import nl.vtek.names.game.model.GameCard;
+import nl.vtek.names.game.dto.UpdateCardsRequest;
+import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.service.GameService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,22 +28,22 @@ public class GameController {
     }
 
     @PostMapping("/start")
-    public List<GameCard> startGame() {
+    public List<CardResponse> startGame() {
         return gameService.startGame();
     }
 
     @GetMapping("/{gameId}")
-    public List<GameCard> getGame(@PathVariable int gameId) {
+    public List<CardResponse> getGame(@PathVariable int gameId) {
         return gameService.getGame(gameId);
     }
 
     @PatchMapping("/updatecards")
-    public List<GameCard> updateCards(@RequestBody CardUpdateRequest request) {
-        return gameService.updateCards(request.getCardIds(), request.getSpymasterPick());
+    public void updateCards(@RequestBody UpdateCardsRequest request) {
+        gameService.updateCards(request.getCardIds(), request.getSpymasterPick());
     }
 
     @PostMapping("/checkcards")
-    public Map<UUID, Boolean> compareSpyOperativeChoice(@RequestBody List<UUID> cardIds) {
-        return gameService.compareSpyOperativeChoice(cardIds);
+    public Map<UUID, Boolean> checkCards(@RequestBody List<UUID> cardIds) {
+        return gameService.checkCards(cardIds);
     }
 }

@@ -4,7 +4,7 @@ In this project we will build a digital version of the board game **Codenames**.
 Instead of using words, the game uses pictures from real museum objects that are dynamically loaded via an external museum API.
 
 The game is played on a 4x4 grid containing 16 museum object images.  
-Each round consists of two alternating phases:
+Each round consists of two phases:
 
 1. **HINT Phase (Spymaster)** – The Spymaster analyzes the grid, selects one or more related images, and provides a single-word clue. After confirming, the game transitions automatically to the next phase.
 
@@ -21,9 +21,10 @@ This section explains how to set up the project locally and run it on your own s
 ## Tech Stack
 
 ### Front-end
-- **Framework:** Vue.js  
+- **Framework:** Vue 3 + Vite  
 - **Language:** JavaScript  
-- **UI:** HTML5 + CSS3  
+- **Routing:** Vue Router  
+- **UI:** HTML5 + CSS3
 
 ### Back-end
 - **Framework:** Spring Boot 4.0.2  
@@ -64,9 +65,10 @@ Documentation:
 
 # Build and Test
 
-> Note: Detailed setup and configuration instructions for the back-end and front-end are documented in their respective README files:
-> - `BACK-END.md`
-> - `FRONT-END.md`
+Detailed setup and architecture notes for each app are documented in:
+
+- `BACK-END.md`
+- `FRONT-END.md`
 
 
 ## 1) Start the database (Docker)
@@ -100,8 +102,11 @@ From the project root:
 
 ```bash
 cd src/front-end
-npm install && npm run dev
+npm install
+npm run dev
 ```
+
+The Vite dev server runs on port **5173** by default.
 
 ---
 Stop the containers when finished:

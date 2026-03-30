@@ -93,7 +93,7 @@ async function getCountOfCardsSelectedBySpymaster() {
       <fase-label fase="Operative"/>
       <div class="hint-card" v-if="hint">
         <div class="hint-header">
-          <span>{{ hint.hintContent }}</span>
+          <span>{{ hint.content }}</span>
           <span class="hint-number">{{ amount }}</span>
         </div>
         <div class="hint-body">

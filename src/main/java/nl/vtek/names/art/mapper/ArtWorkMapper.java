@@ -21,11 +21,11 @@ public class ArtWorkMapper {
         );
     }
 
-    public ArtWorkResponse toResponse(ArtWork artWork, int position) {
+    public ArtWorkResponse toResponse(ArtWork artWork, int id) {
         String imageUrl = "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, artWork.getImageId());
         String altText = "%s — %s, %s".formatted(
                 artWork.getTitle(), artWork.getArtistDisplay(), artWork.getDateDisplay());
 
-        return new ArtWorkResponse(position, imageUrl, altText);
+        return new ArtWorkResponse(id, imageUrl, altText);
     }
 }
