@@ -37,7 +37,7 @@ function buttonClick() {
 
 .text-field {
   width: 100%;
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
 }
 
 .fields {
@@ -54,7 +54,7 @@ function buttonClick() {
   box-sizing: border-box;
   width: 100%;
   padding: 12px 16px;
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   background: white;
   border: 1px solid #ccc;
   border-radius: 20px;

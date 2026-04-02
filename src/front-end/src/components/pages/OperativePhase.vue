@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/FaseLabel.vue";
 import {useRouter} from 'vue-router'
+import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";
 import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
 import BaseModal from "@/components/BaseModal.vue";
@@ -39,17 +40,13 @@ async function getHint() {
 
 async function submit() {
   try {
-    let booleanResult = 0;
     let correctCards = await getSelectedCards();
     for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
       if (cardToUpdate) {
         cardToUpdate.color = isCorrect ? 'right' : 'wrong';
-        booleanResult = isCorrect ? booleanResult + 1 : booleanResult;
       }
     }
-    correctAmount.value = booleanResult;
-    modal.value.show()
   } catch (error) {
     console.log(error);
   }
@@ -96,16 +93,19 @@ async function getCountOfCardsSelectedBySpymaster() {
 </script>
 
 <template>
-  <TutorialButton>
-    <OperativeModalContent></OperativeModalContent>
-  </TutorialButton>
+  <div class="operative-phase">
+  <Header #tutorial-button username="V-Tek">
+    <TutorialButton>
+      <OperativeModalContent></OperativeModalContent>
+    </TutorialButton>
+  </Header>
   <div class="screen">
     <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
     <div class="sidebar">
       <fase-label fase="Operative"/>
       <div class="hint-card" v-if="hint">
         <div class="hint-header">
-          <span>{{ hint.content }}</span>
+          <span>{{ hint.hintContent }}</span>
           <span class="hint-number">{{ amount }}</span>
         </div>
         <div class="hint-body">
@@ -117,20 +117,30 @@ async function getCountOfCardsSelectedBySpymaster() {
       </div>
     </div>
   </div>
+  </div>
+
   <BaseModal ref="modal">
     <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount" :selectedAmount="selectedCards.length"></OperativeResultModalContent>
   </BaseModal>
 </template>
 
 <style scoped>
-.screen {
+.operative-phase {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  overflow: hidden;
   background-color: var(--background-color);
+}
+
+.screen {
+  background-color: inherit;
   gap: 20px;
   display: grid;
   grid-template-columns: 2fr 1fr;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 92vh;
   box-sizing: border-box;
   padding: 20px;
 }
@@ -155,7 +165,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-header {
-  font-family: var(--font-display);
+  font-family: var(--font-display),sans-serif;
   font-size: 32px;
   font-weight: bold;
   text-transform: uppercase;
@@ -174,7 +184,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-body p {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: 18px;
   margin: 4px 0;
   color: var(--text-color);

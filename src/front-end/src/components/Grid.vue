@@ -21,7 +21,7 @@ const emit = defineEmits(['card-clicked'])
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: 16px;
-  height: calc(100vh - 40px);
+  height: calc(100vh - 160px);
   aspect-ratio: 1;
   max-width: 100%;
 }

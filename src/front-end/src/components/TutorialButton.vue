@@ -6,12 +6,13 @@ const modal = ref(null)
 </script>
 
 <template>
-  <button @click="modal?.show()">
-    <img alt="ModalStart" :src="questionIcon" />
-  </button>
   <BaseModal ref="modal" @click="modal?.hide()">
     <slot></slot>
   </BaseModal>
+
+  <button @click="modal?.show()">
+    <img alt="ModalStart" :src="questionIcon" />
+  </button>
 </template>
 
 <style scoped>

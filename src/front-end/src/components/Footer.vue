@@ -15,7 +15,7 @@ function year() {
   position: absolute;
   bottom: 1rem;
   left: 2rem;
-  font-family: var(--font-secondary),serif;
+  font-family: var(--font-secondary),sans-serif;
   font-weight: 300;
   font-size: 0.9rem;
   color: #555;

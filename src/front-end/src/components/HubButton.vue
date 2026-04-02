@@ -14,7 +14,7 @@ const emit = defineEmits(
 </script>
 
 <template>
-  <button @click="emit('button-click')" class="jqx-button container">
+  <button @click="emit('button-click')" class="button container">
       <span class="text-block">
         <span class="h1">{{ props.Phase }}</span>
         <span class="subtext">{{ props.subText }}</span>
@@ -46,12 +46,12 @@ const emit = defineEmits(
 .h1{
   font-size: 1.5rem;
   font-weight: 500;
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
 }
 
 .subtext {
   font-size: 1rem;
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
 }
 
 img{
@@ -63,8 +63,8 @@ img{
   object-fit: contain;
 }
 
-.jqx-button {
-  background-color: var(--bg-color);
+.button {
+  background-color: inherit;
   font-family: inherit;
   color: inherit;
   outline: none;

@@ -58,14 +58,14 @@ function goToGameHubPhase() {
 
 
 .title {
-  font-family: var(--font-main),serif;
+  font-family: var(--font-main),sans-serif;
   font-size: 5.5rem;
   font-weight: 300;
   margin: 0;
 }
 
 .description {
-  font-family: var(--font-secondary),serif;
+  font-family: var(--font-secondary),sans-serif;
   font-size: 1.5rem;
   font-weight: 300;
   margin: 0;
