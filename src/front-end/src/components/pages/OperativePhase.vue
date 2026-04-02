@@ -4,18 +4,23 @@ import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/FaseLabel.vue";
 import {useRouter} from 'vue-router'
+import TutorialButton from "@/components/TutorialButton.vue";
+import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
+import BaseModal from "@/components/BaseModal.vue";
+import OperativeResultModalContent from "@/components/ModalContent/OperativeResultModalContent.vue";
 
 const router = useRouter();
+const modal = ref(null)
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
+const correctAmount = ref(0);
 const amount = ref(0);
 
 onMounted (async () => {
   await getHint();
   await getGrid();
   amount.value = await getCountOfCardsSelectedBySpymaster();
-  console.log(amount);
 });
 
 async function getGameId(){
@@ -34,13 +39,17 @@ async function getHint() {
 
 async function submit() {
   try {
+    let booleanResult = 0;
     let correctCards = await getSelectedCards();
     for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
       if (cardToUpdate) {
         cardToUpdate.color = isCorrect ? 'right' : 'wrong';
+        booleanResult = isCorrect ? booleanResult + 1 : booleanResult;
       }
     }
+    correctAmount.value = booleanResult;
+    modal.value.show()
   } catch (error) {
     console.log(error);
   }
@@ -87,6 +96,9 @@ async function getCountOfCardsSelectedBySpymaster() {
 </script>
 
 <template>
+  <TutorialButton>
+    <OperativeModalContent></OperativeModalContent>
+  </TutorialButton>
   <div class="screen">
     <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
     <div class="sidebar">
@@ -99,11 +111,15 @@ async function getCountOfCardsSelectedBySpymaster() {
         <div class="hint-body">
           <p>Nog {{ amount }} kunstwerken te vinden</p>
           <p>Geselecteerd: {{ selectedCards.length }}</p>
+          <p>Correct geraden: {{correctAmount}}</p>
           <button class="end-turn-btn" @click="submit">Beëindig poging</button>
         </div>
       </div>
     </div>
   </div>
+  <BaseModal ref="modal">
+    <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount" :selectedAmount="selectedCards.length"></OperativeResultModalContent>
+  </BaseModal>
 </template>
 
 <style scoped>

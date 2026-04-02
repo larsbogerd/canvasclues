@@ -1,80 +1,16 @@
 <script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-function goToGameHubPhase() {
-  router.push('/gamehub')
-}
+import RightHalfStartingPage from "@/components/RightHalfStartingPage.vue";
+import LeftHalfStartingPage from "@/components/LeftHalfStartingPage.vue";
+import Footer from "@/components/Footer.vue";
 </script>
 
 <template>
   <div class="page">
-
-    <div class="left">
-      <div class="header">
-        <Logo :size="80" />
-      </div>
-
-      <div class="content">
-        <h1 class="title">Canvas Clues</h1>
-        <p class="description">
-          Vind de verborgen verbanden tussen meesterwerken!
-        </p>
-        <div class="button-group">
-          <button @click="goToGameHubPhase" class="start-btn">Start een spel</button>
-          <button @click="howToPlay" class="secondary-btn">Hoe werkt het?</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="right">
-      <img :src="artImage" alt="Art piece" />
-    </div>
-
-    <AppFooter />
-
-    <Popup v-model="showPopup" />
-
+    <LeftHalfStartingPage></LeftHalfStartingPage>
+    <RightHalfStartingPage></RightHalfStartingPage>
+    <Footer></Footer>
   </div>
 </template>
-
-<script>
-import AppFooter from '@/components/Footer.vue'
-import Logo from '@/components/Logo.vue'
-import art from '@/assets/images/mainartpiece.png'
-import logoImage from '@/assets/images/logo-artic.png'
-import Popup from '@/components/RulesPopUp.vue'
-
-
-
-export default {
-  name: 'StartingPage',
-
-  components: {
-    Logo,
-    AppFooter,
-    Popup
-
-  },
-
-  data() {
-    return {
-      artImage: art,
-      logo: logoImage,
-      showPopup: false
-    }
-  },
-  methods: {
-    startGame() {
-      console.log('Spel gestart');
-    },
-    howToPlay() {
-      this.showPopup = true
-    }
-  }
-}
-</script>
 
 <style>
 html, body {
@@ -93,83 +29,9 @@ html, body {
   overflow: hidden;
 }
 
-.left {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding-left: 2rem;
-}
-
-.header {
-  position: absolute;
-  top: 1.5rem;
-  left: 2rem;
-}
-
 .header img {
   width: 80px;
   height: 80px;
 }
 
-.content {
-  max-width: 550px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.right {
-  flex: 1;
-  overflow: hidden;
-}
-
-.right img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.title {
-  font-family: var(--font-main);
-  font-size: 5.5rem;
-  font-weight: 300;
-  margin: 0;
-}
-
-.description {
-  font-family: var(--font-secondary);
-  font-size: 1.5rem;
-  font-weight: 300;
-  margin: 0;
-}
-
-.button-group {
-  display: flex;
-  gap: 0.8rem;
-  margin-top: 0.5rem;
-}
-
-.start-btn,
-.secondary-btn {
-  font-size: 1.2rem;
-  padding: 0.6rem 4rem;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.start-btn {
-  background-color: var(--primary-color);
-  color: var(--background-color);
-  border: none;
-}
-
-.start-btn:hover {
-  opacity: 0.9;
-}
-
-.secondary-btn {
-  background-color: transparent;
-  color: black;
-  border: 2px solid var(--primary-color);
-}
 </style>

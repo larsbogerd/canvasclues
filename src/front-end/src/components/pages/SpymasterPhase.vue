@@ -5,22 +5,30 @@ import {onMounted, ref} from "vue";
 import Grid from "@/components/Grid.vue";
 import FaseLabel from "@/components/FaseLabel.vue";
 import { useRouter } from 'vue-router'
+import TutorialButton from "@/components/TutorialButton.vue";
+import SpymasterModalContent from "@/components/ModalContent/SpymasterModalContent.vue";
+import BaseModal from "@/components/BaseModal.vue";
+import SpymasterResultModalContent from "@/components/ModalContent/SpymasterResultModalContent.vue";
+
 const hintInput = ref("");
+const modal = ref(null);
 const cards = ref([]);
 const selectedCards = ref([]);
 const emit = defineEmits(['game-started']);
 const router = useRouter();
+
 let gameId;
+
+onMounted(startGame);
 
 async function submit(input) {
   let status;
   try {
     if (validateInput(input)) {
       await patchCards()
-
       status = await postHint(input)
       httpStatus(status)
-      await router.push('/gamehub');
+      modal.value.show();
     } else {
       console.error("invalid input");
     }
@@ -51,8 +59,6 @@ function validateInput(input) {
   const regex = /^[a-zA-Z]+$/;
   return regex.test(input);
 }
-
-onMounted(startGame);
 
 async function startGame() {
   try {
@@ -104,13 +110,20 @@ async function patchCards() {
   }
 }
 
+
 </script>
 
 <template>
+  <TutorialButton>
+    <SpymasterModalContent></SpymasterModalContent>
+  </TutorialButton>
+  <BaseModal ref="modal">
+    <SpymasterResultModalContent></SpymasterResultModalContent>
+  </BaseModal>
   <div class="screen">
     <grid class="grid" :cards="cards" @card-clicked="handleCardClicked"/>
     <div class="sidebar">
-      <fase-label fase="Spymaster"/>
+      <FaseLabel fase="Spymaster"/>
       <div class="hint-card">
         <div class="hint-body">
           <p>Geselecteerd: {{ selectedCards.length }}</p>
@@ -158,7 +171,7 @@ async function patchCards() {
 }
 
 .hint-body p {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),serif;
   font-size: 18px;
   margin: 0 0 16px 0;
   color: var(--text-color);

@@ -1,0 +1,28 @@
+---
+title: Component Diagram - Museum Codenames
+---
+
+graph TB
+    subgraph frontend ["<<system>> Vue.js Frontend"]
+        FE["<<component>>\nWeb Application"]
+    end
+
+    subgraph backend ["<<system>> Spring Boot Backend"]
+        GAME["<<component>>\nGame Management"]
+        HINT["<<component>>\nHint Management"]
+        ART["<<component>>\nArtwork Integration"]
+    end
+
+    DB[("<<system>>\nMySQL Database")]
+    AIC["<<external system>>\nArt Institute of\nChicago API"]
+    IIIF["<<external system>>\nIIIF Image Server"]
+
+    FE -- "GAME API" --> GAME
+    FE -- "HINT API" --> HINT
+    FE -. "Loads images" .-> IIIF
+
+    GAME --> ART
+    GAME --> DB
+    HINT --> DB
+
+    ART -- "Fetches artwork metadata\nand image URLs" --> AIC
