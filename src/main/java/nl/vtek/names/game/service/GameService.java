@@ -2,9 +2,11 @@ package nl.vtek.names.game.service;
 
 import nl.vtek.names.art.dto.ArtWorkResponse;
 import nl.vtek.names.art.service.ArtWorkService;
+import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.dto.CardResponse;
+import nl.vtek.names.game.model.GameState;
 import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.mapper.CardMapper;
@@ -52,6 +54,9 @@ public class GameService {
     public List<CardResponse> getGame(int gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found: " + gameId));
+        game.setPlayCount(game.getPlayCount() + 1);
+        gameRepository.save(game);
+
         return CardMapper.toCardResponse(game.getCards());
     }
 
@@ -74,4 +79,12 @@ public class GameService {
         }
         return results;
     }
+
+    public List<GameResponse> getGameList() {
+        List<Game> games = gameRepository.findByState(GameState.READY);
+        return games.stream()
+                .map(GameMapper::toGameResponse)
+                .toList();
+    }
+
 }

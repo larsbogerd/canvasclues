@@ -1,9 +1,9 @@
 <script setup>
 import axios from 'axios';
 import {onMounted, ref} from "vue";
-import Grid from "@/components/Grid.vue";
-import FaseLabel from "@/components/FaseLabel.vue";
-import {useRouter} from 'vue-router'
+import Grid from "@/components/board/Grid.vue";
+import FaseLabel from "@/components/board/FaseLabel.vue";
+import {useRouter, useRoute} from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";
 import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
@@ -11,6 +11,7 @@ import BaseModal from "@/components/BaseModal.vue";
 import OperativeResultModalContent from "@/components/ModalContent/OperativeResultModalContent.vue";
 
 const router = useRouter();
+const route = useRoute();
 const modal = ref(null)
 const cards = ref([]);
 const hint = ref(null);
@@ -24,8 +25,8 @@ onMounted (async () => {
   amount.value = await getCountOfCardsSelectedBySpymaster();
 });
 
-async function getGameId(){
-  return 1;
+function getGameId(){
+  return route.params.gameId;
 }
 
 async function getHint() {
@@ -40,13 +41,16 @@ async function getHint() {
 
 async function submit() {
   try {
+    correctAmount.value = 0;
     let correctCards = await getSelectedCards();
     for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
       if (cardToUpdate) {
         cardToUpdate.color = isCorrect ? 'right' : 'wrong';
+        if (isCorrect) correctAmount.value++;
       }
     }
+    modal.value.show();
   } catch (error) {
     console.log(error);
   }
@@ -105,7 +109,7 @@ async function getCountOfCardsSelectedBySpymaster() {
       <fase-label fase="Operative"/>
       <div class="hint-card" v-if="hint">
         <div class="hint-header">
-          <span>{{ hint.hintContent }}</span>
+          <span>{{ hint.content }}</span>
           <span class="hint-number">{{ amount }}</span>
         </div>
         <div class="hint-body">
@@ -165,7 +169,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-header {
-  font-family: var(--font-display),sans-serif;
+  font-family: var(--font-display), sans-serif;
   font-size: 32px;
   font-weight: bold;
   text-transform: uppercase;

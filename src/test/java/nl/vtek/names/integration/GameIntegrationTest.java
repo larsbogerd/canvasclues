@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import nl.vtek.names.game.dto.CardResponse;
+import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.model.Card;
@@ -133,5 +134,42 @@ class GameIntegrationTest {
         assertThat(dbUnpickedCards).isNotEmpty();
         assertThat(dbPickedCards).allMatch(Card::isSpymasterPick);
         assertThat(dbUnpickedCards).noneMatch(Card::isSpymasterPick);
+    }
+
+    @Test
+    void getGameList_returnsReadyGames() throws Exception {
+        MvcResult startResult = mockMvc.perform(post("/api/v1/game/start"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<CardResponse> returnedCards = objectMapper.readValue(
+                startResult.getResponse().getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        int gameId = returnedCards.getFirst().getGameId();
+
+        String hintBody = """
+                {"gameId": %d, "content": "testclue"}
+                """.formatted(gameId);
+
+        mockMvc.perform(post("/api/v1/hints")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(hintBody))
+                .andExpect(status().isOk());
+
+        MvcResult listResult = mockMvc.perform(get("/api/v1/game/list"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<GameResponse> games = objectMapper.readValue(
+                listResult.getResponse().getContentAsString(),
+                new TypeReference<>() {}
+        );
+
+        assertThat(games).isNotEmpty();
+        assertThat(games)
+                .anyMatch(game -> game.getGameId() == gameId
+                        && "testclue".equals(game.getHint()));
     }
 }

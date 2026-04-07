@@ -10,7 +10,7 @@ const router = useRouter()
 const modal = ref(null)
 
 function goToGameHubPhase() {
-  router.push('/gamehub')
+  router.push('/game')
 }
 </script>
 

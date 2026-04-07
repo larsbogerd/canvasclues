@@ -1,27 +1,63 @@
--- Seed: game table
-INSERT IGNORE INTO game (id, state, max_score, created_at)
-VALUES (1, 'READY', 3, NOW());
-
 -- Seed: game board
+INSERT IGNORE INTO game (id, state, max_score, created_at, play_count)
+VALUES (1, 'READY', 3, '2026-03-25 13:00:00', 50),
+       (2, 'READY', 4, '2026-03-31 16:30:00', 5),
+       (3, 'READY', 5, '2026-04-01 10:20:00', 10);
+
+-- Seed: card table
 INSERT IGNORE INTO card (id, game_id, alt_text, image_url, is_spymaster_pick)
 VALUES
-  (UUID_TO_BIN('05316ced-9f2b-42a1-8e24-16e2f519e257'), 1, 'Stacks of Wheat (End of Summer) – Claude Monet (French, 1840–1926), 1890/91', 'https://www.artic.edu/iiif/2/a38e2828-ec6f-ece1-a30f-70243449197b/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('0779a09c-6f86-4d14-a0fb-40de1013f9c9'), 1, 'The Bedroom – Vincent van Gogh (Dutch, 1853–1890), 1889', 'https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/!500,500/0/default.jpg', true),
-  (UUID_TO_BIN('0daad8c3-35a5-4eed-8d4f-6628e1ea2654'), 1, 'The Assumption of the Virgin – El Greco (Doménikos Theotokópoulos) (Greek, 1541–1614), 1577', 'https://www.artic.edu/iiif/2/47fd1564-93f5-f30b-7786-013421133b4a/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('226181d7-8122-4567-ba90-c885ae9cb3ba'), 1, 'At the Moulin Rouge – Henri de Toulouse-Lautrec (French, 1864–1901), 1892/95', 'https://www.artic.edu/iiif/2/defb4004-b500-218d-3d9b-9a02423f097d/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('2e41d850-ea3c-452c-a803-54529c9e41d3'), 1, 'Veranda Post (Òpó Ògògá) – Olowe of Ise (died 1938), Yorùbá', 'https://www.artic.edu/iiif/2/fec5d023-0b46-45df-eb57-cbf64e24121d/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('3d0ea3a9-2ac7-4cf7-a61f-a1d7bee37082'), 1, 'Water Lilies – Claude Monet (French, 1840–1926), 1906', 'https://www.artic.edu/iiif/2/3c27b499-af56-f0d5-93b5-a7f2f1ad5813/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('4fdcd66f-a7ce-45c0-84d4-f683e57d6d7a'), 1, 'A Sunday on La Grande Jatte – 1884 – Georges Seurat (French, 1859–1891), 1884–86', 'https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('5a9988af-d2a2-4ac6-8298-ad88824b520b'), 1, 'Self-Portrait – Vincent van Gogh (Dutch, 1853–1890), 1887', 'https://www.artic.edu/iiif/2/47c5bcb8-62ef-e5d7-55e7-f5121f409a30/full/!500,500/0/default.jpg', true),
-  (UUID_TO_BIN('71e7b296-2147-4789-8a2c-4f06c99e8319'), 1, 'Buddha Shakyamuni Seated in Meditation (Dhyanamudra) – India', 'https://www.artic.edu/iiif/2/0675f9a9-1a7b-c90a-3bb6-7f7be2afb678/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('7608ed35-f502-4558-907b-94a18eaaf695'), 1, 'Paris Street; Rainy Day – Gustave Caillebotte (French, 1848–1894), 1877', 'https://www.artic.edu/iiif/2/f8fd76e9-c396-5678-36ed-6a348c904d27/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('7e25d3bf-d972-4cd7-adf8-0b1713956dd9'), 1, 'Bust of Anne-Marie-Louise Thomas de Domangeville de Sérilly', 'https://www.artic.edu/iiif/2/fae6d055-fe95-17e2-a00a-c2307ace531c/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('887d2aff-7dff-478e-859f-fe2b5c077616'), 1, 'Under the Wave off Kanagawa (Kanagawa oki nami ura), also known as the Great Wave – Katsushika Hokusai (Japanese, 1760–1849), 1830/33', 'https://www.artic.edu/iiif/2/2fa24f36-cc26-41b6-4b49-12bba2a6c1c8/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('89374af2-56f4-4209-9001-46af26a9a346'), 1, 'Two Sisters (On the Terrace) – Pierre-Auguste Renoir (French, 1841–1919), 1881', 'https://www.artic.edu/iiif/2/3a608f55-d76e-fa96-d0b1-0789fbc48f1e/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('a71fe056-43fe-44c3-ad93-5e107646ff1d'), 1, 'Arrival of the Normandy Train, Gare Saint-Lazare – Claude Monet (French, 1840–1926), 1877', 'https://www.artic.edu/iiif/2/0f1cc0e0-e42e-be16-3f71-2022da38cb93/full/!500,500/0/default.jpg', false),
-  (UUID_TO_BIN('c35890a2-f2ce-443f-be38-8cc1297959e0'), 1, 'The Drinkers - Vincent van Gogh (Dutch, 1853–1890), 1890', 'https://www.artic.edu/iiif/2/d0ff5b36-bb38-b156-6042-5c8545352c2f/full/!500,500/0/default.jpg', true),
-  (UUID_TO_BIN('c9ca8451-8d89-4030-904a-05f624d97785'), 1, 'The Basket of Apples – Paul Cezanne (French, 1839–1906), c. 1893', 'https://www.artic.edu/iiif/2/52ac8996-3460-cf71-cb42-5c4d0aa29b74/full/!500,500/0/default.jpg', false);
+    (UUID_TO_BIN('05316ced-9f2b-42a1-8e24-16e2f519e257'), 1, 'Stacks of Wheat (End of Summer) – Claude Monet (French, 1840–1926), 1890/91', 'https://www.artic.edu/iiif/2/a38e2828-ec6f-ece1-a30f-70243449197b/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('0779a09c-6f86-4d14-a0fb-40de1013f9c9'), 1, 'The Bedroom – Vincent van Gogh (Dutch, 1853–1890), 1889', 'https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('0daad8c3-35a5-4eed-8d4f-6628e1ea2654'), 1, 'The Assumption of the Virgin – El Greco (Doménikos Theotokópoulos) (Greek, 1541–1614), 1577', 'https://www.artic.edu/iiif/2/47fd1564-93f5-f30b-7786-013421133b4a/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('226181d7-8122-4567-ba90-c885ae9cb3ba'), 1, 'At the Moulin Rouge – Henri de Toulouse-Lautrec (French, 1864–1901), 1892/95', 'https://www.artic.edu/iiif/2/defb4004-b500-218d-3d9b-9a02423f097d/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('2e41d850-ea3c-452c-a803-54529c9e41d3'), 1, 'Veranda Post (Òpó Ògògá) – Olowe of Ise (died 1938), Yorùbá', 'https://www.artic.edu/iiif/2/fec5d023-0b46-45df-eb57-cbf64e24121d/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('3d0ea3a9-2ac7-4cf7-a61f-a1d7bee37082'), 1, 'Water Lilies – Claude Monet (French, 1840–1926), 1906', 'https://www.artic.edu/iiif/2/3c27b499-af56-f0d5-93b5-a7f2f1ad5813/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('4fdcd66f-a7ce-45c0-84d4-f683e57d6d7a'), 1, 'A Sunday on La Grande Jatte – 1884 – Georges Seurat (French, 1859–1891), 1884–86', 'https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('5a9988af-d2a2-4ac6-8298-ad88824b520b'), 1, 'Self-Portrait – Vincent van Gogh (Dutch, 1853–1890), 1887', 'https://www.artic.edu/iiif/2/47c5bcb8-62ef-e5d7-55e7-f5121f409a30/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('71e7b296-2147-4789-8a2c-4f06c99e8319'), 1, 'Buddha Shakyamuni Seated in Meditation (Dhyanamudra) – India', 'https://www.artic.edu/iiif/2/0675f9a9-1a7b-c90a-3bb6-7f7be2afb678/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('7608ed35-f502-4558-907b-94a18eaaf695'), 1, 'Paris Street; Rainy Day – Gustave Caillebotte (French, 1848–1894), 1877', 'https://www.artic.edu/iiif/2/f8fd76e9-c396-5678-36ed-6a348c904d27/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('7e25d3bf-d972-4cd7-adf8-0b1713956dd9'), 1, 'Bust of Anne-Marie-Louise Thomas de Domangeville de Sérilly', 'https://www.artic.edu/iiif/2/fae6d055-fe95-17e2-a00a-c2307ace531c/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('887d2aff-7dff-478e-859f-fe2b5c077616'), 1, 'Under the Wave off Kanagawa (Kanagawa oki nami ura), also known as the Great Wave – Katsushika Hokusai (Japanese, 1760–1849), 1830/33', 'https://www.artic.edu/iiif/2/2fa24f36-cc26-41b6-4b49-12bba2a6c1c8/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('89374af2-56f4-4209-9001-46af26a9a346'), 1, 'Two Sisters (On the Terrace) – Pierre-Auguste Renoir (French, 1841–1919), 1881', 'https://www.artic.edu/iiif/2/3a608f55-d76e-fa96-d0b1-0789fbc48f1e/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('a71fe056-43fe-44c3-ad93-5e107646ff1d'), 1, 'Arrival of the Normandy Train, Gare Saint-Lazare – Claude Monet (French, 1840–1926), 1877', 'https://www.artic.edu/iiif/2/0f1cc0e0-e42e-be16-3f71-2022da38cb93/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('c35890a2-f2ce-443f-be38-8cc1297959e0'), 1, 'The Drinkers - Vincent van Gogh (Dutch, 1853–1890), 1890', 'https://www.artic.edu/iiif/2/d0ff5b36-bb38-b156-6042-5c8545352c2f/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('c9ca8451-8d89-4030-904a-05f624d97785'), 1, 'The Basket of Apples – Paul Cezanne (French, 1839–1906), c. 1893', 'https://www.artic.edu/iiif/2/52ac8996-3460-cf71-cb42-5c4d0aa29b74/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('cd257504-634f-455b-9f50-0004026c717e'), 2, 'Equestrienne (At the Cirque Fernando) — Henri de Toulouse-Lautrec (French, 1864–1901), 1887–88', 'https://www.artic.edu/iiif/2/65db9e21-83c3-1cc6-7240-1e1996d87f52/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('f36df9fe-a662-459a-8a91-b63de19f7a57'), 2, 'Woman before an Aquarium — Henri Matisse French, 1869–1954, 1921–23', 'https://www.artic.edu/iiif/2/d0e36029-27fc-bf4e-357a-55cfbaf7bdfd/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('d6c0e2ef-a8bf-429b-b4b1-5f9cd51f9089'), 2, 'The Girl by the Window — Edvard Munch (Norwegian, 1863–1944), 1893', 'https://www.artic.edu/iiif/2/d7df2633-3b40-f570-c906-211503a37cde/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('bcd4248f-4301-4579-a469-bc9485b90600'), 2, 'English Dining Room of the Georgian Period, 1770-90 — Designed by Narcissa Niblack Thorne American, 1882-1966, c. 1937', 'https://www.artic.edu/iiif/2/416b87c8-515f-0066-5c44-b7562162f2c0/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('b80155e2-2b30-4a4f-bc86-2c21ec424a25'), 2, 'Landscape with Saint John on Patmos — Nicolas Poussin (French, 1594–1665), 1640', 'https://www.artic.edu/iiif/2/aa870b0d-5a1b-660a-6dc6-56c12109cf6e/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('f0942a86-c00b-4f85-9dd9-3f5f43b36f77'), 2, 'Coffin and Mummy of Paankhaenamun — Egyptian; Thebes (now Luxor), Egypt, Third Intermediate Period, Dynasty 22, reign of Osorkon I (about 924–889 BCE)', 'https://www.artic.edu/iiif/2/93270aaf-16a5-1604-c6c8-0f3c003eb7a1/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('aa33538b-7ab4-4269-87cf-de48c5c36ce8'), 2, 'Fishing Boats with Hucksters Bargaining for Fish — Joseph Mallord William Turner (English, 1775–1851), 1837–38', 'https://www.artic.edu/iiif/2/8641479e-c93e-f1a8-9925-19be061706da/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('a25a798b-0c99-4e5b-99a0-9b0b09a3a465'), 2, 'Acrobats at the Cirque Fernando (Francisca and Angelina Wartenberg) — Pierre-Auguste Renoir (French, 1841–1919), 1879', 'https://www.artic.edu/iiif/2/321c45f5-22a3-84a2-44cc-cf66642d4cf2/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('7cbce956-1367-443e-bbb6-c3996c75b5d7'), 2, 'Hercules and the Lernaean Hydra — Gustave Moreau (French, 1826-1898), 1875–76', 'https://www.artic.edu/iiif/2/2ae64c8a-266d-470a-a25a-c83127564636/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('5119f8dc-c10b-4e2c-badb-388585b94c71'), 2, 'Shiva as Lord of the Dance (Nataraja) — India Tamil Nadu, Chola period, about 10th/11th century', 'https://www.artic.edu/iiif/2/cf50f037-5fb2-e197-0e56-3ae701edb3e2/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('4fe6eaac-b195-400b-a4cc-14a375cca885'), 2, 'The Watermill with the Great Red Roof — Meindert Hobbema (Dutch, 1638–1709), c. 1665', 'https://www.artic.edu/iiif/2/237c25a2-6051-a8e7-1610-a01938d4deab/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('4591aa0e-49e9-4e79-b883-b004e9cdd6ae'), 2, 'The Herring Net — Winslow Homer (American, 1836–1910), 1885', 'https://www.artic.edu/iiif/2/5dca7347-c6dc-24dd-d073-d705b9cdc575/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('4071607c-d838-41e4-af4a-e85f0713831f'), 2, 'Cupid Chastised — Bartolomeo Manfredi (Italian, 1582–1622), 1613', 'https://www.artic.edu/iiif/2/0f951635-312c-0829-451b-553f461c5518/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('0dc1295c-99c8-499a-bf0b-60a42bf161d8'), 2, 'The Bay of Marseille, Seen from L''Estaque — Paul Cezanne (French, 1839–1906), c. 1885', 'https://www.artic.edu/iiif/2/d4ca6321-8656-3d3f-a362-2ee297b2b813/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('a3f5c512-e446-4b35-a7c8-22fcd74c3dc8'), 2, 'The Annunciation — Jean Hey (Master of Moulins; Netherlandish, c. 1480-c.1504), 1490–95', 'https://www.artic.edu/iiif/2/77951d0c-d781-eac6-f4ff-f13cc5cfc0cf/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('eed5af4c-84b2-428e-9933-b2f97856677c'), 2, 'Grey and Silver: Old Battersea Reach — James McNeill Whistler (American, 1834–1903), 1863', 'https://www.artic.edu/iiif/2/f0b3ff64-d68e-3fd2-ffc9-5470eb9fea6e/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('021b46c8-0211-4463-b45f-f62d86488335'), 3, 'Madame de Pastoret and Her Son — Jacques-Louis David (French, 1748–1825), 1791–92', 'https://www.artic.edu/iiif/2/72227c9e-413c-8930-477d-5a90e0a2123c/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('0efceed6-5504-4fb0-9412-2a5a6b7e93dc'), 3, 'Portrait Vessel — Ceramist unknown (Moche), Southern Moche region, north coast, Peru, 600–700', 'https://www.artic.edu/iiif/2/239e0072-de08-cb26-1484-4776fc27b0fb/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('8c394982-39f8-41d6-84d9-700d823d64cc'), 3, 'Roses in a Bowl — Henri Fantin-Latour (French, 1836–1904), 1881','https://www.artic.edu/iiif/2/7abbfd97-fb03-2366-cfe5-b53738a3d93e/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('4d0eff4d-0cb1-4223-9203-78282b7537cb'), 3, 'Still Life with Dead Game, Fruits, and Vegetables in a Market — Frans Snyders (Flemish, 1579-1657), 1614', 'https://www.artic.edu/iiif/2/d9bde524-38b2-4262-3338-e4d06a50746d/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('5709c820-2a44-4b12-92ec-7b169b6f2729'), 3, 'Virgin and Child with the Young Saint John the Baptist — Correggio (Antonio Allegri; Italian, 1489–1534), c. 1515', 'https://www.artic.edu/iiif/2/d63b9402-c42b-cce3-aa63-6d213ad621cd/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('6dda92ed-bce2-4483-8ede-c2aff101f703'), 3, 'The Captive Slave (Ira Aldridge) — John Philip Simpson (English, 1782–1847), 1827', 'https://www.artic.edu/iiif/2/5490fd49-dd52-4fd7-7d41-d871dcffae55/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('74af3481-bf70-4ed6-b8b0-d357043facfa'), 3, 'Madame Cezanne in a Yellow Chair — Paul Cezanne (French, 1839–1906), 1888–90', 'https://www.artic.edu/iiif/2/4822cd01-44ac-041a-36b8-c0542377b750/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('9a91a883-303a-4de4-943e-4fc343a9ce1f'), 3, 'Stela of Amenemhat and Hemet — Egyptian; probably Thebes (now Luxor), Egypt, Middle Kingdom, early Dynasty 12, about 1956–1877 BCE', 'https://www.artic.edu/iiif/2/9365a024-75ce-75e9-756f-1c2c96eadec9/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('9c70792d-bd9d-4652-9795-892318ef70bb'), 3, 'Bust of a Youth (Saint John the Baptist) — Francesco Mochi (Italian, 1580–1654), 1630-40', 'https://www.artic.edu/iiif/2/4e37b182-cc1e-ef86-3eb2-de7d5b9db717/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('ac94511a-7ef5-482b-a719-eca5f81515c2'), 3, 'At Mouquin''s — William Glackens (American, 1870–1938), 1905', 'https://www.artic.edu/iiif/2/b146368d-a855-63ac-6115-04b835c60bb0/full/!500,500/0/default.jpg', true),
+    (UUID_TO_BIN('c315728b-201a-41ae-9b8c-49deb09bb291'), 3, 'The Fountains — Hubert Robert (French, 1733-1808), 1787–88', 'https://www.artic.edu/iiif/2/62fd0e14-d7fe-0d01-ab00-1eed84b4f294/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('13f8b684-38fc-4f43-873a-3c28e2f3ec33'), 3, 'The Landing Place — Hubert Robert (French, 1733-1808), 1788', 'https://www.artic.edu/iiif/2/83092988-7180-21d1-b8a3-cf39ddf39a68/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('ad8786ce-d340-4cca-af29-4d77ad6621bb'), 3, 'St. Gerardo Sagredo, Bishop of Csanád — Bernardo Strozzi (Italian, 1581–1664), 1633', 'https://www.artic.edu/iiif/2/f0447c50-f4c9-ecb2-2695-22669e1469cd/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('dc196af3-6ca5-4493-b3a4-21e35c8d564e'), 3, 'The Interior of the Palm House on the Pfaueninsel Near Potsdam — Carl Blechen (German, 1798–1840), 1834', 'https://www.artic.edu/iiif/2/38bb6be4-223e-af7a-7e18-f9ad0c388d3c/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('d6d90125-4526-491c-bf80-d445309d7fab'), 3, 'The Gulf of Salerno — Joseph Wright of Derby (English, 1734-1797), 1783–85', 'https://www.artic.edu/iiif/2/67b46720-1589-0d13-3597-f03c7b618094/full/!500,500/0/default.jpg', false),
+    (UUID_TO_BIN('e6c965c3-ee03-4247-b360-57c25d9a7211'), 3, 'In the Sea — Arnold Böcklin (Swiss, 1827–1901), 1883', 'https://www.artic.edu/iiif/2/fa81bfb9-5a07-5e3c-33b4-4efde68981c8/full/!500,500/0/default.jpg', false);
 
 -- Seed: hint table
 INSERT IGNORE INTO hint (id, content, game_id)
-VALUES (UUID_TO_BIN('cd5c469d-a519-4972-bc84-d0ec474f312b'), 'vangogh', 1);
+VALUES (UUID_TO_BIN('cd5c469d-a519-4972-bc84-d0ec474f312b'), 'vangogh', 1),
+       (UUID_TO_BIN('079d8865-d7e1-45c9-8fcf-a0b0914331aa'), 'water', 2),
+       (UUID_TO_BIN('3a3e6807-59cd-469e-b418-2d7e277894d3'), 'zittend', 3)

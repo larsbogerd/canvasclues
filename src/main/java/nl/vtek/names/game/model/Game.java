@@ -27,6 +27,8 @@ public class Game {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private int playCount;
+
     @OneToMany(mappedBy = "game")
     private List<Card> cards;
 
@@ -36,11 +38,12 @@ public class Game {
     public Game() {
     }
 
-    public Game(int id, GameState state, int maxScore, LocalDateTime createdAt) {
+    public Game(int id, GameState state, int maxScore, LocalDateTime createdAt, int playCount) {
         this.id = id;
         this.state = state;
         this.maxScore = maxScore;
         this.createdAt = createdAt;
+        this.playCount = playCount;
     }
 
     public int getId() {
@@ -89,6 +92,14 @@ public class Game {
 
     public void setHints(List<Hint> hints) {
         this.hints = hints;
+    }
+
+    public int getPlayCount() {
+        return playCount;
+    }
+
+    public void setPlayCount(int playCount) {
+        this.playCount = playCount;
     }
 }
 

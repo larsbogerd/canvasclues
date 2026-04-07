@@ -25,9 +25,7 @@
 
 <style scoped>
 p{
-  font-family: var(--font-secondary),serif;
+  font-family: var(--font-secondary),sans-serif;
   font-weight: 300;
 }
 </style>
-<script setup lang="ts">
-</script>

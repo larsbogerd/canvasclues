@@ -65,7 +65,7 @@ Shared utilities used across the application.
 
 ## Domain Model
 
-- `Game` uses an integer primary key and tracks `state`, `maxScore`, `createdAt`, related `cards`, and related `hints`.
+- `Game` uses an integer primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key and belongs to a `Game`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
@@ -82,7 +82,8 @@ The branch refactors renamed older `GameCard` and phase naming to the current `C
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
-| GET | `/api/v1/game/{gameId}` | Returns the stored `CardResponse[]` for a game |
+| GET | `/api/v1/game/{gameId}` | Returns the stored `CardResponse[]` for a game and increments its `playCount` |
+| GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` (used by the operative hub) |
 | PATCH | `/api/v1/game/updatecards` | Updates selected cards using `{ "cardIds": ["uuid"], "spymasterPick": true }` |
 | POST | `/api/v1/game/checkcards` | Accepts a JSON array of card UUIDs and returns a map of `cardId -> isSpymasterPick` |
 
@@ -141,5 +142,5 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 - Assign `CardType` values during game creation
 - Add scoring system that write the `Game`
 - Replace generic runtime exceptions with structured API errors
-- Add integration tests for the game and hint endpoints
+- ~~Add integration tests for the game and hint endpoints~~ (done)
 - Add OpenAPI or similar API documentation

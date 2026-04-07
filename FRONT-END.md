@@ -4,7 +4,8 @@
 
 The front-end is built using **Vue** and is responsible for:
 
-- rendering the landing page, game hub, and phase screens
+- rendering the landing page, game hub, operative hub, and phase screens
+- browsing available puzzles with sorting and search
 - starting a new game for the spymaster flow
 - sending selected cards and hints to the back-end
 - loading an existing game's cards and hint for the operative flow
@@ -51,12 +52,13 @@ src/front-end/vite.config.js
 
 Routes are defined in `src/front-end/src/router.js` using hash-based routing (`createWebHashHistory`).
 
-| Route        | Component        | Description |
-|--------------|------------------|-------------|
-| `/`          | `StartingPage`   | Landing page with the project intro and rules popup |
-| `/gamehub`   | `GameHub`        | Role selection screen for spymaster or operative |
-| `/spy`       | `SpymasterPhase` | Starts a new game, shows the 4x4 grid, lets the spymaster select cards and submit a one-word hint |
-| `/operative` | `OperativePhase` | Loads a game's grid and hint, then lets the operative validate selected cards |
+| Route                    | Component        | Description |
+|--------------------------|------------------|-------------|
+| `/`                      | `StartingPage`   | Landing page with the project intro and rules popup |
+| `/game`                  | `GameHub`        | Role selection screen for spymaster or operative |
+| `/game/spymaster`        | `SpymasterPhase` | Starts a new game, shows the 4x4 grid, lets the spymaster select cards and submit a one-word hint |
+| `/game/operative`        | `OperativeHub`   | Browse available puzzles with sorting (newest, popular, difficulty) and search |
+| `/game/operative/:gameId`| `OperativePhase` | Loads a game's grid and hint, then lets the operative validate selected cards |
 
 ---
 
@@ -68,6 +70,13 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 - The returned cards are rendered in the grid.
 - Selected card IDs are sent to `PATCH /api/v1/game/updatecards`.
 - The clue is sent to `POST /api/v1/hints`.
+
+### Operative hub
+
+- On mount, the page calls `GET /api/v1/game/list` to fetch all available puzzles.
+- Games can be sorted by newest, popularity (`playCount`), or difficulty (`maxScore`).
+- A search field filters puzzles by hint text (case-insensitive).
+- Clicking a puzzle navigates to `/game/operative/:gameId`.
 
 ### Operative phase
 

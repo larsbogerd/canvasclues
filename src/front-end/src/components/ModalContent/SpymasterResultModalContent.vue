@@ -1,19 +1,14 @@
 <script setup>
-import trophy from "@/assets/images/trophy.png";
 import ButtonBase from "@/components/ButtonBase.vue";
 import router from "@/router.js";
 
 function RouteToOpertive() {
-  router.push('/operative')
+  router.push('/game/operative')
 }
 
 function ReloadGame() {
   router.go()
 }
-
-//function RouteToLeaderBoard() {
- // router.push('/leaderboard');
-//}
 
 </script>
 
@@ -24,7 +19,6 @@ function ReloadGame() {
       <div class="container">
         <button-base id="button" @click="RouteToOpertive">Speel als operative</button-base>
         <button-base id="button2" @click="ReloadGame">Nieuwe puzzel</button-base>
-       <!-- <button-base id="button3" @click="RouteToLeaderBoard"><img class="trophy" alt="trophy" :src="trophy">Bekijk leaderboard</button-base>-->
       </div>
   </section>
 </template>
@@ -43,35 +37,13 @@ h2{
   display: grid;
   grid-template-columns: 49% 49%;
   grid-gap: 2%;
-  grid-row-gap: 6%;
-  grid-template-areas: "a b"
-                       "c c";
 }
 
 #button{
-  grid-area: a;
   padding: 3%;
 }
 
 #button2{
-  grid-area: b;
   padding: 3%;
-}
-
-#button3{
-  display: grid;
-  grid-template-columns: 10% auto;
-  grid-template-rows: auto;
-  align-items: center;
-  justify-content: center;
-  grid-gap: 2%;
-  grid-area: c;
-  margin-bottom: 3%;
-}
-
-.trophy{
-  height: 100%;
-  width: 100%;
-  filter: invert(1);
 }
 </style>

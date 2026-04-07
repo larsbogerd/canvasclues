@@ -68,7 +68,10 @@ img{
   font-family: inherit;
   color: inherit;
   outline: none;
+}
 
+.button {
+  background-color: var(--background-color);
   border: black 2px solid;
   border-radius: 8px;
   padding: 10px 50px;

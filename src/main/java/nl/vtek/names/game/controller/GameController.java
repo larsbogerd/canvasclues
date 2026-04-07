@@ -1,5 +1,6 @@
 package nl.vtek.names.game.controller;
 
+import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.UpdateCardsRequest;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.service.GameService;
@@ -35,6 +36,11 @@ public class GameController {
     @GetMapping("/{gameId}")
     public List<CardResponse> getGame(@PathVariable int gameId) {
         return gameService.getGame(gameId);
+    }
+
+    @GetMapping("/list")
+    public List<GameResponse> getGameList() {
+        return gameService.getGameList();
     }
 
     @PatchMapping("/updatecards")

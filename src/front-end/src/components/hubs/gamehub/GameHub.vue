@@ -1,16 +1,16 @@
 <script setup>
 import router from "@/router.js";
-import HubButton from "@/components/HubButton.vue";
+import Button from "@/components/hubs/gamehub/Button.vue";
 import operativeImg from "@/assets/images/Icons/Operative.png";
 import spymasterImg from "@/assets/images/Icons/Spymaster.png";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/header/Header.vue";
 function goToSpyPhase() {
-  router.push('/spy')
+  router.push('/game/spymaster')
 }
 
-function goToOperativePhase() {
-  router.push('/operative')
+function goToOperativeHub() {
+  router.push('/game/operative')
 }
 
 </script>
@@ -20,13 +20,13 @@ function goToOperativePhase() {
   <Header #tutorial-button username="ClueKiller12">
   </Header>
   <div class="screen">
-    <h1 class="main-text">wat wil je doen?</h1>
+    <h1 class="main-text">Wat wil je doen?</h1>
     <div class="game-hub-button">
-      <hub-button class="button" Phase="Spymaster" sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives "
+      <Button class="button" Phase="Spymaster" sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives "
                   :imgUrl="spymasterImg" altText="Spymaster" @button-click="goToSpyPhase"/>
 
-      <hub-button class="button" Phase="Operative" sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
-                  :imgUrl="operativeImg" altText="Operative" @button-click="goToOperativePhase" />
+      <Button class="button" Phase="Operative" sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
+                  :imgUrl="operativeImg" altText="Operative" @button-click="goToOperativeHub" />
     </div>
   </div>
   <Footer class="footer-element"/>

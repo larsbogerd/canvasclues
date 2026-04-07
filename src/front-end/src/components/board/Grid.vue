@@ -1,6 +1,6 @@
 <script setup>
 
-import Card from "@/components/Card.vue";
+import Card from "@/components/board/Card.vue";
 const prop = defineProps({
       cards: Array,
 })

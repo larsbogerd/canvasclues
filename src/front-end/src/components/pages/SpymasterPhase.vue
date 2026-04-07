@@ -1,9 +1,9 @@
 <script setup>
-import inputField from "@/components/InputField.vue";
+import inputField from "@/components/board/InputField.vue";
 import axios from "axios";
 import {onMounted, ref} from "vue";
-import Grid from "@/components/Grid.vue";
-import FaseLabel from "@/components/FaseLabel.vue";
+import Grid from "@/components/board/Grid.vue";
+import FaseLabel from "@/components/board/FaseLabel.vue";
 import { useRouter } from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";

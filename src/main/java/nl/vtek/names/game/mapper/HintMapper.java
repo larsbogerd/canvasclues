@@ -13,7 +13,7 @@ public class HintMapper {
     public static Hint toEntity(HintRequest request, Game game) {
         Hint hint = new Hint();
         hint.setGame(game);
-        hint.setContent(request.getContent());
+        hint.setContent(request.getContent().toLowerCase());
         return hint;
     }
 
