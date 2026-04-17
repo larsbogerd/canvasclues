@@ -1,14 +1,15 @@
 <script setup>
 import axios from 'axios';
-import {onMounted, ref} from "vue";
-import Grid from "@/components/board/Grid.vue";
-import FaseLabel from "@/components/board/FaseLabel.vue";
-import {useRouter, useRoute} from 'vue-router'
+import {useRoute} from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";
 import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import OperativeResultModalContent from "@/components/ModalContent/OperativeResultModalContent.vue";
+import {onMounted, provide, ref} from "vue";
+import Grid from "@/components/board/Grid.vue";
+import FaseLabel from "@/components/board/FaseLabel.vue";
+import {useRouter} from 'vue-router'
 
 const router = useRouter();
 const route = useRoute();
@@ -19,13 +20,15 @@ const selectedCards = ref([]);
 const correctAmount = ref(0);
 const amount = ref(0);
 
-onMounted (async () => {
+provide("submitFn", lockIn)
+provide("handleCardClickedFn", handleCardClicked)
+onMounted(async () => {
   await getHint();
   await getGrid();
   amount.value = await getCountOfCardsSelectedBySpymaster();
 });
 
-function getGameId(){
+function getGameId() {
   return route.params.gameId;
 }
 
@@ -34,14 +37,29 @@ async function getHint() {
     const id = await getGameId()
     const response = await axios.get(`http://localhost:8082/api/v1/hints/${id}`);
     hint.value = response.data;
-  } catch(error) {
+  } catch (error) {
     console.log(error.status);
+  }
+}
+
+correctAmount.value = 0;
+async function lockIn(cardId) {
+  const response = await getSelectedCards();
+  console.log(response);
+  for (const [id, isCorrect] of Object.entries(response.data)) {
+    if(id === cardId){
+      let cardToUpdate = cards.value.find(card => card.id === cardId);
+      if (cardToUpdate) {
+        cardToUpdate.color = isCorrect ? 'right' : 'wrong';
+        if (isCorrect) correctAmount.value++;
+        break;
+      }
+    }
   }
 }
 
 async function submit() {
   try {
-    correctAmount.value = 0;
     let correctCards = await getSelectedCards();
     for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
@@ -64,13 +82,13 @@ function handleCardClicked(id, clicked) {
   }
 }
 
-async function getSelectedCards(){
-  try{
+async function getSelectedCards() {
+  try {
     const response = await axios.post("http://localhost:8082/api/v1/game/checkcards",
-      selectedCards.value
+        selectedCards.value
     )
     return response;
-  } catch(error){
+  } catch (error) {
     return error.status
   }
 }
@@ -80,15 +98,15 @@ async function getGrid() {
     const id = await getGameId()
     const response = await axios.get(`http://localhost:8082/api/v1/game/${id}`);
     cards.value = response.data;
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
 }
 
 async function getCountOfCardsSelectedBySpymaster() {
-    let correctAmount = 0;
-  for (const card of cards.value){
-    if(card.spymasterPick === true){
+  let correctAmount = 0;
+  for (const card of cards.value) {
+    if (card.spymasterPick === true) {
       correctAmount++
     }
   }
@@ -98,33 +116,34 @@ async function getCountOfCardsSelectedBySpymaster() {
 
 <template>
   <div class="operative-phase">
-  <Header #tutorial-button username="V-Tek">
-    <TutorialButton>
-      <OperativeModalContent></OperativeModalContent>
-    </TutorialButton>
-  </Header>
-  <div class="screen">
-    <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
-    <div class="sidebar">
-      <fase-label fase="Operative"/>
-      <div class="hint-card" v-if="hint">
-        <div class="hint-header">
-          <span>{{ hint.content }}</span>
-          <span class="hint-number">{{ amount }}</span>
-        </div>
-        <div class="hint-body">
-          <p>Nog {{ amount }} kunstwerken te vinden</p>
-          <p>Geselecteerd: {{ selectedCards.length }}</p>
-          <p>Correct geraden: {{correctAmount}}</p>
-          <button class="end-turn-btn" @click="submit">Beëindig poging</button>
+    <Header #tutorial-button username="V-Tek">
+      <TutorialButton>
+        <OperativeModalContent></OperativeModalContent>
+      </TutorialButton>
+    </Header>
+    <div class="screen">
+      <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
+      <div class="sidebar">
+        <fase-label fase="Operative"/>
+        <div class="hint-card" v-if="hint">
+          <div class="hint-header">
+            <span>{{ hint.content }}</span>
+            <span class="hint-number">{{ amount }}</span>
+          </div>
+          <div class="hint-body">
+            <p>Nog {{ amount }} kunstwerken te vinden</p>
+            <p>Geselecteerd: {{ selectedCards.length }}</p>
+            <p>Correct geraden: {{ correctAmount }}</p>
+            <button class="end-turn-btn" @click="submit">Beëindig poging</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
 
   <BaseModal ref="modal">
-    <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount" :selectedAmount="selectedCards.length"></OperativeResultModalContent>
+    <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount"
+                                 :selectedAmount="selectedCards.length"></OperativeResultModalContent>
   </BaseModal>
 </template>
 
@@ -188,7 +207,7 @@ async function getCountOfCardsSelectedBySpymaster() {
 }
 
 .hint-body p {
-  font-family: var(--font-secondary),sans-serif;
+  font-family: var(--font-secondary), sans-serif;
   font-size: 18px;
   margin: 4px 0;
   color: var(--text-color);

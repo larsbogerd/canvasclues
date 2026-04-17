@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from "vue";
+import LockButton from "@/components/pages/LockButton.vue";
 
 const clicked = ref(false);
 
@@ -8,6 +9,7 @@ let props = defineProps({
   imgUrl: String,
   altText: String,
   color: String,
+  phase: String,
 })
 
 
@@ -23,15 +25,19 @@ const emit = defineEmits(['card-clicked'])
     <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
   </div>
 
-  <div v-else class="card" @click="clicked = !clicked; emit('card-clicked', props.id, clicked)"
+  <div v-else class="card"
+       @click="clicked = !clicked; emit('card-clicked', props.id, clicked)"
        :class="{ active: clicked }">
+    <LockButton v-if="phase=='operative'" :id="props.id" class="hidden" :class="{visible: clicked, hidden: !clicked}"></LockButton>
     <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
+
   </div>
 </template>
 
 <style scoped>
 
 .card {
+  position: relative;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
