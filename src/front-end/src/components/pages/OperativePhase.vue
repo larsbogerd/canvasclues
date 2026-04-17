@@ -45,7 +45,7 @@ async function getHint() {
 correctAmount.value = 0;
 async function lockIn(cardId) {
   const response = await getSelectedCards();
-  console.log(response);
+  selectedCards.value.push(cardId)
   for (const [id, isCorrect] of Object.entries(response.data)) {
     if(id === cardId){
       let cardToUpdate = cards.value.find(card => card.id === cardId);
@@ -60,6 +60,7 @@ async function lockIn(cardId) {
 
 async function submit() {
   try {
+    correctAmount.value = 0;
     let correctCards = await getSelectedCards();
     for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
