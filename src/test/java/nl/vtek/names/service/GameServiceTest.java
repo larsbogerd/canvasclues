@@ -64,10 +64,15 @@ class GameServiceTest {
     private List<ArtWorkResponse> buildFakeArtworks() {
         List<ArtWorkResponse> artworks = new ArrayList<>();
         for (int i = 1; i <= GameService.BOARD_SIZE; i++) {
+            String title = "Painting " + i;
+            String artistDisplay = "Tester";
+            String dateDisplay = "2024";
             artworks.add(new ArtWorkResponse(
                     i,
-                    "https://image.url/" + i,
-                    "By Tester - Painting " + i
+                    title,
+                    artistDisplay,
+                    dateDisplay,
+                    "https://image.url/" + i
             ));
         }
         return artworks;

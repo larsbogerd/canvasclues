@@ -16,15 +16,31 @@ const props = defineProps({
 
 <style scoped>
 .usernameField{
-font-family: var(--font-secondary),sans-serif;
+  font-family: var(--font-secondary), sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
 .button{
   display: flex;
-  gap: 1rem;
-  padding: 10px 40px;
-  min-height: 20px;
-  min-width:80px;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 8px 20px;
+  font-weight: bold;
+  font-family: var(--font-secondary);
+  color: var(--text-color);
+  background-color: white;
+  border: 2px solid #e2d8c8;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
 }
 
 </style>

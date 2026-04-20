@@ -11,10 +11,12 @@ button {
   background-color: var(--primary-color);
   color: var(--background-color);
   border: none;
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-color) 28%, transparent);
+  transition: border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
 }
 
 button:hover {
-  opacity: 0.9;
+  box-shadow: 0 14px 24px color-mix(in srgb, var(--primary-color) 38%, transparent);
 }
 
 </style>

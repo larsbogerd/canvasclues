@@ -7,5 +7,7 @@ public record ArticDto(
         String title,
         @JsonProperty("artist_display") String artistDisplay,
         @JsonProperty("image_id") String imageId,
-        @JsonProperty("date_display") String dateDisplay
+        @JsonProperty("date_display") String dateDisplay,
+        @JsonProperty("medium_display") String mediumDisplay,
+        @JsonProperty("place_of_origin") String placeOfOrigin
 ) {}

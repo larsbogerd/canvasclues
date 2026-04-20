@@ -17,15 +17,17 @@ public class ArtWorkMapper {
                 dto.imageId(),
                 dto.title(),
                 dto.artistDisplay(),
-                dto.dateDisplay()
+                dto.dateDisplay(),
+                dto.mediumDisplay(),
+                dto.placeOfOrigin()
         );
     }
 
     public ArtWorkResponse toResponse(ArtWork artWork, int id) {
         String imageUrl = "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, artWork.getImageId());
-        String altText = "%s — %s, %s".formatted(
-                artWork.getTitle(), artWork.getArtistDisplay(), artWork.getDateDisplay());
 
-        return new ArtWorkResponse(id, imageUrl, altText);
+        return new ArtWorkResponse(id, artWork.getTitle(), artWork.getArtistDisplay(),
+                artWork.getDateDisplay(), artWork.getMediumDisplay(),
+                artWork.getPlaceOfOrigin(), imageUrl);
     }
 }

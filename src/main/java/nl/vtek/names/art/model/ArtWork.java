@@ -10,16 +10,21 @@ public class ArtWork {
     private String title;
     private String artistDisplay;
     private String dateDisplay;
+    private String mediumDisplay;
+    private String placeOfOrigin;
 
     public ArtWork() {
     }
 
-    public ArtWork(int id, String imageId, String title, String artistDisplay, String dateDisplay) {
+    public ArtWork(int id, String imageId, String title, String artistDisplay, String dateDisplay,
+                   String mediumDisplay, String placeOfOrigin) {
         this.id = id;
         this.imageId = imageId;
         this.title = title;
         this.artistDisplay = artistDisplay;
         this.dateDisplay = dateDisplay;
+        this.mediumDisplay = mediumDisplay;
+        this.placeOfOrigin = placeOfOrigin;
     }
 
     public int getId() {
@@ -61,4 +66,21 @@ public class ArtWork {
     public void setDateDisplay(String dateDisplay) {
         this.dateDisplay = dateDisplay;
     }
+
+    public String getMediumDisplay() {
+        return mediumDisplay;
+    }
+
+    public void setMediumDisplay(String mediumDisplay) {
+        this.mediumDisplay = mediumDisplay;
+    }
+
+    public String getPlaceOfOrigin() {
+        return placeOfOrigin;
+    }
+
+    public void setPlaceOfOrigin(String placeOfOrigin) {
+        this.placeOfOrigin = placeOfOrigin;
+    }
+
 }

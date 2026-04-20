@@ -17,7 +17,7 @@ function goToGameHubPhase() {
 <template>
   <div class="left">
     <div class="header">
-      <Logo :size="80" />
+      <Logo/>
     </div>
 
     <div class="content">
@@ -40,7 +40,8 @@ function goToGameHubPhase() {
   flex: 1;
   display: flex;
   align-items: center;
-  padding-left: 2rem;
+  justify-content: center;
+  padding: 0 2rem;
 }
 
 .header {
@@ -49,6 +50,12 @@ function goToGameHubPhase() {
   left: 2rem;
 }
 
+.header :deep(img) {
+  width: clamp(80px, 5vw, 120px);
+  height: clamp(80px, 5vw, 120px);
+}
+
+
 .content {
   max-width: 550px;
   display: flex;
@@ -56,16 +63,15 @@ function goToGameHubPhase() {
   gap: 1rem;
 }
 
-
 .title {
-  font-family: var(--font-main),sans-serif;
+  font-family: var(--font-main), sans-serif;
   font-size: 5.5rem;
   font-weight: 300;
   margin: 0;
 }
 
 .description {
-  font-family: var(--font-secondary),sans-serif;
+  font-family: var(--font-secondary), sans-serif;
   font-size: 1.5rem;
   font-weight: 300;
   margin: 0;
@@ -73,13 +79,20 @@ function goToGameHubPhase() {
 
 .button-group {
   display: flex;
-  gap: 0.8rem;
-  margin-top: 0.5rem;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
 }
 
-#secondary-btn {
+:deep(#secondary-btn) {
   background-color: transparent;
   color: black;
-  border: 2px solid var(--primary-color);
+  border: 2px solid #e2d8c8;
+  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+}
+
+:deep(#secondary-btn:hover) {
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
 }
 </style>

@@ -44,7 +44,7 @@ public class ArticClient {
         try {
             return restClient
                     .post()
-                    .uri("/artworks/search?fields={fields}", "id,image_id,title,artist_display,date_display")
+                    .uri("/artworks/search?fields={fields}", "id,image_id,title,artist_display,date_display,medium_display,place_of_origin")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(query)
                     .retrieve()

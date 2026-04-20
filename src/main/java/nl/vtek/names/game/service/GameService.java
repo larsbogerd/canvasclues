@@ -44,7 +44,15 @@ public class GameService {
 
         List<Card> cards = new ArrayList<>();
         for (ArtWorkResponse artwork : artworks) {
-            cards.add(new Card(game, artwork.imageUrl(), artwork.altText()));
+            cards.add(new Card(
+                    game,
+                    artwork.imageUrl(),
+                    artwork.title(),
+                    artwork.artistDisplay(),
+                    artwork.dateDisplay(),
+                    artwork.mediumDisplay(),
+                    artwork.placeOfOrigin()
+            ));
         }
 
         cardRepository.saveAll(cards);

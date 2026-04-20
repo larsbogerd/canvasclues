@@ -55,7 +55,14 @@ class GameIntegrationTest {
 
         assertThat(returnedCards).allSatisfy(card -> {
             assertThat(card.getImageUrl()).isNotEmpty();
-            assertThat(card.getAltText()).isNotEmpty();
+            assertThat(card.getTitle()).isNotBlank();
+            assertThat(card.getArtistDisplay()).isNotBlank();
+            assertThat(card.getDateDisplay()).isNotBlank();
+            assertThat(card.getAltText()).isEqualTo("%s — %s, %s".formatted(
+                    card.getTitle(),
+                    card.getArtistDisplay(),
+                    card.getDateDisplay()
+            ));
         });
 
         List<Card> dbCards = cardRepository.findByGame_Id(gameId);
@@ -86,6 +93,16 @@ class GameIntegrationTest {
 
         assertThat(fetchedCards).hasSize(GameService.BOARD_SIZE);
         assertThat(fetchedCards).allMatch(card -> card.getGameId() == gameId);
+        assertThat(fetchedCards).allSatisfy(card -> {
+            assertThat(card.getTitle()).isNotBlank();
+            assertThat(card.getArtistDisplay()).isNotBlank();
+            assertThat(card.getDateDisplay()).isNotBlank();
+            assertThat(card.getAltText()).isEqualTo("%s — %s, %s".formatted(
+                    card.getTitle(),
+                    card.getArtistDisplay(),
+                    card.getDateDisplay()
+            ));
+        });
 
         List<UUID> createdIds = returnedCards.stream().map(CardResponse::getId).toList();
         List<UUID> fetchedIds = fetchedCards.stream().map(CardResponse::getId).toList();

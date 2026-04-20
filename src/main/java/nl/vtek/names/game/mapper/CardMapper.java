@@ -18,7 +18,14 @@ public class CardMapper {
             response.setId(card.getId());
             response.setGameId(card.getGame().getId());
             response.setImageUrl(card.getImageUrl());
-            response.setAltText(card.getAltText());
+            response.setTitle(card.getTitle());
+            response.setArtistDisplay(card.getArtistDisplay());
+            response.setDateDisplay(card.getDateDisplay());
+            response.setMediumDisplay(card.getMediumDisplay());
+            response.setPlaceOfOrigin(card.getPlaceOfOrigin());
+
+            response.setAltText("%s — %s, %s".formatted(
+                    card.getTitle(), card.getArtistDisplay(), card.getDateDisplay()));
             response.setSpymasterPick(card.isSpymasterPick());
             response.setType(card.getType());
 

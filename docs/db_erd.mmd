@@ -13,7 +13,9 @@ erDiagram
     UUID id PK
     int game_id FK
     varchar image_url
-    varchar alt_text
+    varchar title
+    varchar artist_display
+    varchar date_display
     enum type "TEAM1 | TEAM2 | NEUTRAL | ASSASSIN"
     boolean is_spymaster_pick
   }

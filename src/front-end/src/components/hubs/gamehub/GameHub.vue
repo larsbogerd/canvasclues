@@ -16,53 +16,61 @@ function goToOperativeHub() {
 </script>
 
 <template>
-<div class="game-hub">
-  <Header #tutorial-button username="ClueKiller12">
-  </Header>
-  <div class="screen">
-    <h1 class="main-text">Wat wil je doen?</h1>
-    <div class="game-hub-button">
-      <Button class="button" Phase="Spymaster" sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives "
-                  :imgUrl="spymasterImg" altText="Spymaster" @button-click="goToSpyPhase"/>
+  <div class="game-hub-page">
+    <Header username="ClueKiller12">
+    </Header>
+    <div class="game-hub">
+      <h1 class="main-text">Wat wil je doen?</h1>
+      <div class="game-hub-button">
+        <Button role-name="spymaster" eyeBrow="Creëer" Phase="Spymaster" sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives"
+                    :imgUrl="spymasterImg" altText="Spymaster" @button-click="goToSpyPhase"/>
 
-      <Button class="button" Phase="Operative" sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
-                  :imgUrl="operativeImg" altText="Operative" @button-click="goToOperativeHub" />
+        <Button role-name="operative" eyeBrow="Ontcijfer" Phase="Operative" sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
+                    :imgUrl="operativeImg" altText="Operative" @button-click="goToOperativeHub" />
+      </div>
     </div>
+    <Footer class="footer-element"/>
   </div>
-  <Footer class="footer-element"/>
-</div>
 </template>
 
 <style scoped>
-.game-hub {
-  background-color: var(--background-color);
+.game-hub-page {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+  background-color: var(--background-color);
 }
 
-.screen {
+.game-hub {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: auto;
-  height: 80%;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  padding: 0 2rem 5rem;
+  box-sizing: border-box;
 }
 
 .game-hub-button {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.button {
-  background-color: var(--button-color);
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .main-text {
   text-align: center;
-  font-family: var(--font-main),serif;
+  font-family: var(--font-main);
+  margin-bottom: 1.5rem;
+  font-size: clamp(3rem, 4vw, 4.5rem);
 }
+
 .footer-element {
   background-color: inherit;
 }
+
 </style>

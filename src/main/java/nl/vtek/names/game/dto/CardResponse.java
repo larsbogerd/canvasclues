@@ -9,6 +9,11 @@ public class CardResponse {
     private int gameId;
     private CardType type;
     private String imageUrl;
+    private String title;
+    private String artistDisplay;
+    private String dateDisplay;
+    private String mediumDisplay;
+    private String placeOfOrigin;
     private String altText;
     private boolean isSpymasterPick;
 
@@ -42,6 +47,46 @@ public class CardResponse {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtistDisplay() {
+        return artistDisplay;
+    }
+
+    public void setArtistDisplay(String artistDisplay) {
+        this.artistDisplay = artistDisplay;
+    }
+
+    public String getDateDisplay() {
+        return dateDisplay;
+    }
+
+    public void setDateDisplay(String dateDisplay) {
+        this.dateDisplay = dateDisplay;
+    }
+
+    public String getMediumDisplay() {
+        return mediumDisplay;
+    }
+
+    public void setMediumDisplay(String mediumDisplay) {
+        this.mediumDisplay = mediumDisplay;
+    }
+
+    public String getPlaceOfOrigin() {
+        return placeOfOrigin;
+    }
+
+    public void setPlaceOfOrigin(String placeOfOrigin) {
+        this.placeOfOrigin = placeOfOrigin;
     }
 
     public String getAltText() {

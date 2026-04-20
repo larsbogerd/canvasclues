@@ -1,6 +1,5 @@
 package nl.vtek.names.game.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,17 +25,25 @@ public class Card {
     @Enumerated(EnumType.STRING)
     private CardType type;
     private String imageUrl;
-    @Column(name = "alt_text", length = 1000)
-    private String altText;
+    private String title;
+    private String artistDisplay;
+    private String dateDisplay;
+    private String mediumDisplay;
+    private String placeOfOrigin;
     private boolean isSpymasterPick;
 
     public Card() {
     }
 
-    public Card(Game game, String imageUrl, String altText) {
+    public Card(Game game, String imageUrl, String title, String artistDisplay, String dateDisplay,
+                String mediumDisplay, String placeOfOrigin) {
         this.game = game;
         this.imageUrl = imageUrl;
-        this.altText = altText;
+        this.title = title;
+        this.artistDisplay = artistDisplay;
+        this.dateDisplay = dateDisplay;
+        this.mediumDisplay = mediumDisplay;
+        this.placeOfOrigin = placeOfOrigin;
         this.isSpymasterPick = false;
     }
 
@@ -72,12 +79,28 @@ public class Card {
         this.imageUrl = imageUrl;
     }
 
-    public String getAltText() {
-        return altText;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAltText(String altText) {
-        this.altText = altText;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtistDisplay() {
+        return artistDisplay;
+    }
+
+    public void setArtistDisplay(String artistDisplay) {
+        this.artistDisplay = artistDisplay;
+    }
+
+    public String getDateDisplay() {
+        return dateDisplay;
+    }
+
+    public void setDateDisplay(String dateDisplay) {
+        this.dateDisplay = dateDisplay;
     }
 
     public boolean isSpymasterPick() {
@@ -87,4 +110,21 @@ public class Card {
     public void setSpymasterPick(boolean spymasterPick) {
         isSpymasterPick = spymasterPick;
     }
+
+    public String getMediumDisplay() {
+        return mediumDisplay;
+    }
+
+    public void setMediumDisplay(String mediumDisplay) {
+        this.mediumDisplay = mediumDisplay;
+    }
+
+    public String getPlaceOfOrigin() {
+        return placeOfOrigin;
+    }
+
+    public void setPlaceOfOrigin(String placeOfOrigin) {
+        this.placeOfOrigin = placeOfOrigin;
+    }
+
 }

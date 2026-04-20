@@ -1,7 +1,7 @@
 <script setup>
 import Button from "@/components/hubs/operativehub/Button.vue";
 
-let props = defineProps({
+const props = defineProps({
   gameId: Number,
   title: String,
   user: String,
@@ -34,21 +34,24 @@ let props = defineProps({
 <style scoped>
 
 .game-hub-card{
-  object-fit: contain;
-  width: 30%;
-  height: auto;
-  background-color: #FAFAFA;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #D1D5DB;
-  min-width: 200px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid #e2d8c8;
+  transition: border-color 180ms ease;
+}
+
+.game-hub-card:hover {
+  border-color: color-mix(in srgb, var(--primary-color) 40%, #ddd5c9);
 }
 
 .text-block{
   display: flex;
   flex-direction: column;
   padding: 20px 20px 10px 20px;
-  gap: 4px;
+  gap: 6px;
 }
 
 .hub-title{
@@ -56,14 +59,15 @@ let props = defineProps({
   font-size: 1.5rem;
   font-weight: 500;
   text-transform: capitalize;
-  padding-bottom: 10px;
   margin: 0;
+  padding-bottom: 10px;
 }
 
 .hub-description{
   font-family: var(--font-secondary);
   font-size: 1rem;
   margin: 0;
+  color: #4c4c4c;
 }
 
 </style>

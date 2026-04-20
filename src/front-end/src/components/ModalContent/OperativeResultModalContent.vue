@@ -18,48 +18,26 @@ function RouteToSpymaster() {
 function ReloadGame() {
   router.go()
 }
-
 </script>
 
 <template>
-  <section id="parent">
-    <h2>Clue voltooid!</h2>
-    <p>Score: {{score}}</p>
-    <p>Geselecteerde kaarten: {{props.selectedAmount}}</p>
-    <p>Gevonden kaarten: {{props.correctAmount}}/{{props.amount}}</p>
-    <div class="container">
-      <button-base id="button" @click="RouteToSpymaster">Speel als spymaster</button-base>
-      <button-base id="button2" @click="ReloadGame">Nieuwe clue</button-base>
+  <section>
+    <h1 class="modal-title">Clue voltooid!</h1>
+    <div class="modal-stats">
+      <div class="modal-stat">
+        <div class="modal-stat-value">{{props.correctAmount}}/{{props.amount}}</div>
+        <div class="modal-stat-label">Gevonden</div>
+      </div>
+      <div class="modal-stat">
+        <div class="modal-stat-value">{{score}}</div>
+        <div class="modal-stat-label">Score</div>
+      </div>
+    </div>
+    <p class="modal-detail">Geselecteerde kaarten: {{props.selectedAmount}}</p>
+    <hr class="modal-divider" />
+    <div class="modal-actions">
+      <ButtonBase @click="RouteToSpymaster">Speel als spymaster</ButtonBase>
+      <ButtonBase @click="ReloadGame">Nieuwe clue</ButtonBase>
     </div>
   </section>
 </template>
-
-<style scoped>
-p{
-  font-family: var(--font-secondary),sans-serif;
-  text-align: center;
-}
-
-#parent{
-  padding-left: 15%;
-  padding-right: 15%;
-}
-
-h2{
-  text-align: center;
-}
-
-.container{
-  display: grid;
-  grid-template-columns: 49% 49%;
-  grid-gap: 2%;
-}
-
-#button{
-  padding: 3%;
-}
-
-#button2{
-  padding: 3%;
-}
-</style>

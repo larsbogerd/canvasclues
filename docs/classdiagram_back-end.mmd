@@ -14,8 +14,10 @@ classDiagram
     class ArtWorkResponse {
         <<record>>
         +int id
+        +String title
+        +String artistDisplay
+        +String dateDisplay
         +String imageUrl
-        +String altText
     }
 
     class ArticResponse {
@@ -94,7 +96,9 @@ classDiagram
         -Game game
         -CardType type
         -String imageUrl
-        -String altText
+        -String title
+        -String artistDisplay
+        -String dateDisplay
         -boolean isSpymasterPick
     }
 
@@ -111,6 +115,9 @@ classDiagram
         -UUID cardId
         -int gameId
         -String imageUrl
+        -String title
+        -String artistDisplay
+        -String dateDisplay
         -String altText
         -boolean spymasterPick
         -CardType cardType

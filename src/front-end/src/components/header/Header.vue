@@ -10,8 +10,8 @@ const props = defineProps({
 
 <template>
   <div class="header-element">
-<header-logo/>
-    <div class="header-left">
+  <header-logo/>
+    <div class="header-right">
       <slot name="tutorial-button"></slot>
       <header-button :username="props.username"/>
     </div>
@@ -23,17 +23,16 @@ const props = defineProps({
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-height: 10vh;
   height: 10vh;
+  min-height: 56px;
   padding: 0 2vw;
-  background-color: inherit;
-  box-shadow: var(--primary-shadow) 4px 4px 4px 4px;
+  background-color: var(--background-color);
+  border-bottom: 1px solid #e2d8c8;
   z-index: 1;
 }
 
 
-
-.header-left {
+.header-right {
   display: flex;
   gap: 1.5rem;
   align-items: center;

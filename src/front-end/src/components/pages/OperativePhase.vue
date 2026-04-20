@@ -1,15 +1,15 @@
 <script setup>
 import axios from 'axios';
-import {useRoute} from 'vue-router'
+import {onMounted, ref, provide} from "vue";
+import Grid from "@/components/board/Grid.vue";
+import FaseLabel from "@/components/board/FaseLabel.vue";
+import ArtInfo from "@/components/board/ArtInfo.vue";
+import {useRoute, useRouter} from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";
 import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import OperativeResultModalContent from "@/components/ModalContent/OperativeResultModalContent.vue";
-import {onMounted, provide, ref} from "vue";
-import Grid from "@/components/board/Grid.vue";
-import FaseLabel from "@/components/board/FaseLabel.vue";
-import {useRouter} from 'vue-router'
 
 const router = useRouter();
 const route = useRoute();
@@ -18,6 +18,7 @@ const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
 const correctAmount = ref(0);
+const activeCard = ref(null);
 const amount = ref(0);
 
 provide("submitFn", lockIn)
@@ -83,8 +84,12 @@ function handleCardClicked(id, clicked) {
   }
 }
 
+function handleInfoClicked(id) {
+  activeCard.value = cards.value.find(c => c.id === id) ?? null;
+}
+
 async function getSelectedCards() {
-  try {
+  try{
     const response = await axios.post("http://localhost:8082/api/v1/game/checkcards",
         selectedCards.value
     )
@@ -117,13 +122,14 @@ async function getCountOfCardsSelectedBySpymaster() {
 
 <template>
   <div class="operative-phase">
-    <Header #tutorial-button username="V-Tek">
-      <TutorialButton>
-        <OperativeModalContent></OperativeModalContent>
-      </TutorialButton>
-    </Header>
-    <div class="screen">
-      <grid class="grid" :cards="cards" @card-clicked="handleCardClicked" :color="color"/>
+  <Header #tutorial-button username="V-Tek">
+    <TutorialButton>
+      <OperativeModalContent></OperativeModalContent>
+    </TutorialButton>
+  </Header>
+  <div class="screen">
+    <div class="layout">
+      <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" phase="operative" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
       <div class="sidebar">
         <fase-label fase="Operative"/>
         <div class="hint-card" v-if="hint">
@@ -138,10 +144,18 @@ async function getCountOfCardsSelectedBySpymaster() {
             <button class="end-turn-btn" @click="submit">Beëindig poging</button>
           </div>
         </div>
+        <ArtInfo v-if="activeCard"
+                 :title="activeCard.title"
+                 :artist="activeCard.artistDisplay"
+                 :date="activeCard.dateDisplay"
+                 :medium="activeCard.mediumDisplay"
+                 :origin="activeCard.placeOfOrigin"
+                 @close="activeCard = null"
+        />
       </div>
     </div>
   </div>
-
+  </div>
   <BaseModal ref="modal">
     <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount"
                                  :selectedAmount="selectedCards.length"></OperativeResultModalContent>
@@ -152,64 +166,80 @@ async function getCountOfCardsSelectedBySpymaster() {
 .operative-phase {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  height: 100vh;
   overflow: hidden;
   background-color: var(--background-color);
 }
 
 .screen {
-  background-color: inherit;
-  gap: 20px;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  background-color: var(--background-color);
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 92vh;
-  box-sizing: border-box;
-  padding: 20px;
 }
+
+.layout {
+  --layout-height: 85vh;
+  --layout-padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  align-items: start;
+  gap: 32px;
+  height: var(--layout-height);
+  box-sizing: border-box;
+  padding: var(--layout-padding);
+}
+
 
 .grid {
   justify-self: center;
+  height: 100%;
+  max-width: calc(var(--layout-height) - var(--layout-padding) * 2);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
 }
 
 .hint-card {
-  background: white;
-  border-radius: 20px;
   width: 340px;
-  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid #e2d8c8;
   box-shadow: 0 2px 8px var(--primary-shadow);
+  background: #ffffff;
 }
 
 .hint-header {
-  font-family: var(--font-display), sans-serif;
-  font-size: 32px;
-  font-weight: bold;
+  font-family: var(--font-secondary), sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   text-align: center;
-  padding: 16px;
+  padding: 20px 16px;
   border-bottom: 2px solid #e0e0e0;
 }
 
 .hint-number {
   color: #ff0000;
   margin-left: 8px;
+  font-weight: 900;
 }
 
 .hint-body {
-  padding: 20px 24px;
+  padding: 24px;
 }
 
 .hint-body p {
-  font-family: var(--font-secondary), sans-serif;
-  font-size: 18px;
+  font-family: var(--font-secondary),sans-serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.125rem);
   margin: 4px 0;
   color: var(--text-color);
 }
@@ -221,13 +251,19 @@ async function getCountOfCardsSelectedBySpymaster() {
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
-  background-color: #333333;
+  font-family: var(--font-secondary);
+  color: var(--text-color);
+  background-color: white;
+  border: 2px solid #e2d8c8;
   border-radius: 20px;
   cursor: pointer;
+  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.end-turn-btn:hover {
-  opacity: 0.9;
+.end-turn-btn:hover,
+.end-turn-btn:focus-visible {
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
 }
 </style>

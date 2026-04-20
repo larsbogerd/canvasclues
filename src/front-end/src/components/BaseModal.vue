@@ -13,7 +13,8 @@ import {ref} from "vue";
 
   defineExpose ({
     show,
-    hide
+    hide,
+    visible
   });
 </script>
 
@@ -42,17 +43,28 @@ import {ref} from "vue";
 }
 
 .popup {
-  min-width: 400px;
-  width: 40vw;
+  min-width: 320px;
+  width: 28vw;
   background: white;
-  border-radius: 8px;
-  padding: 20px 40px;
+  border-radius: 20px;
+  padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
   position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: clamp(10px, 1.5vw, 20px);
+  right: clamp(10px, 1.5vw, 20px);
+  background: none;
+  border: none;
+  font-size: clamp(1rem, 1.2vw, 1.4rem);
+  color: #8b7f70;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.close:hover {
+  color: var(--text-color);
 }
 </style>

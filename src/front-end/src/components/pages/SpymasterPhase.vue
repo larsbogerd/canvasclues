@@ -4,6 +4,7 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import Grid from "@/components/board/Grid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
+import ArtInfo from "@/components/board/ArtInfo.vue";
 import { useRouter } from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/TutorialButton.vue";
@@ -15,6 +16,7 @@ const hintInput = ref("");
 const modal = ref(null);
 const cards = ref([]);
 const selectedCards = ref([]);
+const activeCard = ref(null);
 const emit = defineEmits(['game-started']);
 const router = useRouter();
 
@@ -96,6 +98,10 @@ function handleCardClicked(id, clicked) {
   console.log("Selected cards:", selectedCards.value);
 }
 
+function handleInfoClicked(id) {
+  activeCard.value = cards.value.find(c => c.id === id) ?? null;
+}
+
 async function patchCards() {
   try {
     const response = await axios.patch('http://localhost:8082/api/v1/game/updatecards', {
@@ -122,14 +128,24 @@ async function patchCards() {
       </TutorialButton>
     </Header>
   <div class="screen">
-    <grid class="grid" :cards="cards" @card-clicked="handleCardClicked"/>
-    <div class="sidebar">
-      <fase-label fase="Spymaster"/>
-      <div class="hint-card">
-        <div class="hint-body">
-          <p>Geselecteerd: {{ selectedCards.length }}</p>
-          <input-field name="Bevestig hint" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
+    <div class="layout">
+      <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
+      <div class="sidebar">
+        <fase-label fase="Spymaster"/>
+        <div class="hint-card">
+          <div class="hint-body">
+            <p>Geselecteerd: {{ selectedCards.length }}</p>
+            <input-field name="Bevestig hint" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
+          </div>
         </div>
+        <ArtInfo v-if="activeCard"
+                 :title="activeCard.title"
+                 :artist="activeCard.artistDisplay"
+                 :date="activeCard.dateDisplay"
+                 :medium="activeCard.mediumDisplay"
+                 :origin="activeCard.placeOfOrigin"
+                 @close="activeCard = null"
+        />
       </div>
     </div>
   </div>
@@ -143,40 +159,53 @@ async function patchCards() {
 .spymaster-phase {
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  height: 100vh;
   overflow: hidden;
   background-color: var(--background-color);
 }
 
 .screen {
-  background-color: inherit;
-  gap: 20px;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  background-color: var(--background-color);
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 92vh;
+}
+
+.layout {
+  --layout-height: 85vh;
+  --layout-padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  align-items: start;
+  gap: 32px;
+  height: var(--layout-height);
   box-sizing: border-box;
-  padding: 20px;
+  padding: var(--layout-padding);
 }
 
 .grid {
   justify-self: center;
+  height: 100%;
+  max-width: calc(var(--layout-height) - var(--layout-padding) * 2);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
 }
 
 .hint-card {
-  background: white;
-  border-radius: 20px;
   width: 340px;
-  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid #e2d8c8;
   box-shadow: 0 2px 8px var(--primary-shadow);
+  background: white;
 }
 
 .hint-body {
@@ -186,7 +215,8 @@ async function patchCards() {
 .hint-body p {
   font-family: var(--font-secondary),sans-serif;
   font-size: 18px;
-  margin: 0 0 16px 0;
+  margin: 0 0 14px 0;
   color: var(--text-color);
 }
+
 </style>

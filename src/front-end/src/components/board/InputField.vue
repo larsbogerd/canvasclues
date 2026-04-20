@@ -19,10 +19,10 @@ function buttonClick() {
 <template>
   <div class="text-field">
     <div class="fields">
-      <div class="input-field" :class="{ 'has-value': modelValue.length > 0 }">
-        <input class="text-jetbrainsMono input-field_input" :readonly="readonly" :value="modelValue"
+      <div class="input-field" :class="{ 'has-value': (modelValue?.length ?? 0) > 0 }">
+        <input :id="inputId" class="text-jetbrainsMono input-field_input" :readonly="readonly" :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)" :disabled="InputDisabled">
-        <label class="input-field_label">
+        <label :for="inputId" class="input-field_label">
           {{ props.label }}
         </label>
       </div>
@@ -72,8 +72,9 @@ function buttonClick() {
   top: 0;
   left: 0;
   transform: translate(16px, 12px);
-  transition: opacity 200ms;
+  transition: opacity 180ms ease;
   color: #999;
+  pointer-events: none;
 }
 
 .input-field input:focus ~ .input-field_label,
@@ -86,15 +87,20 @@ function buttonClick() {
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  font-family: var(--font-secondary);
+  color: var(--background-color);
   background-color: var(--primary-color);
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-color) 28%, transparent);
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
-.submit-btn:hover {
-  opacity: 0.9;
+.submit-btn:hover,
+.submit-btn:focus-visible {
+  filter: saturate(1.02);
+  box-shadow: 0 14px 24px color-mix(in srgb, var(--primary-color) 38%, transparent);
 }
 
 </style>

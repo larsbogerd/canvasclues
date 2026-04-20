@@ -28,10 +28,4 @@ html, body {
   background-color: var(--background-color);
   overflow: hidden;
 }
-
-.header img {
-  width: 80px;
-  height: 80px;
-}
-
 </style>

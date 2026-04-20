@@ -1,0 +1,296 @@
+---
+config:
+  flowchart:
+    nodeSpacing: 50
+    rankSpacing: 75
+  layout: elk
+---
+
+classDiagram
+    direction TB
+    App --> startingPage
+    App --> SpymasterPhase
+    App --> OperativePhase
+    App --> OperativeHub
+    App --> gameHub
+
+    startingPage --> LeftHalfStartingPage
+    startingPage --> RightHalfStartingPage
+    startingPage --> Footer
+
+    SpymasterPhase --> Grid
+    SpymasterPhase --> FaseLabel
+    SpymasterPhase --> Header
+    SpymasterPhase --> InputField
+
+    OperativePhase --> Grid
+    OperativePhase --> FaseLabel
+    OperativePhase --> Header
+
+    OperativeHub --> OperativeHubButton
+    OperativeHub --> OperativeHubCard
+    OperativeHub --> GameModeCard
+
+    Header --> HeaderLogo
+    Header --> HeaderButton
+
+    HeaderLogo --> IconPalette
+
+    Grid --> boardCard
+
+    gameHub --> gameHubButton
+    gameHub --> Footer
+
+    boardCard --> LockButton
+    LeftHalfStartingPage --> ArticLogo
+
+%%modal
+%% dont know if mapped correctly
+    LeftHalfStartingPage --> BaseModal
+    LeftHalfStartingPage --> StartingPageModalContent
+
+    OperativePhase --> TutorialButton
+    OperativePhase --> BaseModal
+    OperativePhase --> OperativeModalContent
+    OperativePhase --> OperativeResultModalContent
+
+    SpymasterPhase --> TutorialButton
+    SpymasterPhase --> SpymasterModalContent
+    SpymasterPhase --> BaseModal
+    SpymasterPhase --> SpymasterResultModalContent
+
+
+
+    namespace boardFolder {
+        class boardCard {
+            <<VueComponent>>
+            -const clicked
+%%          props
+            +String id
+            +String imgUrl
+            +String altText
+            +String color
+            +String phase
+
+%%          emits
+            +emit card-clicked()
+        }
+        class FaseLabel {
+            <<VueComponent>>
+            +String fase
+        }
+
+        class Grid {
+            <<VueComponent>>
+%%          props
+            +Array cards
+
+%%          emits
+            +emit card-clicked()
+        }
+
+        class InputField {
+            <<VueComponent>>
+%%             props
+               +String label
+               +String modelValue
+               +String name
+               +Boolean readonly
+               +Boolean inputDisabled
+
+               -buttonClick()
+%%             emits
+               +emit submit()
+               +emit update:modelValue(value)
+        }
+
+        class LockButton {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+    namespace headerFolder {
+        class Header {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class HeaderButton {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class HeaderLogo {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class IconPalette {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+%% hubs folder
+    namespace operativeHubFolder {
+        class OperativeHubButton {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class OperativeHubCard {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class GameModeCard {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class OperativeHub {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+    namespace gameHubFolder {
+        class gameHubButton {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class gameHub {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+    namespace footer {
+        class Footer {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+%% modal
+    namespace modalContentFolder {
+        class OperativeModalContent {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class OperativeResultModalContent {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class SpymasterModalContent {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class SpymasterResultModalContent {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class StartingPageModalContent {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+    namespace modalLinks {
+        class BaseModal {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class ButtonBase {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class TutorialButton {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+    namespace  pagesFolder {
+        class SpymasterPhase {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+        class OperativePhase {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+        }
+    }
+
+%% is in the pagesfolder
+        namespace startingPageFolder {
+            class startingPage {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+            }
+            class LeftHalfStartingPage {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+            }
+            class RightHalfStartingPage {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+            }
+            class ArticLogo {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+            }
+        }
+
+%% vue default classes
+    class App {
+            <<VueComponent>>
+%%             props
+%%             emits
+
+    }
