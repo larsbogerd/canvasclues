@@ -1,8 +1,8 @@
 <script setup>
 import Card from '@/components/hubs/operativehub/Card.vue';
 import GameModeCard from "@/components/hubs/operativehub/GameModeCard.vue";
-import axios from "axios";
 import {computed, onMounted, ref} from "vue";
+import {fetchGameListService} from "@/assets/composables/FetchGameListService.js";
 import Header from "@/components/header/Header.vue";
 const list = ref([]);
 const sortBy = ref('newest');
@@ -25,12 +25,8 @@ const sortedList = computed(() => {
   });
 });
 
-onMounted(fetchGameList);
+onMounted(async () => {list.value = await fetchGameListService()})
 
-async function fetchGameList() {
-  const response = await axios.get(`http://localhost:8082/api/v1/game/list`);
-  list.value = response.data;
-}
 </script>
 
 <template>

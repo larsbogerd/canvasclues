@@ -1,5 +1,5 @@
 <script setup>
-import ButtonBase from "@/components/ButtonBase.vue";
+import ButtonBase from "@/components/global-components/ButtonBase.vue";
 import router from "@/router.js";
 
 const props = defineProps({

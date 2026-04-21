@@ -1,7 +1,7 @@
 <script setup>
 import {ref} from "vue";
 import infoIcon from '@/assets/images/Icons/info.svg'
-import LockButton from "@/components/pages/LockButton.vue";
+import LockButton from "@/components/board/LockButton.vue";
 
 const clicked = ref(false);
 

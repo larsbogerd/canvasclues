@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import {inject, ref} from "vue";
+import {inject} from "vue";
 import lockInIcon from '@/assets/images/Icons/lock-in.svg'
 
 const props = defineProps<{
   id: string
 }>()
-const isLockedIn = ref(false);
 const submitFn = inject<(cardId) => void>('submitFn')!
-const handleCardClickedFn = inject<() => void>("cardClickedFn");
 
 function lockIn(){
   submitFn(props.id);

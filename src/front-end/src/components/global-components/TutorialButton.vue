@@ -1,6 +1,6 @@
 <script setup>
 import questionIcon from "@/assets/images/question-icon.svg";
-import BaseModal from "@/components/BaseModal.vue";
+import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import {ref} from "vue";
 const modal = ref(null)
 </script>

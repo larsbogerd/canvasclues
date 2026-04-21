@@ -3,7 +3,7 @@ import router from "@/router.js";
 import Button from "@/components/hubs/gamehub/Button.vue";
 import operativeImg from "@/assets/images/Icons/Operative.png";
 import spymasterImg from "@/assets/images/Icons/Spymaster.png";
-import Footer from "@/components/Footer.vue";
+import Footer from "@/components/global-components/Footer.vue";
 import Header from "@/components/header/Header.vue";
 function goToSpyPhase() {
   router.push('/game/spymaster')

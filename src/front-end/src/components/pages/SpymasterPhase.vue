@@ -4,13 +4,18 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import Grid from "@/components/board/Grid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
+
+import {startGameCall} from "@/assets/composables/StartGameService.js";
+import {updateHint} from "@/assets/composables/HintService.js";
+import {patchCards} from "@/assets/composables/UpdateGameService.js";
+
 import ArtInfo from "@/components/board/ArtInfo.vue";
-import { useRouter } from 'vue-router'
+
 import Header from "@/components/header/Header.vue";
-import TutorialButton from "@/components/TutorialButton.vue";
-import SpymasterModalContent from "@/components/ModalContent/SpymasterModalContent.vue";
-import BaseModal from "@/components/BaseModal.vue";
-import SpymasterResultModalContent from "@/components/ModalContent/SpymasterResultModalContent.vue";
+import TutorialButton from "@/components/global-components/TutorialButton.vue";
+import SpymasterModalContent from "@/components/modalpopup/modalcontent/SpymasterModalContent.vue";
+import BaseModal from "@/components/modalpopup/BaseModal.vue";
+import SpymasterResultModalContent from "@/components/modalpopup/modalcontent/SpymasterResultModalContent.vue";
 
 const hintInput = ref("");
 const modal = ref(null);
@@ -18,7 +23,6 @@ const cards = ref([]);
 const selectedCards = ref([]);
 const activeCard = ref(null);
 const emit = defineEmits(['game-started']);
-const router = useRouter();
 
 let gameId;
 
@@ -28,9 +32,10 @@ async function submit(input) {
   let status;
   try {
     if (validateInput(input)) {
-      await patchCards()
-      status = await postHint(input)
-      httpStatus(status)
+      await patchCards(selectedCards);
+      status = await updateHint(input, gameId);
+      console.log(status);
+      httpStatus(status);
       modal.value.show();
     } else {
       console.error("invalid input");
@@ -64,28 +69,15 @@ function validateInput(input) {
 }
 
 async function startGame() {
-  try {
-    const response = await axios.post('http://localhost:8082/api/v1/game/start');
-    cards.value = response.data;
+  try{
+    cards.value = await startGameCall();
     console.log("Fetched hints:", cards.value);
     for (const card of cards.value){
-      gameId = card.gameId;
+      gameId = await card.gameId;
       emit('game-started', gameId);
     }
   } catch(error) {
     console.log(error);
-  }
-}
-
-async function postHint(input) {
-  try {
-    const response = await axios.post('http://localhost:8082/api/v1/hints', {
-      content: input,
-      gameId: gameId
-    })
-    return response.status;
-  } catch (error) {
-    return error.status;
   }
 }
 
@@ -101,23 +93,6 @@ function handleCardClicked(id, clicked) {
 function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
 }
-
-async function patchCards() {
-  try {
-    const response = await axios.patch('http://localhost:8082/api/v1/game/updatecards', {
-      cardIds: selectedCards.value,
-      spymasterPick: true
-    })
-
-    console.log("Patched cards:", response.data);
-    return response.status;
-  } catch (error) {
-    console.log(error);
-    return error.status;
-  }
-}
-
-
 </script>
 
 <template>

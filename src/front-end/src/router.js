@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
-import StartingPage from "@/components/pages/StartingPage.vue";
+import StartingPage from "@/components/pages/StartPage/StartingPage.vue";
 import gameHub from "@/components/hubs/gamehub/GameHub.vue";
 import SpyView from './components/pages/SpymasterPhase.vue'
 import OperativeView from './components/pages/OperativePhase.vue'

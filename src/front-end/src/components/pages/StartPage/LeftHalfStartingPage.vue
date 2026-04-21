@@ -1,10 +1,10 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import {ref} from "vue";
-import ButtonBase from "@/components/ButtonBase.vue";
-import Logo from "@/components/Logo.vue";
-import BaseModal from "@/components/BaseModal.vue";
-import StartingPageModalContent from "@/components/ModalContent/StartingPageModalContent.vue";
+import ButtonBase from "@/components/global-components/ButtonBase.vue";
+import Logo from "@/components/global-components/Logo.vue";
+import BaseModal from "@/components/modalpopup/BaseModal.vue";
+import StartingPageModalContent from "@/components/modalpopup/modalcontent/StartingPageModalContent.vue";
 
 const router = useRouter()
 const modal = ref(null)

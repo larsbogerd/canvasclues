@@ -1,18 +1,16 @@
 <script setup>
-import axios from 'axios';
-import {onMounted, ref, provide} from "vue";
+import ArtInfo from "@/components/board/ArtInfo.vue";
+import {onMounted, provide, ref} from "vue";
 import Grid from "@/components/board/Grid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
-import ArtInfo from "@/components/board/ArtInfo.vue";
-import {useRoute, useRouter} from 'vue-router'
 import Header from "@/components/header/Header.vue";
-import TutorialButton from "@/components/TutorialButton.vue";
-import OperativeModalContent from "@/components/ModalContent/OperativeModalContent.vue";
-import BaseModal from "@/components/BaseModal.vue";
-import OperativeResultModalContent from "@/components/ModalContent/OperativeResultModalContent.vue";
+import TutorialButton from "@/components/global-components/TutorialButton.vue";
+import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
+import BaseModal from "@/components/modalpopup/BaseModal.vue";
+import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
+import {getSelectedCards, getGrid} from "@/assets/composables/VerificationService.js";
+import {getHint} from "@/assets/composables/HintService.js";
 
-const router = useRouter();
-const route = useRoute();
 const modal = ref(null)
 const cards = ref([]);
 const hint = ref(null);
@@ -23,31 +21,18 @@ const amount = ref(0);
 
 provide("submitFn", lockIn)
 provide("handleCardClickedFn", handleCardClicked)
-onMounted(async () => {
-  await getHint();
-  await getGrid();
+onMounted (async () => {
+  hint.value = await getHint();
+  cards.value = await getGrid();
   amount.value = await getCountOfCardsSelectedBySpymaster();
 });
 
-function getGameId() {
-  return route.params.gameId;
-}
 
-async function getHint() {
-  try {
-    const id = await getGameId()
-    const response = await axios.get(`http://localhost:8082/api/v1/hints/${id}`);
-    hint.value = response.data;
-  } catch (error) {
-    console.log(error.status);
-  }
-}
-
-correctAmount.value = 0;
 async function lockIn(cardId) {
-  const response = await getSelectedCards();
+  correctAmount.value = 0;
   selectedCards.value.push(cardId)
-  for (const [id, isCorrect] of Object.entries(response.data)) {
+  const response = await getSelectedCards(selectedCards);
+  for (const [id, isCorrect] of Object.entries(response)) {
     if(id === cardId){
       let cardToUpdate = cards.value.find(card => card.id === cardId);
       if (cardToUpdate) {
@@ -62,8 +47,8 @@ async function lockIn(cardId) {
 async function submit() {
   try {
     correctAmount.value = 0;
-    let correctCards = await getSelectedCards();
-    for (let [cardId, isCorrect] of Object.entries(correctCards.data)) {
+    let correctCards = await getSelectedCards(selectedCards);
+    for (let [cardId, isCorrect] of Object.entries(correctCards)) {
       let cardToUpdate = cards.value.find(card => card.id === cardId);
       if (cardToUpdate) {
         cardToUpdate.color = isCorrect ? 'right' : 'wrong';
@@ -86,27 +71,6 @@ function handleCardClicked(id, clicked) {
 
 function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
-}
-
-async function getSelectedCards() {
-  try{
-    const response = await axios.post("http://localhost:8082/api/v1/game/checkcards",
-        selectedCards.value
-    )
-    return response;
-  } catch (error) {
-    return error.status
-  }
-}
-
-async function getGrid() {
-  try {
-    const id = await getGameId()
-    const response = await axios.get(`http://localhost:8082/api/v1/game/${id}`);
-    cards.value = response.data;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 async function getCountOfCardsSelectedBySpymaster() {

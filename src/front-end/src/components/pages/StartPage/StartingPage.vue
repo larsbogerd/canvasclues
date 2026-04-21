@@ -1,7 +1,7 @@
 <script setup>
-import RightHalfStartingPage from "@/components/RightHalfStartingPage.vue";
-import LeftHalfStartingPage from "@/components/LeftHalfStartingPage.vue";
-import Footer from "@/components/Footer.vue";
+import RightHalfStartingPage from "@/components/pages/StartPage/RightHalfStartingPage.vue";
+import LeftHalfStartingPage from "@/components/pages/StartPage/LeftHalfStartingPage.vue";
+import Footer from "@/components/global-components/Footer.vue";
 </script>
 
 <template>
