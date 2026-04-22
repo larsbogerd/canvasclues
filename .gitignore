@@ -121,3 +121,10 @@ __screenshots__/
 # MySQL localdata
 sqldata/
 package-lock.json
+
+# Process ID files
+*.pid
+*.pid.lock
+
+# PID folders
+.pids/

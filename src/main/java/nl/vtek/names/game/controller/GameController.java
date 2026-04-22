@@ -45,11 +45,14 @@ public class GameController {
 
     @PatchMapping("/updatecards")
     public void updateCards(@RequestBody UpdateCardsRequest request) {
-        gameService.updateCards(request.getCardIds(), request.getSpymasterPick());
+        gameService.updateCards(request.getCardIds(), request.getSpymasterPick(), request.getMaxScore(), request.getGameId());
     }
 
     @PostMapping("/checkcards")
     public Map<UUID, Boolean> checkCards(@RequestBody List<UUID> cardIds) {
         return gameService.checkCards(cardIds);
     }
+
+
+
 }

@@ -1,7 +1,7 @@
 <script setup>
 import inputField from "@/components/board/InputField.vue";
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import { onMounted, ref, computed } from "vue";
 import Grid from "@/components/board/Grid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
 
@@ -10,7 +10,7 @@ import {updateHint} from "@/assets/composables/HintService.js";
 import {patchCards} from "@/assets/composables/UpdateGameService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
-
+import { useRouter } from 'vue-router'
 import Header from "@/components/header/Header.vue";
 import TutorialButton from "@/components/global-components/TutorialButton.vue";
 import SpymasterModalContent from "@/components/modalpopup/modalcontent/SpymasterModalContent.vue";
@@ -32,7 +32,7 @@ async function submit(input) {
   let status;
   try {
     if (validateInput(input)) {
-      await patchCards(selectedCards);
+      await patchCards(selectedCards, gameId);
       status = await updateHint(input, gameId);
       console.log(status);
       httpStatus(status);
@@ -93,6 +93,11 @@ function handleCardClicked(id, clicked) {
 function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
 }
+
+
+
+
+
 </script>
 
 <template>
@@ -126,7 +131,7 @@ function handleInfoClicked(id) {
   </div>
   </div>
   <BaseModal ref="modal">
-    <SpymasterResultModalContent></SpymasterResultModalContent>
+      <SpymasterResultModalContent :score="selectedCards.length" />
   </BaseModal>
 </template>
 

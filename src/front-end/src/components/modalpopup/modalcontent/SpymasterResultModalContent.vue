@@ -2,6 +2,10 @@
 import ButtonBase from "@/components/global-components/ButtonBase.vue";
 import router from "@/router.js";
 
+
+const props = defineProps({ score: Number })
+
+
 function RouteToOpertive() {
   router.push('/game/operative')
 }
@@ -14,6 +18,10 @@ function ReloadGame() {
 <template>
   <section>
     <h1 class="modal-title">Puzzel gepubliceerd!</h1>
+    <div class="modal-stat">
+      <div class="modal-stat-value">{{props.score}}</div>
+      <div class="modal-stat-label">Score</div>
+    </div>
     <div class="modal-body modal-body--centered">
       <p>Operatives kunnen nu jouw puzzel spelen. Bekijk later hoe goed jouw hints werken.</p>
     </div>

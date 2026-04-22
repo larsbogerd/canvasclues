@@ -13,6 +13,7 @@ import nl.vtek.names.game.mapper.CardMapper;
 import nl.vtek.names.game.mapper.GameMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,16 +69,23 @@ public class GameService {
         return CardMapper.toCardResponse(game.getCards());
     }
 
-    public void updateCards(List<UUID> cardIds, Boolean isSpymasterPick) {
+    public void updateCards(List<UUID> cardIds, Boolean isSpymasterPick, Integer maxScore, int gameId) {
         List<Card> cards = cardRepository.findAllById(cardIds);
+
         for (Card card : cards) {
             if (isSpymasterPick != null) {
                 card.setSpymasterPick(isSpymasterPick);
             }
         }
-
         cardRepository.saveAll(cards);
+
+        if (maxScore != null) {
+            Game game = gameRepository.findById(gameId).orElseThrow();
+            game.setMaxScore(maxScore);
+            gameRepository.save(game);
+        }
     }
+
 
     public Map<UUID, Boolean> checkCards(List<UUID> cardIds) {
         List<Card> cards = cardRepository.findAllById(cardIds);
@@ -94,5 +102,4 @@ public class GameService {
                 .map(GameMapper::toGameResponse)
                 .toList();
     }
-
 }

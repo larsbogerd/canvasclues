@@ -131,6 +131,9 @@ class GameIntegrationTest {
                 new java.util.HashMap<>() {{
                     put("cardIds", pickedIds);
                     put("spymasterPick", true);
+                    put("maxScore", 4);
+                    put("gameId", gameId);
+
                 }}
         );
 

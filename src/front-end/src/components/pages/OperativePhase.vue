@@ -104,7 +104,7 @@ async function getCountOfCardsSelectedBySpymaster() {
           <div class="hint-body">
             <p>Nog {{ amount }} kunstwerken te vinden</p>
             <p>Geselecteerd: {{ selectedCards.length }}</p>
-            <p>Correct geraden: {{ correctAmount }}</p>
+            <p>Score: {{ correctAmount }}</p>
             <button class="end-turn-btn" @click="submit">Beëindig poging</button>
           </div>
         </div>
