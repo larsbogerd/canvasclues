@@ -114,7 +114,7 @@ function handleInfoClicked(id) {
         <fase-label fase="Spymaster"/>
         <div class="hint-card">
           <div class="hint-body">
-            <p>Geselecteerd: {{ selectedCards.length }}</p>
+            <p>Maximale score: {{ selectedCards.length }}</p>
             <input-field name="Bevestig hint" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
           </div>
         </div>

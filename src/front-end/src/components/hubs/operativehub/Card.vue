@@ -14,20 +14,12 @@ const props = defineProps({
 <template>
   <div class="game-hub-card">
     <div class="text-block">
-      <p class="hub-title">
-        {{ props.title }}
-      </p>
-      <p class="hub-description">
-        Spymaster: {{props.user}}
-      </p>
-      <p class="hub-description">
-        Gamemode: {{props.gameMode}}
-      </p>
-      <p class="hub-description">
-        Best score: {{props.score}}
-      </p>
+      <p class="hub-title">{{ props.title }}</p>
+      <p class="hub-description">Spymaster: {{ props.user }}</p>
+      <p class="hub-description">Gamemode: {{ props.gameMode }}</p>
+      <p class="hub-description">Best score: {{ props.score }}</p>
+      <Button :game-id="props.gameId" />
     </div>
-    <Button :game-id="props.gameId"/>
   </div>
 </template>
 
@@ -61,6 +53,9 @@ const props = defineProps({
   text-transform: capitalize;
   margin: 0;
   padding-bottom: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .hub-description{

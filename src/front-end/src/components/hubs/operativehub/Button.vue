@@ -32,6 +32,7 @@ button{
   font-weight: 700;
   box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-color) 28%, transparent);
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  align-self: start;
 }
 
 button:hover,

@@ -29,8 +29,6 @@ onMounted (async () => {
 
 
 async function lockIn(cardId) {
-  correctAmount.value = 0;
-  selectedCards.value.push(cardId)
   const response = await getSelectedCards(selectedCards);
   for (const [id, isCorrect] of Object.entries(response)) {
     if(id === cardId){
@@ -38,11 +36,12 @@ async function lockIn(cardId) {
       if (cardToUpdate) {
         cardToUpdate.color = isCorrect ? 'right' : 'wrong';
         if (isCorrect) correctAmount.value++;
-        break;
       }
+      break;
     }
   }
 }
+
 
 async function submit() {
   try {
@@ -86,39 +85,39 @@ async function getCountOfCardsSelectedBySpymaster() {
 
 <template>
   <div class="operative-phase">
-  <Header #tutorial-button username="V-Tek">
-    <TutorialButton>
-      <OperativeModalContent></OperativeModalContent>
-    </TutorialButton>
-  </Header>
-  <div class="screen">
-    <div class="layout">
-      <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" phase="operative" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
-      <div class="sidebar">
-        <fase-label fase="Operative"/>
-        <div class="hint-card" v-if="hint">
-          <div class="hint-header">
-            <span>{{ hint.content }}</span>
-            <span class="hint-number">{{ amount }}</span>
+    <Header #tutorial-button username="V-Tek">
+      <TutorialButton>
+        <OperativeModalContent></OperativeModalContent>
+      </TutorialButton>
+    </Header>
+    <div class="screen">
+      <div class="layout">
+        <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" phase="operative" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
+        <div class="sidebar">
+          <fase-label fase="Operative"/>
+          <div class="hint-card" v-if="hint">
+            <div class="hint-header">
+              <span>{{ hint.content }}</span>
+              <span class="hint-number">{{ amount }}</span>
+            </div>
+            <div class="hint-body">
+              <p>Nog {{ amount - correctAmount }} kunstwerk(en) te vinden</p>
+              <p>Geselecteerd: {{ selectedCards.length }}</p>
+              <p>Score: {{ correctAmount }}</p>
+              <button class="end-turn-btn" @click="submit">Beëindig poging</button>
+            </div>
           </div>
-          <div class="hint-body">
-            <p>Nog {{ amount }} kunstwerken te vinden</p>
-            <p>Geselecteerd: {{ selectedCards.length }}</p>
-            <p>Score: {{ correctAmount }}</p>
-            <button class="end-turn-btn" @click="submit">Beëindig poging</button>
-          </div>
+          <ArtInfo v-if="activeCard"
+                   :title="activeCard.title"
+                   :artist="activeCard.artistDisplay"
+                   :date="activeCard.dateDisplay"
+                   :medium="activeCard.mediumDisplay"
+                   :origin="activeCard.placeOfOrigin"
+                   @close="activeCard = null"
+          />
         </div>
-        <ArtInfo v-if="activeCard"
-                 :title="activeCard.title"
-                 :artist="activeCard.artistDisplay"
-                 :date="activeCard.dateDisplay"
-                 :medium="activeCard.mediumDisplay"
-                 :origin="activeCard.placeOfOrigin"
-                 @close="activeCard = null"
-        />
       </div>
     </div>
-  </div>
   </div>
   <BaseModal ref="modal">
     <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount"
