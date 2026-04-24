@@ -36,7 +36,7 @@ public class Card {
     }
 
     public Card(Game game, String imageUrl, String title, String artistDisplay, String dateDisplay,
-                String mediumDisplay, String placeOfOrigin) {
+                String mediumDisplay, String placeOfOrigin, CardType type) {
         this.game = game;
         this.imageUrl = imageUrl;
         this.title = title;
@@ -45,6 +45,7 @@ public class Card {
         this.mediumDisplay = mediumDisplay;
         this.placeOfOrigin = placeOfOrigin;
         this.isSpymasterPick = false;
+        this.type = type;
     }
 
     public UUID getId() {

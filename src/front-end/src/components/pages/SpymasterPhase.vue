@@ -109,7 +109,7 @@ function handleInfoClicked(id) {
     </Header>
   <div class="screen">
     <div class="layout">
-      <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
+      <grid class="grid" phase="spymaster" :cards="cards" :active-info-id="activeCard?.id" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
       <div class="sidebar">
         <fase-label fase="Spymaster"/>
         <div class="hint-card">

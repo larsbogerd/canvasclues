@@ -4,6 +4,7 @@ import nl.vtek.names.art.dto.ArtWorkResponse;
 import nl.vtek.names.art.service.ArtWorkService;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.model.Card;
+import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.model.GameState;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -26,7 +28,6 @@ public class GameService {
     private final ArtWorkService artWorkService;
     private final CardRepository cardRepository;
     private final GameRepository gameRepository;
-
     public GameService(ArtWorkService artWorkService,
                        CardRepository cardRepository,
                        GameRepository gameRepository) {
@@ -43,6 +44,8 @@ public class GameService {
 
         List<ArtWorkResponse> artworks = artWorkService.searchArtworks(BOARD_SIZE);
 
+        Random rand = new Random();
+        int[] gameOverLoop = {0, rand.nextInt(16)};
         List<Card> cards = new ArrayList<>();
         for (ArtWorkResponse artwork : artworks) {
             cards.add(new Card(
@@ -52,8 +55,10 @@ public class GameService {
                     artwork.artistDisplay(),
                     artwork.dateDisplay(),
                     artwork.mediumDisplay(),
-                    artwork.placeOfOrigin()
+                    artwork.placeOfOrigin(),
+                    TypeRandomizer(gameOverLoop)
             ));
+            gameOverLoop[0]++;
         }
 
         cardRepository.saveAll(cards);
@@ -102,4 +107,12 @@ public class GameService {
                 .map(GameMapper::toGameResponse)
                 .toList();
     }
+
+    private CardType TypeRandomizer(int[] assassinPosition){
+        CardType[] possibleTypeValues = CardType.values();
+        Random randomizer = new Random();
+        int randomNumber = randomizer.nextInt(possibleTypeValues.length - 1);
+        return assassinPosition[0] == assassinPosition[1]? possibleTypeValues[3]: possibleTypeValues[randomNumber];
+    }
+
 }

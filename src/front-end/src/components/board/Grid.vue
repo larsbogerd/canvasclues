@@ -14,7 +14,7 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
 <template>
   <div class="grid">
     <card v-for="(card,index) in prop.cards" :phase="prop.phase" :id="card.id" :img-url="card.imageUrl"
-          :alt-text="card.altText" :color="card.color" :info-active="card.id === prop.activeInfoId" :key="index"
+          :alt-text="card.altText" :color="card.color" :type="card.type" :info-active="card.id === prop.activeInfoId" :key="index"
           @card-clicked="(id, clicked) => emit('card-clicked', id, clicked)"
           @info-clicked="(id) => emit('info-clicked', id)"/>
   </div>

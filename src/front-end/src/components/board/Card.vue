@@ -12,6 +12,7 @@ const props = defineProps({
   color: String,
   infoActive: Boolean,
   phase: String,
+  type: String
 })
 
 const emit = defineEmits(['card-clicked', 'info-clicked'])
@@ -26,6 +27,14 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
   </div>
 
   <div v-else-if="color==='wrong'" class="card wrong" :class="{ 'info-shown': infoActive }">
+    <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
+    <button class="info-btn" @click.stop="emit('info-clicked', props.id)">
+      <img :src="infoIcon" alt="Info" />
+    </button>
+  </div>
+  <div v-else-if="phase==='spymaster'" class="card" @click="clicked = !clicked;
+        emit('card-clicked', props.id, clicked)"
+       :class="props.type, { active: clicked, 'info-shown': infoActive }">
     <img :src="props.imgUrl" :alt="props.altText" draggable="false"/>
     <button class="info-btn" @click.stop="emit('info-clicked', props.id)">
       <img :src="infoIcon" alt="Info" />
@@ -57,6 +66,22 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
     border-width 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.HIGH_SCORE{
+  border: clamp(2px, 1vh, 4px) solid purple;
+}
+
+.MEDIUM_SCORE{
+  border: clamp(2px, 1vh,  4px) solid yellow;
+}
+
+.LOW_SCORE{
+  border: clamp(2px, 1vh,  4px) solid blue;
+}
+
+.GAME_OVER{
+  border: clamp(2px, 1vh,  4px) solid black;
 }
 
 .right {
