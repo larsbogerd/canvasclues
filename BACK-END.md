@@ -47,16 +47,18 @@ The back-end starts on port **8082**.
 
 ## Package Structure
 
-### `art` – Artwork fetching
-Calls the Art Institute of Chicago API, maps responses to internal DTOs and models, and exposes a test endpoint for fetching random artworks.
+### `art` – Artwork fetching & persistence
+Calls the Art Institute of Chicago API, maps responses to the `Artwork` entity, and persists artworks so their gameplay usage (times loaded, times picked by spymaster, correct/bad guesses, first/last used) can be tracked for the admin dashboard.
 
 ### `game` – Game logic & persistence
 Contains controllers, DTOs, mappers, entities, repositories, services, and exception handling for:
 - `Game`
-- `Card`
+- `Card` (now references an `Artwork` by UUID rather than inlining its fields)
 - `Hint`
 - `GameState`
 - `CardType`
+
+A dedicated `SubmitService` handles the unified spymaster submit flow (cards + hint + max score in one call).
 
 ### `utils` – Utility classes
 Shared utilities used across the application.
@@ -66,12 +68,13 @@ Shared utilities used across the application.
 ## Domain Model
 
 - `Game` uses an integer primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
-- `Card` uses a UUID primary key and belongs to a `Game`.
+- `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
+- `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
 - `CardType` currently supports `TEAM1`, `TEAM2`, `NEUTRAL`, and `ASSASSIN`.
 
-The branch refactors renamed older `GameCard` and phase naming to the current `Card` and `GameState` model.
+`Artwork` was split off from `Card` so the same artwork can accumulate usage stats.
 
 ---
 
@@ -84,7 +87,7 @@ The branch refactors renamed older `GameCard` and phase naming to the current `C
 | POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
 | GET | `/api/v1/game/{gameId}` | Returns the stored `CardResponse[]` for a game and increments its `playCount` |
 | GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` (used by the operative hub) |
-| PATCH | `/api/v1/game/updatecards` | Updates selected cards using `{ "cardIds": ["uuid"], "spymasterPick": true }` |
+| POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "maxScore": 3, "hintContent": "museum" }`. Flags picked cards, sets `maxScore`, creates the `Hint`, and moves the game to `READY`. |
 | POST | `/api/v1/game/checkcards` | Accepts a JSON array of card UUIDs and returns a map of `cardId -> isSpymasterPick` |
 
 ### Hint
@@ -92,13 +95,14 @@ The branch refactors renamed older `GameCard` and phase naming to the current `C
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/v1/hints/{gameId}` | Returns the hint for a game as `HintResponse`; responds with `404` if none exists |
-| POST | `/api/v1/hints` | Creates a hint using `{ "gameId": 1, "content": "museum" }` and moves the game to `READY` |
 
-### Artwork (testing purposes)
+### Artwork
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/v1/artworks/test?size=25` | Fetches artwork data from the AIC API. `size` defaults to `25` |
+| GET | `/api/v1/artwork/test?size=25` | Fetches random artworks from the AIC API for testing. `size` defaults to `25` |
+| GET | `/api/v1/artwork/statslist` | Returns every persisted `Artwork` as `ArtworkStatsListResponse[]`, including usage counters and `pickPercentage`. Used by the admin dashboard table. |
+| GET | `/api/v1/artwork/{id}/stats` | Returns a single artwork's full detail + usage stats as `ArtworkStatsResponse`. Used by the admin detail page. |
 
 ---
 
@@ -140,7 +144,6 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 ## Future Improvements (TBD)
 
 - Assign `CardType` values during game creation
-- Add scoring system that write the `Game`
 - Replace generic runtime exceptions with structured API errors
-- ~~Add integration tests for the game and hint endpoints~~ (done)
+- Add more integration tests for the game and hint endpoints
 - Add OpenAPI or similar API documentation

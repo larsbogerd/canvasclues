@@ -130,14 +130,12 @@ class GameIntegrationTest {
         String requestBody = objectMapper.writeValueAsString(
                 new java.util.HashMap<>() {{
                     put("cardIds", pickedIds);
-                    put("spymasterPick", true);
                     put("maxScore", 4);
-                    put("gameId", gameId);
-
+                    put("hintContent", "testclue");
                 }}
         );
 
-        mockMvc.perform(patch("/api/v1/game/updatecards")
+        mockMvc.perform(post("/api/v1/game/" + gameId + "/submit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
@@ -169,13 +167,13 @@ class GameIntegrationTest {
 
         int gameId = returnedCards.getFirst().getGameId();
 
-        String hintBody = """
-                {"gameId": %d, "content": "testclue"}
-                """.formatted(gameId);
+        String submitBody = """
+                { "cardIds": [], "maxScore": 0, "hintContent": "testclue" }
+                """;
 
-        mockMvc.perform(post("/api/v1/hints")
+        mockMvc.perform(post("/api/v1/game/%d/submit".formatted(gameId))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(hintBody))
+                        .content(submitBody))
                 .andExpect(status().isOk());
 
         MvcResult listResult = mockMvc.perform(get("/api/v1/game/list"))

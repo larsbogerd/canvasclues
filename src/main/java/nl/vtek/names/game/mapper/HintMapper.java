@@ -1,6 +1,5 @@
 package nl.vtek.names.game.mapper;
 
-import nl.vtek.names.game.dto.HintRequest;
 import nl.vtek.names.game.dto.HintResponse;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Hint;
@@ -10,10 +9,10 @@ public class HintMapper {
         /* This utility class should not be instantiated */
     }
 
-    public static Hint toEntity(HintRequest request, Game game) {
+    public static Hint toEntity(String content, Game game) {
         Hint hint = new Hint();
         hint.setGame(game);
-        hint.setContent(request.getContent().toLowerCase());
+        hint.setContent(content.toLowerCase());
         return hint;
     }
 

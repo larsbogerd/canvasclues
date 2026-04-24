@@ -1,6 +1,5 @@
 package nl.vtek.names.game.service;
 
-import nl.vtek.names.game.dto.HintRequest;
 import nl.vtek.names.game.dto.HintResponse;
 import nl.vtek.names.game.mapper.HintMapper;
 import nl.vtek.names.game.model.Game;
@@ -26,11 +25,11 @@ public class HintService {
     }
 
 
-    public void createHint(HintRequest request) {
-        Game game = gameRepository.findById(request.getGameId())
+    public void createHint(int gameId, String content) {
+        Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        Hint hint = HintMapper.toEntity(request, game);
+        Hint hint = HintMapper.toEntity(content, game);
         validateHint(hint);
         hintRepo.save(hint);
 

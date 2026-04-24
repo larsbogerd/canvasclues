@@ -19,13 +19,13 @@ const emit = defineEmits(['close'])
       <div>
         <p class="art-info-title">{{ props.title }}</p>
         <p class="art-info-subtitle">{{ props.artist }}</p>
-        <p class="art-info-date">{{ props.date }}</p>
       </div>
       <button class="art-info-close" @click="emit('close')">
         <img :src="closeIcon" alt="Sluiten" draggable="false" />
       </button>
     </div>
     <div class="art-info-details">
+      <p class="art-info-detail">{{ props.date }}</p>
       <p class="art-info-detail">{{ props.medium }}</p>
       <p class="art-info-detail">{{ props.origin }}</p>
     </div>
@@ -63,13 +63,6 @@ const emit = defineEmits(['close'])
   font-size: clamp(0.8rem, 1.1vw, 1rem);
   margin: 0;
   color: #4c4c4c;
-}
-
-.art-info-date {
-  font-family: var(--font-secondary);
-  font-size: clamp(0.7rem, 1vw, 0.9rem);
-  margin: 4px 0 0;
-  color: #8b7f70;
 }
 
 .art-info-details {

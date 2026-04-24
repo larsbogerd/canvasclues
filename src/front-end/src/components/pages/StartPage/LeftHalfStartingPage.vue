@@ -30,6 +30,7 @@ function goToGameHubPhase() {
         <button-base @click="modal?.show()" id="secondary-btn">Hoe werkt het?</button-base>
       </div>
     </div>
+    <button class="admin-secret" @click="router.push('/admin')"></button>
   </div>
   <BaseModal ref="modal">
     <StartingPageModalContent></StartingPageModalContent>
@@ -75,6 +76,22 @@ function goToGameHubPhase() {
   font-size: 1.5rem;
   font-weight: 300;
   margin: 0;
+}
+
+.admin-secret {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  background: transparent;
+  border: #000000 solid 5px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.admin-secret:hover {
+  opacity: 1;
 }
 
 .button-group {

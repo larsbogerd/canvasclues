@@ -2,12 +2,15 @@ package nl.vtek.names.art.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+
 public record ArticDto(
-        int id,
+        @JsonProperty("image_id") UUID id,
         String title,
         @JsonProperty("artist_display") String artistDisplay,
-        @JsonProperty("image_id") String imageId,
         @JsonProperty("date_display") String dateDisplay,
         @JsonProperty("medium_display") String mediumDisplay,
-        @JsonProperty("place_of_origin") String placeOfOrigin
+        @JsonProperty("place_of_origin") String placeOfOrigin,
+        String dimensions,
+        @JsonProperty("department_title") String departmentTitle
 ) {}

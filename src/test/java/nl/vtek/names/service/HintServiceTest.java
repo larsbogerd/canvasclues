@@ -4,7 +4,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.vtek.names.game.dto.HintRequest;
 import nl.vtek.names.game.dto.HintResponse;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Hint;
@@ -39,11 +38,7 @@ class HintServiceTest {
 
         given(gameRepository.findById(111111)).willReturn(Optional.of(game));
 
-        HintRequest request = new HintRequest();
-        request.setGameId(111111);
-        request.setContent("testhint");
-
-        hintService.createHint(request);
+        hintService.createHint(111111, "testhint");
 
         ArgumentCaptor<Hint> captor = ArgumentCaptor.forClass(Hint.class);
         verify(hintRepo).save(captor.capture());

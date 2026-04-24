@@ -6,8 +6,7 @@ import Grid from "@/components/board/Grid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
 
 import {startGameCall} from "@/assets/composables/StartGameService.js";
-import {updateHint} from "@/assets/composables/HintService.js";
-import {patchCards} from "@/assets/composables/UpdateGameService.js";
+import {submitSpymasterTurn} from "@/assets/composables/SubmitService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
 import { useRouter } from 'vue-router'
@@ -31,17 +30,21 @@ onMounted(startGame);
 async function submit(input) {
   let status;
   try {
-    if (validateInput(input)) {
-      await patchCards(selectedCards, gameId);
-      status = await updateHint(input, gameId);
-      console.log(status);
-      httpStatus(status);
-      modal.value.show();
-    } else {
+    if (!validateInput(input)) {
       console.error("invalid input");
+      return;
     }
+
+    status = await submitSpymasterTurn(gameId, {
+      cardIds: selectedCards.value,
+      maxScore: selectedCards.value.length,
+      hintContent: input,
+    });
+
+    httpStatus(status);
+    modal.value.show();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return error;
   }
 }

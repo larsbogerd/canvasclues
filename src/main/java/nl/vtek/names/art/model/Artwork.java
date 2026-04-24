@@ -1,0 +1,173 @@
+package nl.vtek.names.art.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import nl.vtek.names.game.model.Card;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+public class Artwork {
+
+    @Id
+    private UUID id;
+    private String title;
+    private String artistDisplay;
+    private String dateDisplay;
+    private String mediumDisplay;
+    private String placeOfOrigin;
+    @Column(length = 1000)
+    private String dimensions;
+    private String departmentTitle;
+
+    private int timesLoaded;
+    private int timesSpymasterPick;
+    private LocalDateTime firstUsedAt;
+    private LocalDateTime lastUsedAt;
+    // TODO: submit operative guesses to back-end endpoint (separate user story)
+    private int timesCorrectGuess;
+    private int timesBadGuess;
+
+    @OneToMany(mappedBy = "artwork")
+    private List<Card> cards;
+
+    public Artwork() {
+    }
+
+    public Artwork(UUID id, String title, String artistDisplay, String dateDisplay,
+                   String mediumDisplay, String placeOfOrigin, String dimensions,
+                   String departmentTitle) {
+        this.id = id;
+        this.title = title;
+        this.artistDisplay = artistDisplay;
+        this.dateDisplay = dateDisplay;
+        this.mediumDisplay = mediumDisplay;
+        this.placeOfOrigin = placeOfOrigin;
+        this.dimensions = dimensions;
+        this.departmentTitle = departmentTitle;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getArtistDisplay() {
+        return artistDisplay;
+    }
+
+    public void setArtistDisplay(String artistDisplay) {
+        this.artistDisplay = artistDisplay;
+    }
+
+    public String getDateDisplay() {
+        return dateDisplay;
+    }
+
+    public void setDateDisplay(String dateDisplay) {
+        this.dateDisplay = dateDisplay;
+    }
+
+    public String getMediumDisplay() {
+        return mediumDisplay;
+    }
+
+    public void setMediumDisplay(String mediumDisplay) {
+        this.mediumDisplay = mediumDisplay;
+    }
+
+    public String getPlaceOfOrigin() {
+        return placeOfOrigin;
+    }
+
+    public void setPlaceOfOrigin(String placeOfOrigin) {
+        this.placeOfOrigin = placeOfOrigin;
+    }
+
+    public String getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(String dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    public String getDepartmentTitle() {
+        return departmentTitle;
+    }
+
+    public void setDepartmentTitle(String departmentTitle) {
+        this.departmentTitle = departmentTitle;
+    }
+
+    public int getTimesLoaded() {
+        return timesLoaded;
+    }
+
+    public void setTimesLoaded(int timesLoaded) {
+        this.timesLoaded = timesLoaded;
+    }
+
+    public int getTimesSpymasterPick() {
+        return timesSpymasterPick;
+    }
+
+    public void setTimesSpymasterPick(int timesSpymasterPick) {
+        this.timesSpymasterPick = timesSpymasterPick;
+    }
+
+    public LocalDateTime getFirstUsedAt() {
+        return firstUsedAt;
+    }
+
+    public void setFirstUsedAt(LocalDateTime firstUsedAt) {
+        this.firstUsedAt = firstUsedAt;
+    }
+
+    public LocalDateTime getLastUsedAt() {
+        return lastUsedAt;
+    }
+
+    public void setLastUsedAt(LocalDateTime lastUsedAt) {
+        this.lastUsedAt = lastUsedAt;
+    }
+
+    public int getTimesCorrectGuess() {
+        return timesCorrectGuess;
+    }
+
+    public void setTimesCorrectGuess(int timesCorrectGuess) {
+        this.timesCorrectGuess = timesCorrectGuess;
+    }
+
+    public int getTimesBadGuess() {
+        return timesBadGuess;
+    }
+
+    public void setTimesBadGuess(int timesBadGuess) {
+        this.timesBadGuess = timesBadGuess;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+}

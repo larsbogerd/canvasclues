@@ -1,5 +1,6 @@
 package nl.vtek.names.game.mapper;
 
+import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.model.Card;
 
@@ -14,18 +15,19 @@ public class CardMapper {
     public static List<CardResponse> toCardResponse(List<Card> cards) {
         List<CardResponse> responses = new ArrayList<>();
         for (Card card : cards) {
+            Artwork artwork = card.getArtwork();
             CardResponse response = new CardResponse();
             response.setId(card.getId());
             response.setGameId(card.getGame().getId());
             response.setImageUrl(card.getImageUrl());
-            response.setTitle(card.getTitle());
-            response.setArtistDisplay(card.getArtistDisplay());
-            response.setDateDisplay(card.getDateDisplay());
-            response.setMediumDisplay(card.getMediumDisplay());
-            response.setPlaceOfOrigin(card.getPlaceOfOrigin());
+            response.setTitle(artwork.getTitle());
+            response.setArtistDisplay(artwork.getArtistDisplay());
+            response.setDateDisplay(artwork.getDateDisplay());
+            response.setMediumDisplay(artwork.getMediumDisplay());
+            response.setPlaceOfOrigin(artwork.getPlaceOfOrigin());
 
             response.setAltText("%s — %s, %s".formatted(
-                    card.getTitle(), card.getArtistDisplay(), card.getDateDisplay()));
+                    artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay()));
             response.setSpymasterPick(card.isSpymasterPick());
             response.setType(card.getType());
 

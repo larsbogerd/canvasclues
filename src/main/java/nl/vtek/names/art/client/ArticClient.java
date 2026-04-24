@@ -17,6 +17,18 @@ public class ArticClient {
 
     private static final Logger log = LoggerFactory.getLogger(ArticClient.class);
 
+    private static final String FIELDS = String.join(",",
+            "id",
+            "image_id",
+            "title",
+            "artist_display",
+            "date_display",
+            "medium_display",
+            "place_of_origin",
+            "dimensions",
+            "department_title"
+    );
+
     private final RestClient restClient;
 
     public ArticClient(RestClient.Builder builder) {
@@ -44,7 +56,7 @@ public class ArticClient {
         try {
             return restClient
                     .post()
-                    .uri("/artworks/search?fields={fields}", "id,image_id,title,artist_display,date_display,medium_display,place_of_origin")
+                    .uri("/artworks/search?fields={fields}", FIELDS)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(query)
                     .retrieve()

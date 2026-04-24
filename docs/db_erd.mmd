@@ -1,21 +1,20 @@
 erDiagram
   GAME ||--o{ CARD : has
   GAME ||--o{ HINT : has
+  ARTWORK ||--o{ CARD : "appears as"
 
   GAME {
     int id PK
     enum state "CREATING | READY | ARCHIVED"
     int max_score
+    int play_count
     timestamp created_at
   }
 
   CARD {
     UUID id PK
     int game_id FK
-    varchar image_url
-    varchar title
-    varchar artist_display
-    varchar date_display
+    uuid artwork_id FK
     enum type "TEAM1 | TEAM2 | NEUTRAL | ASSASSIN"
     boolean is_spymaster_pick
   }
@@ -24,6 +23,23 @@ erDiagram
     UUID id PK
     int game_id FK
     varchar content
+  }
+
+  ARTWORK {
+    uuid id PK
+    varchar title
+    varchar artist_display
+    varchar date_display
+    varchar medium_display
+    varchar place_of_origin
+    varchar dimensions
+    varchar department_title
+    int times_loaded
+    int times_spymaster_pick
+    int times_correct_guess
+    int times_bad_guess
+    timestamp first_used_at
+    timestamp last_used_at
   }
 
   SESSION-CONCEPT {

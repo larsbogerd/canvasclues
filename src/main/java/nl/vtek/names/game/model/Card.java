@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
+import nl.vtek.names.art.model.Artwork;
 
 import java.util.UUID;
 
@@ -22,28 +24,19 @@ public class Card {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @ManyToOne
+    @JoinColumn(name = "artwork_id")
+    private Artwork artwork;
+
     @Enumerated(EnumType.STRING)
     private CardType type;
-    private String imageUrl;
-    private String title;
-    private String artistDisplay;
-    private String dateDisplay;
-    private String mediumDisplay;
-    private String placeOfOrigin;
     private boolean isSpymasterPick;
 
     public Card() {
     }
 
-    public Card(Game game, String imageUrl, String title, String artistDisplay, String dateDisplay,
-                String mediumDisplay, String placeOfOrigin, CardType type) {
+    public Card(Game game, CardType type) {
         this.game = game;
-        this.imageUrl = imageUrl;
-        this.title = title;
-        this.artistDisplay = artistDisplay;
-        this.dateDisplay = dateDisplay;
-        this.mediumDisplay = mediumDisplay;
-        this.placeOfOrigin = placeOfOrigin;
         this.isSpymasterPick = false;
         this.type = type;
     }
@@ -72,36 +65,17 @@ public class Card {
         this.type = type;
     }
 
+    public Artwork getArtwork() {
+        return artwork;
+    }
+
+    @Transient
     public String getImageUrl() {
-        return imageUrl;
+        return "https://www.artic.edu/iiif/2/%s/full/!500,500/0/default.jpg".formatted(artwork.getId());
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getArtistDisplay() {
-        return artistDisplay;
-    }
-
-    public void setArtistDisplay(String artistDisplay) {
-        this.artistDisplay = artistDisplay;
-    }
-
-    public String getDateDisplay() {
-        return dateDisplay;
-    }
-
-    public void setDateDisplay(String dateDisplay) {
-        this.dateDisplay = dateDisplay;
+    public void setArtwork(Artwork artwork) {
+        this.artwork = artwork;
     }
 
     public boolean isSpymasterPick() {
@@ -111,21 +85,4 @@ public class Card {
     public void setSpymasterPick(boolean spymasterPick) {
         isSpymasterPick = spymasterPick;
     }
-
-    public String getMediumDisplay() {
-        return mediumDisplay;
-    }
-
-    public void setMediumDisplay(String mediumDisplay) {
-        this.mediumDisplay = mediumDisplay;
-    }
-
-    public String getPlaceOfOrigin() {
-        return placeOfOrigin;
-    }
-
-    public void setPlaceOfOrigin(String placeOfOrigin) {
-        this.placeOfOrigin = placeOfOrigin;
-    }
-
 }

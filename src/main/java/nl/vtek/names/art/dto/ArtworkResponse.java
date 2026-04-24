@@ -1,7 +1,9 @@
 package nl.vtek.names.art.dto;
 
-public record ArtWorkResponse(
-        int id,
+import java.util.UUID;
+
+public record ArtworkResponse(
+        UUID id,
         String title,
         String artistDisplay,
         String dateDisplay,

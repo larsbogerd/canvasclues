@@ -38,10 +38,10 @@ class HintIntegrationTest {
         game = gameRepository.save(game);
 
         String json = """
-                { "gameId": %d, "content": "testhint" }
-                """.formatted(game.getId());
+                { "cardIds": [], "maxScore": 0, "hintContent": "testhint" }
+                """;
 
-        mockMvc.perform(post("/api/v1/hints")
+        mockMvc.perform(post("/api/v1/game/%d/submit".formatted(game.getId()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
