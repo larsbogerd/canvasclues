@@ -3,6 +3,7 @@ package nl.vtek.names.game.controller;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.SubmitRequest;
+import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.service.SubmitService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,10 +25,12 @@ public class GameController {
 
     private final GameService gameService;
     private final SubmitService submitService;
+    private final CardService cardService;
 
-    public GameController(GameService gameService, SubmitService submitService) {
+    public GameController(GameService gameService, SubmitService submitService, CardService cardService) {
         this.gameService = gameService;
         this.submitService = submitService;
+        this.cardService = cardService;
     }
 
     @PostMapping("/start")
@@ -52,6 +55,6 @@ public class GameController {
 
     @PostMapping("/checkcards")
     public Map<UUID, Boolean> checkCards(@RequestBody List<UUID> cardIds) {
-        return gameService.checkCards(cardIds);
+        return cardService.checkCards(cardIds);
     }
 }

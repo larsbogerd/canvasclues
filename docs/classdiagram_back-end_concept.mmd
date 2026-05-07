@@ -1,0 +1,349 @@
+---
+title: Back-end (concept — service split refactor)
+config:
+  flowchart:
+    nodeSpacing: 50
+    rankSpacing: 75
+  layout: elk
+---
+classDiagram
+    direction TB
+
+    GameController --> StartGameService
+    GameController --> GameService
+    GameController --> CardService
+    GameController --> SubmitService
+    HintController --> HintService
+
+    %% --- Orchestration ---
+    StartGameService --> GameService
+    StartGameService --> ArtworkService
+    StartGameService --> CardService
+
+    SubmitService --> GameService
+    SubmitService --> CardService
+    SubmitService --> HintService
+    SubmitService --> ArtworkService
+
+    %% --- Services -> repo + mapper ---
+    GameService --> GameRepository
+    GameService ..> GameMapper
+
+    CardService --> CardRepository
+    CardService ..> CardMapper
+
+    HintService --> HintRepo
+    HintService ..> HintMapper
+
+    ArtworkService --> ArtworkRepository
+    ArtworkService --> ArticClient
+    ArtworkService ..> ArtworkMapper
+
+    %% --- Artic ---
+    ArticClient --> ArticApi
+
+    %% --- Model relationships ---
+    Game "1" --> "*" Card
+    Game "1" --> "*" Hint
+    Game --> GameState
+    Card --> CardType
+    Card "*" --> "1" Artwork
+
+    %% ============================================================
+    %% CONTROLLER LAYER
+    %% ============================================================
+    namespace controllers {
+        class GameController {
+            <<RestController>>
+            +startGame() List~CardResponse~
+            +getGame(int gameId) List~CardResponse~
+            +getGameList() List~GameResponse~
+            +submit(int gameId, SubmitRequest) void
+            +checkCards(List~UUID~) Map~UUID, Boolean~
+        }
+        class HintController {
+            <<RestController>>
+            +getHintByGameId(int gameId) ResponseEntity~HintResponse~
+        }
+        class ArtworkController {
+            <<RestController>>
+            +getArtworks(int size) List~ArtworkResponse~
+            +getArtworkStatsList() List~ArtworkStatsListResponse~
+            +getArtworkDetail(UUID id) ArtworkStatsResponse
+        }
+    }
+
+    %% ============================================================
+    %% ORCHESTRATION LAYER
+    %% ============================================================
+    namespace orchestration {
+        class StartGameService {
+            <<Service>>
+            -GameService gameService
+            -ArtworkService artworkService
+            -CardService cardService
+            +startGame() List~CardResponse~
+        }
+        class SubmitService {
+            <<Service>>
+            -GameService gameService
+            -CardService cardService
+            -HintService hintService
+            -ArtworkService artworkService
+            +submit(int gameId, SubmitRequest) void
+        }
+        class SubmitRequest {
+            <<record>>
+            +List~UUID~ cardIds
+            +Integer maxScore
+            +String hintContent
+        }
+    }
+
+    %% ============================================================
+    %% GAME
+    %% ============================================================
+    namespace game {
+        class GameService {
+            <<Service>>
+            -GameRepository gameRepository
+            +createGame() Game
+            +getGame(int gameId) Game
+            +getGameList() List~GameResponse~
+            +updateMaxScore(int gameId, Integer) void
+            +incrementPlayCount(int gameId) void
+        }
+        class GameMapper {
+            <<utility>>
+            +toEntity() Game
+            +toGameResponse(Game) GameResponse
+        }
+        class GameRepository {
+            <<interface>>
+            JpaRepository~Game, Integer~
+            +findByState(GameState) List~Game~
+        }
+        class Game {
+            <<entity>>
+            -int id
+            -GameState state
+            -int maxScore
+            -LocalDateTime createdAt
+            -int playCount
+            -List~Card~ cards
+            -List~Hint~ hints
+        }
+        class GameState {
+            <<enumeration>>
+            CREATING
+            READY
+            ARCHIVED
+        }
+        class GameResponse {
+            <<dto>>
+            -int gameId
+            -String hint
+            -int maxScore
+            -LocalDateTime createdAt
+            -int playCount
+        }
+    }
+
+    %% ============================================================
+    %% CARD
+    %% ============================================================
+    namespace card {
+        class CardService {
+            <<Service>>
+            -CardRepository cardRepository
+            +buildBoard(Game, List~Artwork~) List~Card~
+            +updateCards(List~UUID~, Boolean) void
+            +checkCards(List~UUID~) Map~UUID, Boolean~
+            -typeRandomizer(int[]) CardType
+        }
+        class CardMapper {
+            <<utility>>
+            +toCardResponse(List~Card~) List~CardResponse~
+        }
+        class CardRepository {
+            <<interface>>
+            JpaRepository~Card, UUID~
+            +findByGame_Id(int) List~Card~
+        }
+        class Card {
+            <<entity>>
+            -UUID id
+            -Game game
+            -Artwork artwork
+            -CardType type
+            -boolean isSpymasterPick
+            +getImageUrl() String
+        }
+        class CardType {
+            <<enumeration>>
+            HIGH_SCORE
+            MEDIUM_SCORE
+            LOW_SCORE
+            GAME_OVER
+        }
+        class CardResponse {
+            <<dto>>
+            -UUID id
+            -int gameId
+            -CardType type
+            -String imageUrl
+            -String title
+            -String artistDisplay
+            -String dateDisplay
+            -String mediumDisplay
+            -String placeOfOrigin
+            -String altText
+            -boolean isSpymasterPick
+        }
+    }
+
+    %% ============================================================
+    %% HINT
+    %% ============================================================
+    namespace hint {
+        class HintService {
+            <<Service>>
+            -HintRepo hintRepo
+            -GameService gameService
+            +createHint(int gameId, String content) void
+            +getHintByGameId(int gameId) Optional~HintResponse~
+            -validateHint(Hint) void
+        }
+        class HintMapper {
+            <<utility>>
+            +toEntity(String, Game) Hint
+            +toHintResponse(Hint) HintResponse
+        }
+        class HintRepo {
+            <<interface>>
+            JpaRepository~Hint, UUID~
+            +findByGame_Id(int) Optional~Hint~
+        }
+        class Hint {
+            <<entity>>
+            -UUID id
+            -String content
+            -Game game
+        }
+        class HintResponse {
+            <<dto>>
+            -UUID id
+            -int gameId
+            -String content
+        }
+    }
+
+    %% ============================================================
+    %% ARTWORK
+    %% ============================================================
+    namespace artwork {
+        class ArtworkService {
+            <<Service>>
+            -ArticClient articClient
+            -ArtworkMapper artworkMapper
+            -ArtworkRepository artworkRepository
+            +fetchAndSaveArtworks(int size) List~Artwork~
+            +searchArtworks(int size) List~ArtworkResponse~
+            +getArtworkStatsList() List~ArtworkStatsListResponse~
+            +getArtworkDetail(UUID id) ArtworkStatsResponse
+            +recordGameUsage(Game) void
+        }
+        class ArtworkMapper {
+            <<Component>>
+            +toEntity(ArticDto) Artwork
+            +toResponse(Artwork) ArtworkResponse
+            +toStatsResponse(Artwork) ArtworkStatsListResponse
+            +toDetailResponse(Artwork) ArtworkStatsResponse
+        }
+        class ArticClient {
+            <<Component>>
+            +searchArtworks(int size) ArticResponse
+        }
+        class ArticApi {
+            <<external>>
+            api.artic.edu
+        }
+        class ArtworkRepository {
+            <<interface>>
+            JpaRepository~Artwork, UUID~
+        }
+        class Artwork {
+            <<entity>>
+            -UUID id
+            -String title
+            -String artistDisplay
+            -String dateDisplay
+            -String mediumDisplay
+            -String placeOfOrigin
+            -String dimensions
+            -String departmentTitle
+            -int timesLoaded
+            -int timesSpymasterPick
+            -LocalDateTime firstUsedAt
+            -LocalDateTime lastUsedAt
+            -int timesCorrectGuess
+            -int timesBadGuess
+            -List~Card~ cards
+        }
+        class ArtworkResponse {
+            <<record>>
+            +UUID id
+            +String title
+            +String artistDisplay
+            +String dateDisplay
+            +String mediumDisplay
+            +String placeOfOrigin
+            +String imageUrl
+        }
+        class ArtworkStatsResponse {
+            <<record>>
+            +UUID id
+            +String title
+            +String artistDisplay
+            +String dateDisplay
+            +String mediumDisplay
+            +String placeOfOrigin
+            +String dimensions
+            +String departmentTitle
+            +int timesLoaded
+            +int timesSpymasterPick
+            +int timesCorrectGuess
+            +int timesBadGuess
+            +Double pickPercentage
+            +LocalDateTime firstUsedAt
+            +LocalDateTime lastUsedAt
+        }
+        class ArtworkStatsListResponse {
+            <<record>>
+            +UUID id
+            +String title
+            +String artistDisplay
+            +int timesLoaded
+            +int timesSpymasterPick
+            +int timesCorrectGuess
+            +int timesBadGuess
+            +Double pickPercentage
+            +LocalDateTime firstUsedAt
+            +LocalDateTime lastUsedAt
+        }
+        class ArticResponse {
+            <<record>>
+            +List~ArticDto~ pulledData
+        }
+        class ArticDto {
+            <<record>>
+            +UUID id
+            +String title
+            +String artistDisplay
+            +String dateDisplay
+            +String mediumDisplay
+            +String placeOfOrigin
+            +String dimensions
+            +String departmentTitle
+        }
+    }

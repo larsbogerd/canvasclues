@@ -9,15 +9,17 @@ public class SubmitService {
 
     private final GameService gameService;
     private final HintService hintService;
+    private final CardService cardService;
 
-    public SubmitService(GameService gameService, HintService hintService) {
+    public SubmitService(GameService gameService, HintService hintService,  CardService cardService) {
         this.gameService = gameService;
         this.hintService = hintService;
+        this.cardService = cardService;
     }
 
     @Transactional
     public void submit(int gameId, SubmitRequest request) {
-        gameService.updateCards(request.cardIds(), true);
+        cardService.updateCards(request.cardIds(), true);
         gameService.updateMaxScore(gameId, request.maxScore());
         hintService.createHint(gameId, request.hintContent());
         gameService.submitMetadata(gameId);
