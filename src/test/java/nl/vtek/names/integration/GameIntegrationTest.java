@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
-import nl.vtek.names.game.service.GameService;
+import nl.vtek.names.game.service.StartGameService;
 import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.model.Card;
 import tools.jackson.core.type.TypeReference;
@@ -47,26 +47,26 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        assertThat(returnedCards).hasSize(GameService.BOARD_SIZE);
+        assertThat(returnedCards).hasSize(StartGameService.BOARD_SIZE);
 
-        int gameId = returnedCards.getFirst().getGameId();
+        Long gameId = returnedCards.getFirst().gameId();
         assertThat(gameId).isNotZero();
-        assertThat(returnedCards).allMatch(card -> card.getGameId() == gameId);
+        assertThat(returnedCards).allMatch(card -> card.gameId().equals(gameId));
 
         assertThat(returnedCards).allSatisfy(card -> {
-            assertThat(card.getImageUrl()).isNotEmpty();
-            assertThat(card.getTitle()).isNotBlank();
-            assertThat(card.getArtistDisplay()).isNotBlank();
-            assertThat(card.getDateDisplay()).isNotBlank();
-            assertThat(card.getAltText()).isEqualTo("%s — %s, %s".formatted(
-                    card.getTitle(),
-                    card.getArtistDisplay(),
-                    card.getDateDisplay()
+            assertThat(card.imageUrl()).isNotEmpty();
+            assertThat(card.title()).isNotBlank();
+            assertThat(card.artistDisplay()).isNotBlank();
+            assertThat(card.dateDisplay()).isNotBlank();
+            assertThat(card.altText()).isEqualTo("%s — %s, %s".formatted(
+                    card.title(),
+                    card.artistDisplay(),
+                    card.dateDisplay()
             ));
         });
 
         List<Card> dbCards = cardRepository.findByGame_Id(gameId);
-        assertThat(dbCards).hasSize(GameService.BOARD_SIZE);
+        assertThat(dbCards).hasSize(StartGameService.BOARD_SIZE);
     }
 
     @Test
@@ -80,7 +80,7 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        int gameId = returnedCards.getFirst().getGameId();
+        Long gameId = returnedCards.getFirst().gameId();
 
         MvcResult getResult = mockMvc.perform(get("/api/v1/game/" + gameId))
                 .andExpect(status().isOk())
@@ -91,21 +91,21 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        assertThat(fetchedCards).hasSize(GameService.BOARD_SIZE);
-        assertThat(fetchedCards).allMatch(card -> card.getGameId() == gameId);
+        assertThat(fetchedCards).hasSize(StartGameService.BOARD_SIZE);
+        assertThat(fetchedCards).allMatch(card -> card.gameId().equals(gameId));
         assertThat(fetchedCards).allSatisfy(card -> {
-            assertThat(card.getTitle()).isNotBlank();
-            assertThat(card.getArtistDisplay()).isNotBlank();
-            assertThat(card.getDateDisplay()).isNotBlank();
-            assertThat(card.getAltText()).isEqualTo("%s — %s, %s".formatted(
-                    card.getTitle(),
-                    card.getArtistDisplay(),
-                    card.getDateDisplay()
+            assertThat(card.title()).isNotBlank();
+            assertThat(card.artistDisplay()).isNotBlank();
+            assertThat(card.dateDisplay()).isNotBlank();
+            assertThat(card.altText()).isEqualTo("%s — %s, %s".formatted(
+                    card.title(),
+                    card.artistDisplay(),
+                    card.dateDisplay()
             ));
         });
 
-        List<UUID> createdIds = returnedCards.stream().map(CardResponse::getId).toList();
-        List<UUID> fetchedIds = fetchedCards.stream().map(CardResponse::getId).toList();
+        List<UUID> createdIds = returnedCards.stream().map(CardResponse::id).toList();
+        List<UUID> fetchedIds = fetchedCards.stream().map(CardResponse::id).toList();
         assertThat(fetchedIds).containsExactlyInAnyOrderElementsOf(createdIds);
     }
 
@@ -120,11 +120,11 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        int gameId = returnedCards.getFirst().getGameId();
+        Long gameId = returnedCards.getFirst().gameId();
 
         List<UUID> pickedIds = returnedCards.stream()
                 .limit(3)
-                .map(CardResponse::getId)
+                .map(CardResponse::id)
                 .toList();
 
         String requestBody = objectMapper.writeValueAsString(
@@ -165,7 +165,7 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        int gameId = returnedCards.getFirst().getGameId();
+        Long gameId = returnedCards.getFirst().gameId();
 
         String submitBody = """
                 { "cardIds": [], "maxScore": 0, "hintContent": "testclue" }
@@ -187,7 +187,7 @@ class GameIntegrationTest {
 
         assertThat(games).isNotEmpty();
         assertThat(games)
-                .anyMatch(game -> game.getGameId() == gameId
-                        && "testclue".equals(game.getHint()));
+                .anyMatch(game -> game.gameId().equals(gameId)
+                        && "testclue".equals(game.hint()));
     }
 }

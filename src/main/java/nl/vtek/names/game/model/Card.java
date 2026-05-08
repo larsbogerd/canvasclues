@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
 import nl.vtek.names.art.model.Artwork;
 
 import java.util.UUID;
@@ -67,11 +66,6 @@ public class Card {
 
     public Artwork getArtwork() {
         return artwork;
-    }
-
-    @Transient
-    public String getImageUrl() {
-        return "https://www.artic.edu/iiif/2/%s/full/!500,500/0/default.jpg".formatted(artwork.getId());
     }
 
     public void setArtwork(Artwork artwork) {

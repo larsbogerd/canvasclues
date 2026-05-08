@@ -5,7 +5,8 @@ import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.SubmitRequest;
 import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
-import nl.vtek.names.game.service.SubmitService;
+import nl.vtek.names.game.service.StartGameService;
+import nl.vtek.names.game.service.BoardSubmitService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,22 +25,27 @@ import java.util.UUID;
 public class GameController {
 
     private final GameService gameService;
-    private final SubmitService submitService;
     private final CardService cardService;
+    private final StartGameService startGameService;
+    private final BoardSubmitService boardSubmitService;
 
-    public GameController(GameService gameService, SubmitService submitService, CardService cardService) {
+    public GameController(GameService gameService,
+                          CardService cardService,
+                          StartGameService startGameService,
+                          BoardSubmitService boardSubmitService) {
         this.gameService = gameService;
-        this.submitService = submitService;
         this.cardService = cardService;
+        this.startGameService = startGameService;
+        this.boardSubmitService = boardSubmitService;
     }
 
     @PostMapping("/start")
     public List<CardResponse> startGame() {
-        return gameService.startGame();
+        return startGameService.startGame();
     }
 
     @GetMapping("/{gameId}")
-    public List<CardResponse> getGame(@PathVariable int gameId) {
+    public List<CardResponse> getGame(@PathVariable Long gameId) {
         return gameService.getGame(gameId);
     }
 
@@ -49,8 +55,8 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/submit")
-    public void submit(@PathVariable int gameId, @RequestBody SubmitRequest request) {
-        submitService.submit(gameId, request);
+    public void submit(@PathVariable Long gameId, @RequestBody SubmitRequest request) {
+        boardSubmitService.submit(gameId, request);
     }
 
     @PostMapping("/checkcards")

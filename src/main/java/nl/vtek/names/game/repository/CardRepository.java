@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface CardRepository extends JpaRepository<Card, UUID> {
 
-    List<Card> findByGame_Id(int gameId);
+    List<Card> findByGame_Id(Long gameId);
 }

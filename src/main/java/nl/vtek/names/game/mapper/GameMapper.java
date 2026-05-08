@@ -19,13 +19,13 @@ public class GameMapper {
         String hint = game.getHints().isEmpty()
                 ? null
                 : game.getHints().getFirst().getContent();
-        GameResponse response = new GameResponse();
-        response.setGameId(game.getId());
-        response.setHint(hint);
-        response.setMaxScore(game.getMaxScore());
-        response.setCreatedAt(game.getCreatedAt());
-        response.setPlayCount(game.getPlayCount());
-        return response;
+        return new GameResponse(
+                game.getId(),
+                hint,
+                game.getMaxScore(),
+                game.getCreatedAt(),
+                game.getPlayCount()
+        );
     }
 
 

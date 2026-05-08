@@ -5,13 +5,11 @@ import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.model.Artwork;
+import nl.vtek.names.art.util.IiifUrlBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ArtworkMapper {
-
-    private static final String IIIF_ARTIC_BASE_URL = "https://www.artic.edu/iiif/2";
-
 
     public Artwork toEntity(ArticDto dto) {
         return new Artwork(
@@ -27,11 +25,9 @@ public class ArtworkMapper {
     }
 
     public ArtworkResponse toResponse(Artwork artwork) {
-        String imageUrl = "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, artwork.getId());
-
         return new ArtworkResponse(artwork.getId(), artwork.getTitle(), artwork.getArtistDisplay(),
                 artwork.getDateDisplay(), artwork.getMediumDisplay(),
-                artwork.getPlaceOfOrigin(), imageUrl);
+                artwork.getPlaceOfOrigin(), IiifUrlBuilder.forArtwork(artwork.getId()));
     }
 
     public ArtworkStatsListResponse toStatsResponse(Artwork artwork) {

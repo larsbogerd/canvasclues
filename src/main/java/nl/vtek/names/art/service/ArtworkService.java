@@ -7,8 +7,13 @@ import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.mapper.ArtworkMapper;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.art.repository.ArtworkRepository;
+import nl.vtek.names.game.exception.GameNotFoundException;
+import nl.vtek.names.game.model.Card;
+import nl.vtek.names.game.model.Game;
+import nl.vtek.names.game.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,27 +25,62 @@ public class ArtworkService {
     private final ArticClient articClient;
     private final ArtworkMapper artworkMapper;
     private final ArtworkRepository artworkRepository;
+    private final GameRepository gameRepository;
 
-    public ArtworkService(ArticClient articClient, ArtworkMapper artworkMapper, ArtworkRepository artworkRepository) {
+    public ArtworkService(ArticClient articClient,
+                          ArtworkMapper artworkMapper,
+                          ArtworkRepository artworkRepository,
+                          GameRepository gameRepository) {
         this.articClient = articClient;
         this.artworkMapper = artworkMapper;
         this.artworkRepository = artworkRepository;
+        this.gameRepository = gameRepository;
+    }
+
+    public void recordArtworkUsage(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Artwork> toUpdate = new ArrayList<>();
+
+        for (Card card : game.getCards()) {
+            Artwork artwork = card.getArtwork();
+            artwork.setTimesLoaded(artwork.getTimesLoaded() + 1);
+
+            if (artwork.getFirstUsedAt() == null) {
+                artwork.setFirstUsedAt(now);
+            }
+            artwork.setLastUsedAt(now);
+
+            if (card.isSpymasterPick()) {
+                artwork.setTimesSpymasterPick(artwork.getTimesSpymasterPick() + 1);
+            }
+            toUpdate.add(artwork);
+        }
+        artworkRepository.saveAll(toUpdate);
     }
 
     public List<Artwork> fetchAndSaveArtworks(int size) {
-        List<Artwork> artworks = new ArrayList<>(
-                articClient.searchArtworks(size + 4).pulledData().stream()
-                        .map(artworkMapper::toEntity)
-                        .filter(artwork -> artwork.getId() != null)
-                        .map(artwork ->
-                                artworkRepository.findById(artwork.getId()).orElseGet(() ->
-                                        artworkRepository.save(artwork)))
-                        .limit(size)
-                        .toList()
-        );
+        List<Artwork> fetched = fetchArtworks(size + 4);
+        List<Artwork> saved = new ArrayList<>(sendArtworksToDatabase(fetched, size));
+        Collections.shuffle(saved);
+        return saved;
+    }
 
-        Collections.shuffle(artworks);
-        return artworks;
+    private List<Artwork> fetchArtworks(int size) {
+        return articClient.searchArtworks(size).pulledData().stream()
+                .map(artworkMapper::toEntity)
+                .filter(artwork -> artwork.getId() != null)
+                .toList();
+    }
+
+    private List<Artwork> sendArtworksToDatabase(List<Artwork> artworks, int limit) {
+        return artworks.stream()
+                .map(artwork -> artworkRepository.findById(artwork.getId())
+                        .orElseGet(() -> artworkRepository.save(artwork)))
+                .limit(limit)
+                .toList();
     }
 
     public List<ArtworkResponse> searchArtworks(int size) {

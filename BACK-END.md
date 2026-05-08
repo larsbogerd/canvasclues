@@ -58,21 +58,28 @@ Contains controllers, DTOs, mappers, entities, repositories, services, and excep
 - `GameState`
 - `CardType`
 
-A dedicated `SubmitService` handles the unified spymaster submit flow (cards + hint + max score in one call).
+The `game.service` package is split into focused services:
+- `GameService` – owns the `Game` aggregate (`createGame`, `getGame`, `markReady`, `updateMaxScore`, `getGameList`)
+- `CardService` – board building and card mutation (`buildBoard`, `updateCards`, `checkCards`)
+- `HintService` – hint creation and lookup
+- `StartGameService` – orchestrates `GameService` + `ArtworkService` + `CardService` for `POST /start`
+- `BoardSubmitService` – orchestrates the unified spymaster submit flow (flag cards → set maxScore → create hint → record artwork usage → mark game ready)
 
-### `utils` – Utility classes
-Shared utilities used across the application.
+`game.exception.GameNotFoundException` + `game.handlers.ApiExceptionHandler` translate missing games to a `404`.
+
+### `art/util` – Utility classes
+`IiifUrlBuilder` builds the IIIF image URL from an artwork id; used by both `ArtworkMapper` and `CardMapper` so the URL format lives in one place.
 
 ---
 
 ## Domain Model
 
-- `Game` uses an integer primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
+- `Game` uses a `Long` primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
 - `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
-- `CardType` currently supports `TEAM1`, `TEAM2`, `NEUTRAL`, and `ASSASSIN`.
+- `CardType` currently supports `HIGH_SCORE`, `MEDIUM_SCORE`, `LOW_SCORE`, and `GAME_OVER`.
 
 `Artwork` was split off from `Card` so the same artwork can accumulate usage stats.
 
@@ -133,9 +140,8 @@ Key properties:
 Spring Data generates SQL queries from repository method names. No manual SQL needed.
 
 Examples:
-- `findByGameId(int gameId)` → `SELECT * FROM game_cards WHERE game_id = ?`
-- `findByGameIdOrderByPositionAsc(int gameId)` → same, ordered by position
-- `findByGameIdAndIsSpymasterPick(int gameId, boolean isSpymasterPick)` → filter by game and spymaster selection
+- `findByGame_Id(Long gameId)` → `SELECT * FROM card WHERE game_id = ?` (used in `CardRepository` and `HintRepository`; the underscore tells Spring Data to navigate the `Card.game` relation and match on `Game.id`)
+- `findByState(GameState state)` → `SELECT * FROM game WHERE state = ?` (used in `GameRepository` for the operative hub list)
 
 Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
@@ -143,7 +149,6 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 
 ## Future Improvements (TBD)
 
-- Assign `CardType` values during game creation
-- Replace generic runtime exceptions with structured API errors
 - Add more integration tests for the game and hint endpoints
 - Add OpenAPI or similar API documentation
+- Extend structured API errors beyond `GameNotFoundException` (e.g. `ArtworkNotFoundException`)

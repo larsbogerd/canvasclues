@@ -16,27 +16,28 @@ import java.util.UUID;
 
 @Service
 public class CardService {
+
     private final CardRepository cardRepository;
     private final Random randomizer = new Random();
 
     public CardService(CardRepository cardRepository) {
-      this.cardRepository = cardRepository;
+        this.cardRepository = cardRepository;
     }
 
-    public List<Card> fetchDeck(Game game, List<Artwork> artworks, int boardSize){
+    public List<Card> buildBoard(Game game, List<Artwork> artworks, int boardSize) {
         int[] gameOverLoop = {0, randomizer.nextInt(boardSize)};
-        List<Card> deck = new ArrayList<>();
+        List<Card> cards = new ArrayList<>();
         for (Artwork artwork : artworks) {
             Card card = new Card(game, cardTypeRandomizer(gameOverLoop));
             card.setArtwork(artwork);
-            deck.add(card);
+            cards.add(card);
+            gameOverLoop[0]++;
         }
-        gameOverLoop[0]++;
-        sentCardsToDatabase(deck);
-        return deck;
+        sendCardsToDatabase(cards);
+        return cards;
     }
 
-    private void sentCardsToDatabase(List<Card> deck){
+    private void sendCardsToDatabase(List<Card> deck) {
         cardRepository.saveAll(deck);
     }
 

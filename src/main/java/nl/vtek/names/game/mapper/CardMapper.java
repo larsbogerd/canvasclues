@@ -1,6 +1,7 @@
 package nl.vtek.names.game.mapper;
 
 import nl.vtek.names.art.model.Artwork;
+import nl.vtek.names.art.util.IiifUrlBuilder;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.model.Card;
 
@@ -16,22 +17,19 @@ public class CardMapper {
         List<CardResponse> responses = new ArrayList<>();
         for (Card card : cards) {
             Artwork artwork = card.getArtwork();
-            CardResponse response = new CardResponse();
-            response.setId(card.getId());
-            response.setGameId(card.getGame().getId());
-            response.setImageUrl(card.getImageUrl());
-            response.setTitle(artwork.getTitle());
-            response.setArtistDisplay(artwork.getArtistDisplay());
-            response.setDateDisplay(artwork.getDateDisplay());
-            response.setMediumDisplay(artwork.getMediumDisplay());
-            response.setPlaceOfOrigin(artwork.getPlaceOfOrigin());
-
-            response.setAltText("%s — %s, %s".formatted(
-                    artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay()));
-            response.setSpymasterPick(card.isSpymasterPick());
-            response.setType(card.getType());
-
-            responses.add(response);
+            responses.add(new CardResponse(
+                    card.getId(),
+                    card.getGame().getId(),
+                    card.getType(),
+                    IiifUrlBuilder.forArtwork(artwork.getId()),
+                    artwork.getTitle(),
+                    artwork.getArtistDisplay(),
+                    artwork.getDateDisplay(),
+                    artwork.getMediumDisplay(),
+                    artwork.getPlaceOfOrigin(),
+                    "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay()),
+                    card.isSpymasterPick()
+            ));
         }
 
         return responses;

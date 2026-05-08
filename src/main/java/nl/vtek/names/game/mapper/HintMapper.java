@@ -17,10 +17,10 @@ public class HintMapper {
     }
 
     public static HintResponse toHintResponse(Hint hint) {
-        HintResponse response = new HintResponse();
-        response.setId(hint.getId());
-        response.setGameId(hint.getGame().getId());
-        response.setContent(hint.getContent());
-        return response;
+        return new HintResponse(
+                hint.getId(),
+                hint.getGame().getId(),
+                hint.getContent()
+        );
     }
 }

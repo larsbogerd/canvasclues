@@ -8,7 +8,7 @@ import nl.vtek.names.game.dto.HintResponse;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.repository.GameRepository;
-import nl.vtek.names.game.repository.HintRepo;
+import nl.vtek.names.game.repository.HintRepository;
 import nl.vtek.names.game.service.HintService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import java.util.Optional;
 class HintServiceTest {
 
     @Mock
-    private HintRepo hintRepo;
+    private HintRepository hintRepository;
 
     @Mock
     private GameRepository gameRepository;
@@ -34,32 +34,32 @@ class HintServiceTest {
     @Test
     void createHint_savesCorrectGameIdAndContent() {
         Game game = new Game();
-        game.setId(111111);
+        game.setId(111111L);
 
-        given(gameRepository.findById(111111)).willReturn(Optional.of(game));
+        given(gameRepository.findById(111111L)).willReturn(Optional.of(game));
 
-        hintService.createHint(111111, "testhint");
+        hintService.createHint(111111L, "testhint");
 
         ArgumentCaptor<Hint> captor = ArgumentCaptor.forClass(Hint.class);
-        verify(hintRepo).save(captor.capture());
+        verify(hintRepository).save(captor.capture());
 
         Hint saved = captor.getValue();
-        assertThat(saved.getGame().getId()).isEqualTo(111111);
+        assertThat(saved.getGame().getId()).isEqualTo(111111L);
         assertThat(saved.getContent()).isEqualTo("testhint");
     }
 
     @Test
     void getHintByGameId_returnsHint() {
         Game game = new Game();
-        game.setId(111111);
+        game.setId(111111L);
         Hint hint = new Hint("testhint", game);
 
-        given(hintRepo.findByGame_Id(111111)).willReturn(Optional.of(hint));
+        given(hintRepository.findByGame_Id(111111L)).willReturn(Optional.of(hint));
 
-        Optional<HintResponse> result = hintService.getHintByGameId(111111);
+        Optional<HintResponse> result = hintService.getHintByGameId(111111L);
 
         assertThat(result).isPresent();
-        assertThat(result.get().getContent()).isEqualTo("testhint");
-        verify(hintRepo).findByGame_Id(111111);
+        assertThat(result.get().content()).isEqualTo("testhint");
+        verify(hintRepository).findByGame_Id(111111L);
     }
 }

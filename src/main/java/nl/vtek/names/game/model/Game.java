@@ -17,7 +17,7 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private GameState state;
@@ -38,7 +38,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(int id, GameState state, int maxScore, LocalDateTime createdAt, int playCount) {
+    public Game(Long id, GameState state, int maxScore, LocalDateTime createdAt, int playCount) {
         this.id = id;
         this.state = state;
         this.maxScore = maxScore;
@@ -46,11 +46,11 @@ public class Game {
         this.playCount = playCount;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

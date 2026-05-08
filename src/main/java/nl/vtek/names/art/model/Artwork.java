@@ -13,15 +13,27 @@ import java.util.UUID;
 @Entity
 public class Artwork {
 
+    /**
+     * Uses the ArtIC API's {@code image_id} (a UUID) as our local primary key.
+     * This lets us deduplicate artworks across game sessions without a separate lookup,
+     * and is also the value plugged into {@link nl.vtek.names.art.util.IiifUrlBuilder}
+     * to build the IIIF image URL.
+     */
     @Id
     private UUID id;
+    @Column(columnDefinition = "TEXT")
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String artistDisplay;
+    @Column(columnDefinition = "TEXT")
     private String dateDisplay;
+    @Column(columnDefinition = "TEXT")
     private String mediumDisplay;
+    @Column(columnDefinition = "TEXT")
     private String placeOfOrigin;
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String dimensions;
+    @Column(columnDefinition = "TEXT")
     private String departmentTitle;
 
     private int timesLoaded;

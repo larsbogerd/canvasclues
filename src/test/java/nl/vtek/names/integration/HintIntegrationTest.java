@@ -8,7 +8,7 @@ import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.GameState;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.repository.GameRepository;
-import nl.vtek.names.game.repository.HintRepo;
+import nl.vtek.names.game.repository.HintRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -26,7 +26,7 @@ class HintIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private HintRepo hintRepo;
+    private HintRepository hintRepository;
 
     @Autowired
     private GameRepository gameRepository;
@@ -46,7 +46,7 @@ class HintIntegrationTest {
                         .content(json))
                 .andExpect(status().isOk());
 
-        Optional<Hint> saved = hintRepo.findByGame_Id(game.getId());
+        Optional<Hint> saved = hintRepository.findByGame_Id(game.getId());
         assertThat(saved).isPresent();
         assertThat(saved.get().getContent()).isEqualTo("testhint");
     }

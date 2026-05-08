@@ -6,7 +6,7 @@ import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.GameState;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.repository.GameRepository;
-import nl.vtek.names.game.repository.HintRepo;
+import nl.vtek.names.game.repository.HintRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,10 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 
 @SpringBootTest
-class HintRepoTest {
+class HintRepositoryTest {
 
     @Autowired
-    private HintRepo hintRepo;
+    private HintRepository hintRepository;
 
     @Autowired
     private GameRepository gameRepository;
@@ -32,9 +32,9 @@ class HintRepoTest {
     void save_persistsHintAndCanFindById() {
         Game game = createAndSaveGame();
         Hint hint = new Hint("testhint", game);
-        hint = hintRepo.save(hint);
+        hint = hintRepository.save(hint);
 
-        boolean exists = hintRepo.existsById(hint.getId());
+        boolean exists = hintRepository.existsById(hint.getId());
         assertThat(exists).isTrue();
     }
 
@@ -42,16 +42,16 @@ class HintRepoTest {
     void findByGameId_returnsCorrectHint() {
         Game game = createAndSaveGame();
         Hint hint = new Hint("testhint", game);
-        hintRepo.save(hint);
+        hintRepository.save(hint);
 
-        Optional<Hint> result = hintRepo.findByGame_Id(game.getId());
+        Optional<Hint> result = hintRepository.findByGame_Id(game.getId());
         assertThat(result).isPresent();
         assertThat(result.get().getContent()).isEqualTo("testhint");
     }
 
     @Test
     void findByGameId_returnsEmptyWhenNotFound() {
-        Optional<Hint> result = hintRepo.findByGame_Id(999999);
+        Optional<Hint> result = hintRepository.findByGame_Id(999999L);
         assertThat(result).isEmpty();
     }
 }

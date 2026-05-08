@@ -12,7 +12,7 @@ classDiagram
     GameController --> StartGameService
     GameController --> GameService
     GameController --> CardService
-    GameController --> SubmitService
+    GameController --> BoardSubmitService
     HintController --> HintService
 
     %% --- Orchestration ---
@@ -20,10 +20,10 @@ classDiagram
     StartGameService --> ArtworkService
     StartGameService --> CardService
 
-    SubmitService --> GameService
-    SubmitService --> CardService
-    SubmitService --> HintService
-    SubmitService --> ArtworkService
+    BoardSubmitService --> GameService
+    BoardSubmitService --> CardService
+    BoardSubmitService --> HintService
+    BoardSubmitService --> ArtworkService
 
     %% --- Services -> repo + mapper ---
     GameService --> GameRepository
@@ -32,12 +32,16 @@ classDiagram
     CardService --> CardRepository
     CardService ..> CardMapper
 
-    HintService --> HintRepo
+    HintService --> HintRepository
     HintService ..> HintMapper
 
     ArtworkService --> ArtworkRepository
     ArtworkService --> ArticClient
+    ArtworkService --> GameRepository
     ArtworkService ..> ArtworkMapper
+
+    ArtworkMapper ..> IiifUrlBuilder
+    CardMapper ..> IiifUrlBuilder
 
     %% --- Artic ---
     ArticClient --> ArticApi
@@ -56,14 +60,14 @@ classDiagram
         class GameController {
             <<RestController>>
             +startGame() List~CardResponse~
-            +getGame(int gameId) List~CardResponse~
+            +getGame(Long gameId) List~CardResponse~
             +getGameList() List~GameResponse~
-            +submit(int gameId, SubmitRequest) void
+            +submit(Long gameId, SubmitRequest) void
             +checkCards(List~UUID~) Map~UUID, Boolean~
         }
         class HintController {
             <<RestController>>
-            +getHintByGameId(int gameId) ResponseEntity~HintResponse~
+            +getHintByGameId(Long gameId) ResponseEntity~HintResponse~
         }
         class ArtworkController {
             <<RestController>>
@@ -79,18 +83,19 @@ classDiagram
     namespace orchestration {
         class StartGameService {
             <<Service>>
+            +BOARD_SIZE int
             -GameService gameService
             -ArtworkService artworkService
             -CardService cardService
             +startGame() List~CardResponse~
         }
-        class SubmitService {
+        class BoardSubmitService {
             <<Service>>
             -GameService gameService
             -CardService cardService
             -HintService hintService
             -ArtworkService artworkService
-            +submit(int gameId, SubmitRequest) void
+            +submit(Long gameId, SubmitRequest) void
         }
         class SubmitRequest {
             <<record>>
@@ -108,10 +113,10 @@ classDiagram
             <<Service>>
             -GameRepository gameRepository
             +createGame() Game
-            +getGame(int gameId) Game
+            +getGame(Long gameId) List~CardResponse~
             +getGameList() List~GameResponse~
-            +updateMaxScore(int gameId, Integer) void
-            +incrementPlayCount(int gameId) void
+            +updateMaxScore(Long gameId, Integer) void
+            +markReady(Long gameId) void
         }
         class GameMapper {
             <<utility>>
@@ -120,12 +125,12 @@ classDiagram
         }
         class GameRepository {
             <<interface>>
-            JpaRepository~Game, Integer~
+            JpaRepository~Game, Long~
             +findByState(GameState) List~Game~
         }
         class Game {
             <<entity>>
-            -int id
+            -Long id
             -GameState state
             -int maxScore
             -LocalDateTime createdAt
@@ -140,12 +145,12 @@ classDiagram
             ARCHIVED
         }
         class GameResponse {
-            <<dto>>
-            -int gameId
-            -String hint
-            -int maxScore
-            -LocalDateTime createdAt
-            -int playCount
+            <<record>>
+            +Long gameId
+            +String hint
+            +int maxScore
+            +LocalDateTime createdAt
+            +int playCount
         }
     }
 
@@ -168,7 +173,7 @@ classDiagram
         class CardRepository {
             <<interface>>
             JpaRepository~Card, UUID~
-            +findByGame_Id(int) List~Card~
+            +findByGame_Id(Long) List~Card~
         }
         class Card {
             <<entity>>
@@ -177,7 +182,6 @@ classDiagram
             -Artwork artwork
             -CardType type
             -boolean isSpymasterPick
-            +getImageUrl() String
         }
         class CardType {
             <<enumeration>>
@@ -187,18 +191,18 @@ classDiagram
             GAME_OVER
         }
         class CardResponse {
-            <<dto>>
-            -UUID id
-            -int gameId
-            -CardType type
-            -String imageUrl
-            -String title
-            -String artistDisplay
-            -String dateDisplay
-            -String mediumDisplay
-            -String placeOfOrigin
-            -String altText
-            -boolean isSpymasterPick
+            <<record>>
+            +UUID id
+            +Long gameId
+            +CardType type
+            +String imageUrl
+            +String title
+            +String artistDisplay
+            +String dateDisplay
+            +String mediumDisplay
+            +String placeOfOrigin
+            +String altText
+            +boolean isSpymasterPick
         }
     }
 
@@ -208,10 +212,10 @@ classDiagram
     namespace hint {
         class HintService {
             <<Service>>
-            -HintRepo hintRepo
-            -GameService gameService
-            +createHint(int gameId, String content) void
-            +getHintByGameId(int gameId) Optional~HintResponse~
+            -HintRepository hintRepository
+            -GameRepository gameRepository
+            +createHint(Long gameId, String content) void
+            +getHintByGameId(Long gameId) Optional~HintResponse~
             -validateHint(Hint) void
         }
         class HintMapper {
@@ -219,10 +223,10 @@ classDiagram
             +toEntity(String, Game) Hint
             +toHintResponse(Hint) HintResponse
         }
-        class HintRepo {
+        class HintRepository {
             <<interface>>
             JpaRepository~Hint, UUID~
-            +findByGame_Id(int) Optional~Hint~
+            +findByGame_Id(Long) Optional~Hint~
         }
         class Hint {
             <<entity>>
@@ -231,10 +235,10 @@ classDiagram
             -Game game
         }
         class HintResponse {
-            <<dto>>
-            -UUID id
-            -int gameId
-            -String content
+            <<record>>
+            +UUID id
+            +Long gameId
+            +String content
         }
     }
 
@@ -251,7 +255,7 @@ classDiagram
             +searchArtworks(int size) List~ArtworkResponse~
             +getArtworkStatsList() List~ArtworkStatsListResponse~
             +getArtworkDetail(UUID id) ArtworkStatsResponse
-            +recordGameUsage(Game) void
+            +recordArtworkUsage(Long gameId) void
         }
         class ArtworkMapper {
             <<Component>>
@@ -289,6 +293,10 @@ classDiagram
             -int timesCorrectGuess
             -int timesBadGuess
             -List~Card~ cards
+        }
+        class IiifUrlBuilder {
+            <<utility>>
+            +forArtwork(UUID) String
         }
         class ArtworkResponse {
             <<record>>

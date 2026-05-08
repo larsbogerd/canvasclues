@@ -22,7 +22,7 @@ public class HintController {
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<HintResponse> getHintByGameId(@PathVariable int gameId) {
+    public ResponseEntity<HintResponse> getHintByGameId(@PathVariable Long gameId) {
         return hintService.getHintByGameId(gameId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
