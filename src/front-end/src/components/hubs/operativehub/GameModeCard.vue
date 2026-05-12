@@ -1,5 +1,5 @@
 <script setup>
-import Button from "@/components/hubs/operativehub/Button.vue";
+import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButton.vue";
 
 const props = defineProps({
   description: String,
@@ -18,7 +18,7 @@ const props = defineProps({
         {{props.description}}
       </p>
     </div>
-    <Button/>
+    <OperativeHubButton/>
   </div>
 </template>
 
@@ -30,15 +30,15 @@ const props = defineProps({
   width: 300px;
   min-height: 220px;
   box-sizing: border-box;
-  background-color: white;
+  background-color: var(--color-secondary);
   padding: 14px;
   border-radius: 22px;
-  border: 1px solid #e2d8c8;
+  border: 1px solid var(--button-border);
   transition: border-color 180ms ease;
 }
 
 .game-hub-card:hover {
-  border-color: color-mix(in srgb, var(--primary-color) 40%, #ddd5c9);
+  border-color: var(--button-border-gradient);
 }
 
 .text-block{
@@ -50,18 +50,19 @@ const props = defineProps({
 }
 
 .hub-title{
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   font-size: 1.5rem;
   font-weight: 500;
   margin: 0;
   padding-bottom: 10px;
+  color: var(--text-primary);
 }
 
 .hub-description{
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: 1rem;
   margin: 0;
-  color: #4c4c4c;
+  color: var(--text-tertiary);
 }
 
 .game-hub-card :deep(button) {

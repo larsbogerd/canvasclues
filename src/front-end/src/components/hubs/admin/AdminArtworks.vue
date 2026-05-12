@@ -1,5 +1,5 @@
 <script setup>
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 import ArtworkStatsTable from "@/components/hubs/admin/ArtworkStatsTable.vue";
 import router from "@/router.js";
 import { onMounted, ref } from "vue";
@@ -14,9 +14,10 @@ onMounted(async () => {
 
 <template>
   <div class="admin-artworks">
-    <Header username="Admin" />
+    <PageHeader username="Admin" />
     <main class="content">
-      <button class="back-link" @click="router.push('/admin')">
+      <button class="back-link"
+              @click="router.push('/admin')">
         &larr; Terug naar hub
       </button>
       <header class="page-header">
@@ -51,7 +52,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .content {
@@ -67,7 +68,7 @@ onMounted(async () => {
   border: none;
   padding: 0;
   margin: 0 0 16px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   font-family: var(--font-secondary), sans-serif;
   font-size: 15px;
@@ -84,14 +85,14 @@ onMounted(async () => {
 
 h1 {
   font-family: var(--font-main), serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin: 0;
   font-size: 36px;
 }
 
 .subtitle {
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   margin: 4px 0 0 0;
 }
@@ -104,24 +105,24 @@ h1 {
 }
 
 .highlight-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
-  border: 1px solid rgba(219, 210, 195, 0.95);
+  background: var(--scrolbox-background-gradient);
+  border: 1px solid var(--scrollbox-border-secondary);
   border-radius: 28px;
   padding: 20px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
 }
 
 .highlight-card h3 {
   margin: 0 0 8px 0;
   font-family: var(--font-main), serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   font-size: 18px;
 }
 
 .placeholder {
   margin: 0;
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.5;
   font-style: italic;
 }

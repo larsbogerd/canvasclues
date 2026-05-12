@@ -6,12 +6,15 @@ const modal = ref(null)
 </script>
 
 <template>
-  <BaseModal ref="modal" @click="modal?.hide()">
+  <BaseModal ref="modal"
+             @click="modal?.hide()">
     <slot></slot>
   </BaseModal>
 
-  <button @click="modal?.show()" :class="{ active: modal?.visible }">
-    <img alt="ModalStart" :src="questionIcon" />
+  <button @click="modal?.show()"
+          :class="{ active: modal?.visible }">
+    <img alt="ModalStart"
+         :src="questionIcon" />
   </button>
 </template>
 
@@ -22,25 +25,25 @@ button{
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: white;
-  border: 2px solid #e2d8c8;
+  background: var(--color-secondary);
+  border: 2px solid var(--button-border);
   border-radius: 50%;
   padding: 0;
   cursor: pointer;
   outline: inherit;
-  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+  box-shadow: 0 14px 28px var(--tertiary-shadow);
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 button:hover {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
   transform: scale(1.05);
 }
 
 button.active {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 img{

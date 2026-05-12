@@ -1,0 +1,51 @@
+:root {
+    --color-primary: #E98689;
+    --color-secondary: #ffffff;
+    --color-bg-base: #f4efe6;
+
+    --text-primary: #000000;
+    --text-secondary: #2f2b27;
+    --text-tertiary: #4c4c4c;
+    --text-eyebrow: #8b7f70;
+    --text-placeholder: #999999;
+    --text-footer:#555555;
+    --text-art-details: #e8e0d4;
+
+    --role-assassin: #000000;
+    --game-score-low:#89CFF0; /* maybe 89CFF0*/
+    --game-score-medium:#E6C86E;/* maybe E6C86E*/
+    --game-score-high:#B59BCE;/* maybe B59BCE*/
+
+    --primary-shadow: rgb(0 0 0 / 0.2);
+    --secondary-shadow: rgb(124 97 62 / 0.12);
+    --tertiary-shadow: rgb(124 97 62 / 0.08);
+    --shadow-scrollbox: rgb(255 255 255 / 0.65);
+
+    --game-good: #66bb6a;
+    --game-wrong: #ef5350;
+
+    --button-border-gradient: color-mix(in srgb, var(--color-primary) 40%, #ddd5c9);
+    --button-gradient: linear-gradient(180deg, rgb(255 255 255 / 0.98), rgb(249 245 239 / 0.95));
+
+    --button-hover: #faf5ec;
+
+    --button-border :#e2d8c8;
+    --secondary-border: #cccccc;
+
+    --scrollbox-border: #e0d6c6;
+    --scrollbox-border-secondary: rgb(219 210 195 / 0.95);
+    --scrollbar-color: rgb(144 144 144 / 0.6);
+    --scrolbox-background-gradient: linear-gradient(180deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.62));
+    --bg-light-opacity: rgb(255 255 255 / 0.85);
+
+    --table-header-color: rgb(247 241 230 / 0.6);
+
+    --icon-primary: #000000;
+    --logo-artic: #040707;
+
+    --hint-border-bottom: #e0e0e0;
+    --hub-border-bottom: #efe6d6;
+
+    --modal-background-blur: rgb(0 0 0 / 0.5);
+    --active-card-shadow: rgb(0 0 0 / 0.24);
+}

@@ -15,7 +15,9 @@ const emit = defineEmits(
 </script>
 
 <template>
-  <button @click="emit('button-click')" class="button">
+  <button @click="emit('button-click')"
+          class="button">
+
     <span class="text-block">
       <span class="eyebrow">{{ props.eyeBrow }}</span>
       <span class="h1">{{ props.Phase }}</span>
@@ -36,30 +38,32 @@ const emit = defineEmits(
   gap: 0.75rem;
   width: min(60%, 360px);
   text-align: left;
+
 }
 
 .eyebrow {
   font-size: 0.82rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-family: var(--font-secondary);
-  color: #8b7f70;
+  font-family: var(--font-secondary),sans-serif;
+  color: var(--text-eyebrow);
   font-weight: 700;
 }
 
 .h1{
   font-size: 3rem;
   font-weight: 500;
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   line-height: 0.95;
+  color: var(--text-primary);
 }
 
 .subtext {
   font-size: 1.05rem;
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   line-height: 1.45;
   max-width: 32ch;
-  color: #2f2b27;
+  color:var(--text-secondary);
 }
 
 .icon-wrap {
@@ -91,22 +95,22 @@ img{
   align-items: stretch;
   justify-content: space-between;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 239, 0.95));
-  border: 2px solid #e2d8c8;
+  background: var(--button-gradient);
+  border: 2px solid var(--button-border);
   border-radius: 28px;
   padding: 2rem 2.25rem;
   margin: 10px;
   width: min(760px, 42vw);
   min-height: 310px;
   cursor: pointer;
-  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 14px 28px var(--secondary-shadow);
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .button:hover,
 .button:focus-visible {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 @media (max-width: 1100px) {

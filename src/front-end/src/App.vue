@@ -12,5 +12,4 @@ onUpdated(() => {
 </template>
 
 <style scoped>
-
 </style>

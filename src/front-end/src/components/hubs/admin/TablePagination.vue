@@ -50,17 +50,17 @@ function go(page) {
   font-size: 1rem;
   min-width: 40px;
   padding: 8px 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--secondary-border);
   border-radius: 999px;
   background-color: white;
-  color: var(--text-color);
+  color: var(--text-primary);
   cursor: pointer;
   transition: border-color 180ms ease, background-color 180ms ease, opacity 180ms ease;
 }
 
 .page-button:hover:not(:disabled) {
-  border-color: var(--primary-color);
-  background-color: #faf5ec;
+  border-color: var(--color-primary);
+  background-color: var(--button-hover);
 }
 
 .page-button:disabled {
@@ -71,7 +71,7 @@ function go(page) {
 .page-info {
   font-family: var(--font-secondary), sans-serif;
   font-size: 0.9rem;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   min-width: 150px;
   text-align: center;
@@ -80,6 +80,6 @@ function go(page) {
 .page-info strong {
   font-weight: 600;
   opacity: 1;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 </style>

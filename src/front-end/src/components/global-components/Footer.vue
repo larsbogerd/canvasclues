@@ -18,6 +18,6 @@ function year() {
   font-family: var(--font-secondary),sans-serif;
   font-weight: 300;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-footer);
 }
 </style>

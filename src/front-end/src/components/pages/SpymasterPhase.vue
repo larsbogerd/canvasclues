@@ -1,8 +1,8 @@
 <script setup>
-import inputField from "@/components/board/InputField.vue";
+import InputField from "@/components/board/InputField.vue";
 import axios from "axios";
 import { onMounted, ref, computed } from "vue";
-import Grid from "@/components/board/Grid.vue";
+import GameGrid from "@/components/board/GameGrid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
 
 import {startGameCall} from "@/assets/composables/StartGameService.js";
@@ -10,7 +10,7 @@ import {submitSpymasterTurn} from "@/assets/composables/SubmitService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
 import { useRouter } from 'vue-router'
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 import TutorialButton from "@/components/global-components/TutorialButton.vue";
 import SpymasterModalContent from "@/components/modalpopup/modalcontent/SpymasterModalContent.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
@@ -105,20 +105,27 @@ function handleInfoClicked(id) {
 
 <template>
   <div class="spymaster-phase">
-    <Header #tutorial-button username="V-Tek">
+    <PageHeader #tutorial-button username="V-Tek">
       <TutorialButton>
         <SpymasterModalContent></SpymasterModalContent>
       </TutorialButton>
-    </Header>
+    </PageHeader>
   <div class="screen">
     <div class="layout">
-      <grid class="grid" phase="spymaster" :cards="cards" :active-info-id="activeCard?.id" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
+      <GameGrid class="grid" phase="spymaster"
+                 :cards="cards"
+                 :active-info-id="activeCard?.id"
+                 @card-clicked="handleCardClicked"
+                 @info-clicked="handleInfoClicked"/>
       <div class="sidebar">
-        <fase-label fase="Spymaster"/>
+        <FaseLabel fase="Spymaster"/>
         <div class="hint-card">
           <div class="hint-body">
             <p>Maximale score: {{ selectedCards.length }}</p>
-            <input-field name="Bevestig hint" v-on:submit="submit" v-model="hintInput" label="Jouw hint"/>
+            <InputField name="Bevestig hint"
+                         v-on:submit="submit"
+                         v-model="hintInput"
+                         label="Jouw hint"/>
           </div>
         </div>
         <ArtInfo v-if="activeCard"
@@ -134,7 +141,8 @@ function handleInfoClicked(id) {
   </div>
   </div>
   <BaseModal ref="modal">
-      <SpymasterResultModalContent :score="selectedCards.length" />
+      <SpymasterResultModalContent
+          :score="selectedCards.length"/>
   </BaseModal>
 </template>
 
@@ -144,11 +152,11 @@ function handleInfoClicked(id) {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .screen {
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
   width: 100%;
   flex: 1;
   min-height: 0;
@@ -186,9 +194,9 @@ function handleInfoClicked(id) {
 .hint-card {
   width: 340px;
   border-radius: 24px;
-  border: 1px solid #e2d8c8;
+  border: 1px solid var(--button-border);
   box-shadow: 0 2px 8px var(--primary-shadow);
-  background: white;
+  background: var(--color-secondary);
 }
 
 .hint-body {
@@ -199,7 +207,7 @@ function handleInfoClicked(id) {
   font-family: var(--font-secondary),sans-serif;
   font-size: 18px;
   margin: 0 0 14px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="logo">
-    <img :src="logo" alt="Canvas Clues Logo" />
+    <img :src="logo"
+         alt="Canvas Clues Logo" />
   </div>
 </template>
 

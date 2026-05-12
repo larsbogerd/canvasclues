@@ -2,7 +2,8 @@
 import { useRouter } from 'vue-router'
 import {ref} from "vue";
 import ButtonBase from "@/components/global-components/ButtonBase.vue";
-import Logo from "@/components/global-components/Logo.vue";
+// import ArticLogo from "@/components/pages/StartPage/ArticLogo.vue";
+import ArticLogo from "@/assets/images/svg-components/ArticLogo.vue"
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import StartingPageModalContent from "@/components/modalpopup/modalcontent/StartingPageModalContent.vue";
 
@@ -17,7 +18,7 @@ function goToGameHubPhase() {
 <template>
   <div class="left">
     <div class="header">
-      <Logo/>
+      <ArticLogo class="artic-logo" />
     </div>
 
     <div class="content">
@@ -27,7 +28,8 @@ function goToGameHubPhase() {
       </p>
       <div class="button-group">
         <button-base @click="goToGameHubPhase" >Start een spel</button-base>
-        <button-base @click="modal?.show()" id="secondary-btn">Hoe werkt het?</button-base>
+        <button-base @click="modal?.show()"
+                     id="secondary-btn">Hoe werkt het?</button-base>
       </div>
     </div>
     <button class="admin-secret" @click="router.push('/admin')"></button>
@@ -36,7 +38,12 @@ function goToGameHubPhase() {
     <StartingPageModalContent></StartingPageModalContent>
   </BaseModal>
 </template>
+
 <style scoped>
+.artic-logo{
+  color: var(--logo-artic);
+  display: block;
+}
 .left {
   flex: 1;
   display: flex;
@@ -51,11 +58,10 @@ function goToGameHubPhase() {
   left: 2rem;
 }
 
-.header :deep(img) {
+.header :deep(svg) {
   width: clamp(80px, 5vw, 120px);
   height: clamp(80px, 5vw, 120px);
 }
-
 
 .content {
   max-width: 550px;
@@ -69,6 +75,7 @@ function goToGameHubPhase() {
   font-size: 5.5rem;
   font-weight: 300;
   margin: 0;
+  color: var(--text-primary);
 }
 
 .description {
@@ -76,6 +83,7 @@ function goToGameHubPhase() {
   font-size: 1.5rem;
   font-weight: 300;
   margin: 0;
+  color: var(--text-secondary);
 }
 
 .admin-secret {
@@ -85,7 +93,7 @@ function goToGameHubPhase() {
   width: 200px;
   height: 200px;
   background: transparent;
-  border: #000000 solid 5px;
+  border: none;
   opacity: 0;
   cursor: pointer;
 }
@@ -103,13 +111,13 @@ function goToGameHubPhase() {
 
 :deep(#secondary-btn) {
   background-color: transparent;
-  color: black;
-  border: 2px solid #e2d8c8;
-  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+  color: var(--text-primary);
+  border: 2px solid var(--button-border);
+  box-shadow: 0 14px 28px var(--tertiary-shadow);
 }
 
 :deep(#secondary-btn:hover) {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 </style>

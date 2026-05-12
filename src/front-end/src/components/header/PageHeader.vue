@@ -26,8 +26,8 @@ const props = defineProps({
   height: 10vh;
   min-height: 56px;
   padding: 0 2vw;
-  background-color: var(--background-color);
-  border-bottom: 1px solid #e2d8c8;
+  background-color: var(--color-bg-base);
+  border-bottom: 1px solid var(--button-border);
   z-index: 1;
 }
 

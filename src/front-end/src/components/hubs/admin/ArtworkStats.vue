@@ -1,5 +1,5 @@
 <script setup>
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 import router from "@/router.js";
 import { ref, onMounted } from "vue";
 import { getArtworkStats } from "@/assets/composables/AdminStatsService.js";
@@ -31,7 +31,7 @@ function formatDate(iso) {
 
 <template>
   <div class="artwork-stats">
-    <Header username="Admin" />
+    <PageHeader username="Admin" />
 
     <main class="content">
       <button class="back-link" @click="router.push('/admin/artworks')">
@@ -141,7 +141,7 @@ function formatDate(iso) {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .content {
@@ -157,7 +157,7 @@ function formatDate(iso) {
   border: none;
   padding: 0;
   margin: 0 0 16px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   font-family: var(--font-secondary), sans-serif;
   font-size: 15px;
@@ -185,9 +185,9 @@ function formatDate(iso) {
 /* ---- Image panel ---- */
 .image-panel {
   position: relative;
-  border: 1px solid #e2d8c8;
+  border: 1px solid var(--button-border);
   border-radius: 28px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
   padding: 24px;
   display: flex;
   align-items: center;
@@ -217,7 +217,7 @@ function formatDate(iso) {
   border-radius: 12px;
   box-shadow: 0 10px 28px rgba(124, 97, 62, 0.25);
   object-fit: contain;
-  background: #ffffff;
+  background: var(--color-secondary);
 }
 
 /* ---- Info panel ---- */
@@ -237,14 +237,14 @@ function formatDate(iso) {
   font-family: var(--font-main), serif;
   font-size: 2rem;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
 }
 
 .artist {
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.75;
   margin: 0;
   white-space: pre-line;
@@ -255,11 +255,11 @@ function formatDate(iso) {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  background: #ffffff;
-  border: 1px solid #e2d8c8;
+  background: var(--color-secondary);
+  border: 1px solid var(--button-border);
   border-radius: 20px;
   padding: 16px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
 }
 
 @media (max-width: 520px) {
@@ -281,7 +281,7 @@ function formatDate(iso) {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.55;
   margin: 0;
 }
@@ -290,17 +290,17 @@ function formatDate(iso) {
   font-family: var(--font-main), serif;
   font-size: 1.6rem;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin: 0;
 }
 
 /* ---- Traits card ---- */
 .trait-card,
 .boards-card {
-  background: #ffffff;
-  border: 1px solid #e2d8c8;
+  background: var(--color-secondary);
+  border: 1px solid var(--button-border);
   border-radius: 28px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
   padding: 20px 24px;
   box-sizing: border-box;
 }
@@ -318,7 +318,7 @@ function formatDate(iso) {
   font-family: var(--font-main), serif;
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin: 0 0 12px 0;
 }
 
@@ -333,7 +333,7 @@ function formatDate(iso) {
   display: grid;
   grid-template-columns: 140px 1fr;
   padding: 8px 0;
-  border-bottom: 1px solid #efe6d6;
+  border-bottom: 1px solid var(--hub-border-bottom);
   gap: 16px;
 }
 
@@ -346,7 +346,7 @@ function formatDate(iso) {
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.55;
   margin: 0;
   align-self: center;
@@ -354,7 +354,7 @@ function formatDate(iso) {
 
 .trait dd {
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin: 0;
   align-self: center;
 }
@@ -370,8 +370,8 @@ function formatDate(iso) {
 .boards-card td {
   text-align: left;
   padding: 10px 12px;
-  color: var(--text-color);
-  border-bottom: 1px solid #efe6d6;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--hub-border-bottom);
 }
 
 .boards-card tbody tr:last-child td {
@@ -409,4 +409,5 @@ function formatDate(iso) {
   border-color: #dfd2b6;
   color: #7a6a46;
 }
+
 </style>

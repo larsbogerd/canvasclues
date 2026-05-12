@@ -76,6 +76,7 @@ function thumbUrl(id) {
   <section class="table-wrapper">
     <div class="table-header">
       <input
+          class="text-color"
           v-model="search"
           type="text"
           placeholder="Filter..."
@@ -86,7 +87,8 @@ function thumbUrl(id) {
         <span class="result-count">{{ filteredRows.length }} resultaten</span>
       </div>
 
-      <button class="pdf-button" @click="saveAsPdf">
+      <button class="pdf-button"
+              @click="saveAsPdf">
         Opslaan als PDF
       </button>
     </div>
@@ -149,11 +151,15 @@ function thumbUrl(id) {
 </template>
 
 <style scoped>
+.text-color {
+  color: var(--text-primary);
+}
+
 .table-wrapper {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
-  border: 1px solid rgba(219, 210, 195, 0.95);
+  background: var(--scrolbox-background-gradient);
+  border: 1px solid var(--scrollbox-border-secondary);
   border-radius: 28px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
   padding: 18px;
   box-sizing: border-box;
 }
@@ -181,10 +187,10 @@ function thumbUrl(id) {
   font-family: var(--font-secondary), sans-serif;
   font-size: 0.9rem;
   padding: 12px 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--secondary-border);
   border-radius: 20px;
   outline: none;
-  background-color: white;
+  background-color: var(--color-secondary);
   transition: border-color 180ms ease;
 }
 
@@ -200,30 +206,31 @@ function thumbUrl(id) {
   font-size: 1.5rem;
   font-weight: 500;
   margin: 0;
+  color:var(--text-primary);
 }
 
 .result-count {
   font-family: var(--font-secondary), sans-serif;
   font-size: 0.8rem;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.5;
 }
 
 .pdf-button {
   cursor: pointer;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .pdf-button:hover {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
 }
 
 .table-shell {
   width: 100%;
   border-radius: 24px;
-  background-color: var(--background-color);
-  border: 1px solid #e0d6c6;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background-color: var(--color-bg-base);
+  border: 1px solid var(--scrollbox-border);
+  box-shadow: inset 0 1px 0 var(--shadow-scrollbox);
   overflow: hidden;
 }
 
@@ -234,18 +241,18 @@ table {
 }
 
 thead {
-  background: rgba(247, 241, 230, 0.6);
+  background: var(--table-header-color);
 }
 
 tbody {
-  background: white;
+  background: var(--color-secondary);
 }
 
 th, td {
   text-align: left;
   padding: 12px 16px;
-  color: var(--text-color);
-  border-bottom: 1px solid #efe6d6;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--hub-border-bottom);
 }
 
 th {
@@ -277,7 +284,7 @@ tbody .thumb {
   border-radius: 8px;
   object-fit: cover;
   display: block;
-  background: #efe6d6;
+  background: var(--hub-border-bottom);
 }
 
 tbody tr:not(.empty) {
@@ -286,7 +293,7 @@ tbody tr:not(.empty) {
 }
 
 tbody tr:not(.empty):hover {
-  background-color: #faf5ec;
+  background-color: var(--button-hover);
 }
 
 

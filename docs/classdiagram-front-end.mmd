@@ -1,9 +1,12 @@
 ---
 config:
+  class:
+    hideEmptyMembersBox: true
   flowchart:
     nodeSpacing: 50
     rankSpacing: 75
   layout: elk
+
 ---
 
 classDiagram
@@ -18,34 +21,37 @@ classDiagram
     startingPage --> RightHalfStartingPage
     startingPage --> Footer
 
-    SpymasterPhase --> Grid
-    SpymasterPhase --> FaseLabel
-    SpymasterPhase --> Header
-    SpymasterPhase --> InputField
+  LeftHalfStartingPage --> ButtonBase
 
-    OperativePhase --> Grid
+    SpymasterPhase --> GameGrid
+    SpymasterPhase --> FaseLabel
+    SpymasterPhase --> PageHeader
+    SpymasterPhase --> InputField
+    SpymasterPhase --> ArtInfo
+
+    OperativePhase --> GameGrid
     OperativePhase --> FaseLabel
-    OperativePhase --> Header
+    OperativePhase --> PageHeader
+    OperativePhase --> ArtInfo
 
     OperativeHub --> OperativeHubButton
     OperativeHub --> OperativeHubCard
     OperativeHub --> GameModeCard
 
-    Header --> HeaderLogo
-    Header --> HeaderButton
+    PageHeader --> HeaderLogo
+    PageHeader --> HeaderButton
 
     HeaderLogo --> IconPalette
 
-    Grid --> boardCard
+    GameGrid --> boardCard
 
-    gameHub --> gameHubButton
+    gameHub --> GameHubButton
     gameHub --> Footer
 
     boardCard --> LockButton
     LeftHalfStartingPage --> ArticLogo
 
 %%modal
-%% dont know if mapped correctly
     LeftHalfStartingPage --> BaseModal
     LeftHalfStartingPage --> StartingPageModalContent
 
@@ -75,12 +81,13 @@ classDiagram
 %%          emits
             +emit card-clicked()
         }
+
         class FaseLabel {
             <<VueComponent>>
             +String fase
         }
 
-        class Grid {
+        class GameGrid {
             <<VueComponent>>
 %%          props
             +Array cards
@@ -107,34 +114,51 @@ classDiagram
         class LockButton {
             <<VueComponent>>
 %%             props
+               +String id
 %%             emits
+        }
 
+        class ArtInfo {
+            <<VueComponent>>
+%%             props
+               +String title
+               +String artist
+               +String medium
+               +String origin
+               +String style
+               +String date
+%%             emits
+               +close()
         }
     }
 
     namespace headerFolder {
-        class Header {
+        class PageHeader {
             <<VueComponent>>
 %%             props
+               +String username
 %%             emits
 
         }
+
         class HeaderButton {
             <<VueComponent>>
 %%             props
+               +String username
 %%             emits
 
         }
+
         class HeaderLogo {
             <<VueComponent>>
 %%             props
 %%             emits
 
+               +const router
         }
+
         class IconPalette {
             <<VueComponent>>
-%%             props
-%%             emits
 
         }
     }
@@ -143,22 +167,29 @@ classDiagram
     namespace operativeHubFolder {
         class OperativeHubButton {
             <<VueComponent>>
-%%             props
-%%             emits
+%%              props
+                +Number gameID
+                -goToOperativePhase()
+%%              emits
+
 
         }
+
         class OperativeHubCard {
             <<VueComponent>>
 %%             props
+
 %%             emits
 
         }
+
         class GameModeCard {
             <<VueComponent>>
 %%             props
 %%             emits
 
         }
+
         class OperativeHub {
             <<VueComponent>>
 %%             props
@@ -168,25 +199,29 @@ classDiagram
     }
 
     namespace gameHubFolder {
-        class gameHubButton {
+        class GameHubButton {
             <<VueComponent>>
-%%             props
-%%             emits
-
+%%          props
+            +String eyeBrow
+            +String phase
+            +String subText
+            +String imgUrl
+            +String altText
+%%           emmits
+            +button-click()
         }
+
         class gameHub {
             <<VueComponent>>
-%%             props
-%%             emits
-
+            -goToSpyPhase()
+            -goToOperativePhase()
         }
     }
 
     namespace footer {
         class Footer {
             <<VueComponent>>
-%%             props
-%%             emits
+            -year()
 
         }
     }
@@ -194,51 +229,50 @@ classDiagram
     namespace modalContentFolder {
         class OperativeModalContent {
             <<VueComponent>>
-%%             props
-%%             emits
-
         }
+
         class OperativeResultModalContent {
             <<VueComponent>>
+               -const score
 %%             props
-%%             emits
-
+               +Number score
+               +Number amount
+               +Number selectedAmount
+               +Number correctAmount
+               +push(page)
+               +go()
         }
+
         class SpymasterModalContent {
             <<VueComponent>>
-%%             props
-%%             emits
-
         }
+
         class SpymasterResultModalContent {
             <<VueComponent>>
-%%             props
-%%             emits
-
+           +push(page)
+               +go()
         }
+
         class StartingPageModalContent {
             <<VueComponent>>
-%%             props
-%%             emits
-
         }
     }
 
     namespace modalLinks {
         class BaseModal {
             <<VueComponent>>
-%%             props
-%%             emits
-
+               -const visible
+               -show()
+               -hide()
         }
+
         class ButtonBase {
             <<VueComponent>>
-%%             props
-%%             emits
-
         }
+
         class TutorialButton {
             <<VueComponent>>
+               +const modal
 %%             props
 %%             emits
 
@@ -251,6 +285,7 @@ classDiagram
 %%             emits
 
         }
+
         class OperativePhase {
             <<VueComponent>>
 %%             props
@@ -267,18 +302,21 @@ classDiagram
 %%             emits
 
             }
+
             class LeftHalfStartingPage {
             <<VueComponent>>
 %%             props
 %%             emits
 
             }
+
             class RightHalfStartingPage {
             <<VueComponent>>
 %%             props
 %%             emits
 
             }
+
             class ArticLogo {
             <<VueComponent>>
 %%             props

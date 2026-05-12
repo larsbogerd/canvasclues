@@ -1,10 +1,10 @@
 <script setup>
 import router from "@/router.js";
-import Button from "@/components/hubs/gamehub/Button.vue";
-import operativeImg from "@/assets/images/Icons/Operative.png";
-import spymasterImg from "@/assets/images/Icons/Spymaster.png";
+import GameHubButton from "@/components/hubs/gamehub/GameHubButton.vue";
+import operativeImg from "@/assets/images/icons/Operative.png";
+import spymasterImg from "@/assets/images/icons/Spymaster.png";
 import Footer from "@/components/global-components/Footer.vue";
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 function goToSpyPhase() {
   router.push('/game/spymaster')
 }
@@ -17,16 +17,26 @@ function goToOperativeHub() {
 
 <template>
   <div class="game-hub-page">
-    <Header username="ClueKiller12">
-    </Header>
+    <PageHeader username="ClueKiller12">
+    </PageHeader>
     <div class="game-hub">
       <h1 class="main-text">Wat wil je doen?</h1>
       <div class="game-hub-button">
-        <Button role-name="spymaster" eyeBrow="Creëer" Phase="Spymaster" sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives"
-                    :imgUrl="spymasterImg" altText="Spymaster" @button-click="goToSpyPhase"/>
+        <GameHubButton role-name="spymaster"
+                       eyeBrow="Creëer"
+                       Phase="Spymaster"
+                       sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives"
+                    :imgUrl="spymasterImg"
+                       altText="Spymaster"
+                       @button-click="goToSpyPhase"/>
 
-        <Button role-name="operative" eyeBrow="Ontcijfer" Phase="Operative" sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
-                    :imgUrl="operativeImg" altText="Operative" @button-click="goToOperativeHub" />
+        <GameHubButton role-name="operative"
+                       eyeBrow="Ontcijfer"
+                       Phase="Operative"
+                       sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
+                    :imgUrl="operativeImg"
+                       altText="Operative"
+                       @button-click="goToOperativeHub" />
       </div>
     </div>
     <Footer class="footer-element"/>
@@ -39,7 +49,7 @@ function goToOperativeHub() {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .game-hub {
@@ -64,9 +74,10 @@ function goToOperativeHub() {
 
 .main-text {
   text-align: center;
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   margin-bottom: 1.5rem;
   font-size: clamp(3rem, 4vw, 4.5rem);
+  color: var(--text-primary);
 }
 
 .footer-element {

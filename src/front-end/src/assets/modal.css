@@ -2,7 +2,7 @@
     font-family: var(--font-main), serif;
     font-size: clamp(1.4rem, 2.2vw, 2rem);
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary);
     text-align: center;
     margin: 0 0 clamp(12px, 1.5vw, 24px);
 }
@@ -11,7 +11,7 @@
     font-family: var(--font-secondary), sans-serif;
     font-size: clamp(0.85rem, 1vw, 1rem);
     font-weight: 300;
-    color: var(--text-color);
+    color: var(--text-primary);
     line-height: 1.6;
 }
 
@@ -26,7 +26,7 @@
 
 .modal-divider {
     border: none;
-    border-top: 1px solid #e2d8c8;
+    border-top: 1px solid var(--button-border);
     margin: clamp(16px, 2vw, 28px) 0;
 }
 
@@ -40,7 +40,7 @@
     flex: 1;
     text-align: center;
     padding: clamp(12px, 1.2vw, 20px);
-    background: var(--background-color);
+    background: var(--color-bg-base);
     border-radius: 12px;
     max-width: 150px;
     margin: 0 auto 20px auto;
@@ -50,7 +50,7 @@
     font-family: var(--font-main), serif;
     font-size: clamp(1.4rem, 2vw, 2rem);
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-primary);
     line-height: 1.2;
 }
 
@@ -58,14 +58,14 @@
     font-family: var(--font-secondary), sans-serif;
     font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     font-weight: 400;
-    color: #8b7f70;
+    color: var(--text-eyebrow);
     margin-top: 4px;
 }
 
 .modal-detail {
     font-family: var(--font-secondary), sans-serif;
     font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-    color: #8b7f70;
+    color: var(--text-eyebrow);
     text-align: center;
     margin-top: clamp(8px, 1vw, 14px);
 }

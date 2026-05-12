@@ -1,19 +1,21 @@
 <script setup>
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 import router from "@/router.js";
 </script>
 
 <template>
   <div class="admin-hub">
-    <Header username="Admin" />
+    <PageHeader username="Admin" />
     <main class="content">
-      <button class="back-link" @click="router.push('/')">
+      <button class="back-link"
+              @click="router.push('/')">
         &larr; Terug naar start
       </button>
-      <h1>Hallo, naam</h1>
+      <h1 class="text-color">Hallo, naam</h1>
       <p class="subtitle">Inzichten & statistieken</p>
       <div class="cards">
-        <button class="card" @click="router.push('/admin/artworks')">
+        <button class="card"
+                @click="router.push('/admin/artworks')">
           <h2>Kunstwerken</h2>
           <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
         </button>
@@ -27,11 +29,15 @@ import router from "@/router.js";
 </template>
 
 <style scoped>
+.text-color {
+  color: var(--text-primary);
+}
+
 .admin-hub {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .content {
@@ -46,7 +52,7 @@ import router from "@/router.js";
   background: none;
   border: none;
   margin: 0 0 16px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   font-family: var(--font-secondary), sans-serif;
   font-size: 15px;
@@ -64,7 +70,7 @@ h1 {
 
 .subtitle {
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
   margin: 4px 0 32px 0;
 }
@@ -80,18 +86,18 @@ h1 {
   font-family: inherit;
   color: inherit;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 239, 0.95));
-  border: 2px solid #e2d8c8;
+  background: var(--button-gradient);
+  border: 2px solid var(--button-border);
   border-radius: 28px;
   padding: 2rem 2.25rem;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
   cursor: pointer;
   transition: transform 0.12s ease, border-color 180ms ease;
 }
 
 .card:hover:not(.disabled) {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 .card.disabled {
@@ -101,13 +107,13 @@ h1 {
 
 .card h2 {
   margin: 0 0 8px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .card p {
   margin: 0;
   font-family: var(--font-secondary), sans-serif;
-  color: var(--text-color);
+  color: var(--text-primary);
   opacity: 0.7;
 }
 </style>

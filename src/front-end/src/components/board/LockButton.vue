@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script setup>
 import {inject} from "vue";
-import lockInIcon from '@/assets/images/Icons/lock-in.svg'
+import lockInIcon from '@/assets/images/svg-components/lock-in.vue'
 
-const props = defineProps<{
-  id: string
-}>()
-const submitFn = inject<(cardId) => void>('submitFn')!
+const props = defineProps({
+  id: String
+})
+
+const submitFn = inject('submitFn')
 
 function lockIn(){
   submitFn(props.id);
@@ -14,12 +15,16 @@ function lockIn(){
 </script>
 
 <template>
-  <button class="lock-btn" @click.stop="lockIn()">
-    <img :src="lockInIcon" alt="Lock in" draggable="false" />
+  <button class="lock-btn"
+          @click.stop="lockIn()">
+<lock-in-icon class="lock-icon"/>
   </button>
 </template>
 
 <style scoped>
+.lock-icon{
+  color:var(--icon-primary);
+}
 
 .lock-btn {
   position: absolute;
@@ -31,7 +36,7 @@ function lockIn(){
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--bg-light-opacity);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -40,7 +45,7 @@ function lockIn(){
   transition: opacity 140ms ease 140ms, background-color 160ms ease;
 }
 
-.lock-btn img {
+.lock-btn svg {
   width: 55%;
   height: 55%;
   transform: rotate(-15deg);
@@ -49,12 +54,12 @@ function lockIn(){
 
 .lock-btn:hover,
 .lock-btn:focus-visible {
-  background-color: var(--primary-color);
+  background-color: var(--color-primary);
   outline: none;
 }
 
-.lock-btn:hover img,
-.lock-btn:focus-visible img {
+.lock-btn:hover svg,
+.lock-btn:focus-visible svg {
   filter: brightness(0) invert(1);
 }
 

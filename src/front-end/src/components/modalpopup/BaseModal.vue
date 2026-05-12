@@ -20,9 +20,11 @@ import {ref} from "vue";
 
 <template>
   <div v-show="visible">
-    <div class="overlay" @click="hide">
+    <div class="overlay"
+         @click="hide">
       <div class="popup">
-        <button  class="close" @click="hide">
+        <button  class="close"
+                 @click="hide">
           ✕
         </button>
         <slot></slot>
@@ -35,7 +37,7 @@ import {ref} from "vue";
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: var(--modal-background-blur);
   z-index: 1;
   display: flex;
   align-items: center;
@@ -45,11 +47,11 @@ import {ref} from "vue";
 .popup {
   min-width: 320px;
   width: 28vw;
-  background: white;
+  background: var(--color-secondary);
   border-radius: 20px;
   padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
   position: relative;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px var(--secondary-shadow);
 }
 
 .close {
@@ -59,12 +61,12 @@ import {ref} from "vue";
   background: none;
   border: none;
   font-size: clamp(1rem, 1.2vw, 1.4rem);
-  color: #8b7f70;
+  color: var(--text-eyebrow);
   cursor: pointer;
   transition: color 180ms ease;
 }
 
 .close:hover {
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 </style>

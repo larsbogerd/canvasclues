@@ -1,9 +1,9 @@
 <script setup>
 import ArtInfo from "@/components/board/ArtInfo.vue";
 import {onMounted, provide, ref} from "vue";
-import Grid from "@/components/board/Grid.vue";
+import GameGrid from "@/components/board/GameGrid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 import TutorialButton from "@/components/global-components/TutorialButton.vue";
 import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
@@ -85,16 +85,21 @@ async function getCountOfCardsSelectedBySpymaster() {
 
 <template>
   <div class="operative-phase">
-    <Header #tutorial-button username="V-Tek">
+    <PageHeader #tutorial-button username="V-Tek">
       <TutorialButton>
         <OperativeModalContent></OperativeModalContent>
       </TutorialButton>
-    </Header>
+    </PageHeader>
     <div class="screen">
       <div class="layout">
-        <grid class="grid" :cards="cards" :active-info-id="activeCard?.id" phase="operative" @card-clicked="handleCardClicked" @info-clicked="handleInfoClicked"/>
+        <GameGrid class="grid"
+                   :cards="cards"
+                   :active-info-id="activeCard?.id"
+                   phase="operative"
+                   @card-clicked="handleCardClicked"
+                   @info-clicked="handleInfoClicked"/>
         <div class="sidebar">
-          <fase-label fase="Operative"/>
+          <FaseLabel fase="Operative"/>
           <div class="hint-card" v-if="hint">
             <div class="hint-header">
               <span>{{ hint.content }}</span>
@@ -120,8 +125,10 @@ async function getCountOfCardsSelectedBySpymaster() {
     </div>
   </div>
   <BaseModal ref="modal">
-    <OperativeResultModalContent :correctAmount="correctAmount" :amount="amount"
-                                 :selectedAmount="selectedCards.length"></OperativeResultModalContent>
+    <OperativeResultModalContent :correctAmount="correctAmount"
+                                 :amount="amount"
+                                 :selectedAmount="selectedCards.length">
+    </OperativeResultModalContent>
   </BaseModal>
 </template>
 
@@ -131,11 +138,11 @@ async function getCountOfCardsSelectedBySpymaster() {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .screen {
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
   width: 100%;
   flex: 1;
   min-height: 0;
@@ -174,9 +181,9 @@ async function getCountOfCardsSelectedBySpymaster() {
 .hint-card {
   width: 340px;
   border-radius: 24px;
-  border: 1px solid #e2d8c8;
+  border: 1px solid var(--button-border);
   box-shadow: 0 2px 8px var(--primary-shadow);
-  background: #ffffff;
+  background: var(--color-secondary);
 }
 
 .hint-header {
@@ -187,11 +194,12 @@ async function getCountOfCardsSelectedBySpymaster() {
   letter-spacing: 0.06em;
   text-align: center;
   padding: 20px 16px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--hint-border-bottom);
+  color: var(--text-primary);
 }
 
 .hint-number {
-  color: #ff0000;
+  color: var(--color-primary);
   margin-left: 8px;
   font-weight: 900;
 }
@@ -204,7 +212,7 @@ async function getCountOfCardsSelectedBySpymaster() {
   font-family: var(--font-secondary),sans-serif;
   font-size: clamp(0.9rem, 1.2vw, 1.125rem);
   margin: 4px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .end-turn-btn {
@@ -214,19 +222,19 @@ async function getCountOfCardsSelectedBySpymaster() {
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  font-family: var(--font-secondary);
-  color: var(--text-color);
-  background-color: white;
-  border: 2px solid #e2d8c8;
+  font-family: var(--font-secondary), sans-serif;
+  color: var(--text-primary);
+  background-color: var(--color-secondary);
+  border: 2px solid var(--button-border);
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 14px 28px rgba(124, 97, 62, 0.08);
+  box-shadow: 0 14px 28px var(--tertiary-shadow);
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .end-turn-btn:hover,
 .end-turn-btn:focus-visible {
-  border-color: var(--primary-color);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 </style>

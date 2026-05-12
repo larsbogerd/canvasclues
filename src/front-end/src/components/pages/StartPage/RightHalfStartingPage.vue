@@ -7,7 +7,8 @@ const artImage = ref(art)
 
 <template>
   <div class="right">
-    <img :src="artImage" alt="Art piece" />
+    <img :src="artImage"
+         alt="Art piece" />
   </div>
 </template>
 

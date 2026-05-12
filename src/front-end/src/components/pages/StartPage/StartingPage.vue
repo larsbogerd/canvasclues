@@ -25,7 +25,7 @@ html, body {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
   overflow: hidden;
 }
 </style>

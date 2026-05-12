@@ -7,7 +7,8 @@ const router = useRouter();
 </script>
 
 <template>
-  <div class="header-logo-container" @click="router.push('/')">
+  <div class="header-logo-container"
+       @click="router.push('/')">
     <icon-palette></icon-palette>
     <span class="logo-text">Canvas Clues</span>
   </div>
@@ -16,11 +17,11 @@ const router = useRouter();
 <style scoped>
 .header-logo-container {
   border-radius: 20px;
-  color: var(--background-color);
+  color: var(--color-bg-base);
   display: flex;
   align-items: center;
   gap: 1rem;
-  background-color: var(--primary-color);
+  background-color: var(--color-primary);
   padding: 10px 20px;
   cursor: pointer;
   transition: box-shadow 180ms ease, border-color 180ms ease;
@@ -29,7 +30,7 @@ const router = useRouter();
 }
 
 .header-logo-container:hover {
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 22%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 .logo-text {

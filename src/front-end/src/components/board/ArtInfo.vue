@@ -1,5 +1,5 @@
 <script setup xmlns="http://www.w3.org/1999/html">
-import closeIcon from '@/assets/images/Icons/close.svg'
+import closeIcon from '@/assets/images/icons/close.svg'
 
 const props = defineProps({
   title: String,
@@ -20,21 +20,29 @@ const emit = defineEmits(['close'])
         <p class="art-info-title">{{ props.title }}</p>
         <p class="art-info-subtitle">{{ props.artist }}</p>
       </div>
-      <button class="art-info-close" @click="emit('close')">
-        <img :src="closeIcon" alt="Sluiten" draggable="false" />
+
+      <button class="art-info-close"
+              @click="emit('close')">
+
+        <img :src="closeIcon" class="artic-logo"
+             alt="Sluiten"
+             draggable="false" />
       </button>
     </div>
+
     <div class="art-info-details">
       <p class="art-info-detail">{{ props.date }}</p>
       <p class="art-info-detail">{{ props.medium }}</p>
       <p class="art-info-detail">{{ props.origin }}</p>
     </div>
+
   </div>
 </template>
 
 <style scoped>
+
 .art-info {
-  background: white;
+  background: var(--color-secondary);
   border-radius: 20px;
   min-height: auto;
   width: 340px;
@@ -51,31 +59,31 @@ const emit = defineEmits(['close'])
 }
 
 .art-info-title {
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   font-size: clamp(1rem, 1.5vw, 1.4rem);
   font-weight: 500;
   margin: 0 0 6px 0;
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .art-info-subtitle {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: clamp(0.8rem, 1.1vw, 1rem);
   margin: 0;
-  color: #4c4c4c;
+  color: var(--text-tertiary);
 }
 
 .art-info-details {
-  border-top: 1px solid #e8e0d4;
+  border-top: 1px solid var(--text-art-details);
   margin-top: 14px;
   padding-top: 12px;
 }
 
 .art-info-detail {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: clamp(0.7rem, 1vw, 0.85rem);
   margin: 0 0 2px 0;
-  color: #8b7f70;
+  color: var(--text-eyebrow);
 }
 
 .art-info-close {

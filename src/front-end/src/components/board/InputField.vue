@@ -19,15 +19,24 @@ function buttonClick() {
 <template>
   <div class="text-field">
     <div class="fields">
-      <div class="input-field" :class="{ 'has-value': (modelValue?.length ?? 0) > 0 }">
-        <input :id="inputId" class="text-jetbrainsMono input-field_input" :readonly="readonly" :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)" :disabled="InputDisabled">
-        <label :for="inputId" class="input-field_label">
+      <div class="input-field"
+           :class="{ 'has-value': (modelValue?.length ?? 0) > 0 }">
+
+        <input class="text-jetbrainsMono input-field_input"
+               :readonly="readonly"
+               :value="modelValue"
+               @input="$emit('update:modelValue', $event.target.value)"
+               :disabled="InputDisabled">
+
+        <label class="input-field_label">
           {{ props.label }}
         </label>
+
       </div>
-      <button class="submit-btn" type="submit" @click="buttonClick">
-      {{ name }}
+      <button class="submit-btn"
+              type="submit"
+              @click="buttonClick">
+        {{ name }}
       </button>
     </div>
   </div>
@@ -55,8 +64,8 @@ function buttonClick() {
   width: 100%;
   padding: 12px 16px;
   font-family: var(--font-secondary),sans-serif;
-  background: white;
-  border: 1px solid #ccc;
+  background: var(--color-secondary);
+  border: 1px solid var(--secondary-border);
   border-radius: 20px;
   height: 3rem;
   cursor: text;
@@ -64,7 +73,8 @@ function buttonClick() {
 }
 
 .input-field_input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
+  color: var(--text-primary);
 }
 
 .input-field_label {
@@ -73,7 +83,7 @@ function buttonClick() {
   left: 0;
   transform: translate(16px, 12px);
   transition: opacity 180ms ease;
-  color: #999;
+  color: var(--text-placeholder);
   pointer-events: none;
 }
 
@@ -87,20 +97,20 @@ function buttonClick() {
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  font-family: var(--font-secondary);
-  color: var(--background-color);
-  background-color: var(--primary-color);
+  font-family: var(--font-secondary), sans-serif;
+  color: var(--color-bg-base);
+  background-color: var(--color-primary);
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 10px 20px color-mix(in srgb, var(--primary-color) 28%, transparent);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--color-primary) 28%, transparent);
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .submit-btn:hover,
 .submit-btn:focus-visible {
   filter: saturate(1.02);
-  box-shadow: 0 14px 24px color-mix(in srgb, var(--primary-color) 38%, transparent);
+  box-shadow: 0 14px 24px color-mix(in srgb, var(--color-primary) 38%, transparent);
 }
 
 </style>

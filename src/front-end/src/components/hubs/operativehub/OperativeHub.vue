@@ -1,9 +1,9 @@
 <script setup>
-import Card from '@/components/hubs/operativehub/Card.vue';
+import OperativeHubCard from '@/components/hubs/operativehub/OperativeHubCard.vue';
 import GameModeCard from "@/components/hubs/operativehub/GameModeCard.vue";
 import {computed, onMounted, ref} from "vue";
 import {fetchGameListService} from "@/assets/composables/FetchGameListService.js";
-import Header from "@/components/header/Header.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
 const list = ref([]);
 const sortBy = ref('newest');
 const search = ref('');
@@ -31,21 +31,24 @@ onMounted(async () => {list.value = await fetchGameListService()})
 
 <template>
   <div class="operative-hub-page">
-    <Header username="ClueKiller12">
-    </Header>
+    <PageHeader username="ClueKiller12">
+    </PageHeader>
     <p class=" page-header hub-title">
       Kies een puzzel
     </p>
     <div class="operative-hub">
-<!--      <div class="operative-hub_header">-->
-<!--        <GameModeCard game-mode="Willekeurige clue" description="Laat Canvas Clues een puzzel voor je kiezen"/>-->
-<!--        <GameModeCard game-mode="Dagelijkse clue" description="Speel de dagelijkse hint"/>-->
-<!--      </div>-->
+      <div class="operative-hub_header">
+        <GameModeCard game-mode="Willekeurige clue"
+                      description="Laat Canvas Clues een puzzel voor je kiezen"/>
+
+        <GameModeCard game-mode="Dagelijkse clue"
+                      description="Speel de dagelijkse hint"/>
+      </div>
       <div class="operative-hub_scroll_box_container">
         <div class="operative-hub_scroll_box_header">
           <div class="sort-group">
             <p class="sort-label">Sorteer op:</p>
-            <select v-model="sortBy">
+            <select class="text-color" v-model="sortBy">
               <option value="newest">Nieuwste</option>
               <option value="popular">Populariteit</option>
               <option value="difficulty">Moeilijkheid</option>
@@ -54,11 +57,18 @@ onMounted(async () => {list.value = await fetchGameListService()})
           <p class="scrollbox-title">
             Beschikbare clues
           </p>
-          <input v-model="search" type="text" placeholder="Zoek op hint..." />
+          <input class="text-color" v-model="search"
+                 type="text"
+                 placeholder="Zoek op hint..." />
         </div>
         <div class="operative-hub_scroll_box_shell">
           <div class="operative-hub_scroll_box">
-            <Card v-for="i in sortedList" :game-id="i.gameId" :title="i.hint" user="John Doe" game-mode="Classic" :score="i.maxScore" />
+            <OperativeHubCard v-for="(card,index) in sortedList"
+                              :game-id="card.gameId"
+                              :title="card.hint"
+                              user="John Doe" game-mode="Classic"
+                              :score="card.maxScore"
+                              :key="index"/>
           </div>
         </div>
       </div>
@@ -68,9 +78,13 @@ onMounted(async () => {list.value = await fetchGameListService()})
 
 <style scoped>
 
+.text-color {
+  color: var(--text-primary);
+}
+
 .operative-hub-page {
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--color-bg-base);
 }
 
 .operative-hub {
@@ -96,10 +110,10 @@ onMounted(async () => {list.value = await fetchGameListService()})
   width: min(1120px, 92vw);
   height: min(64vh, 760px);
   min-height: 420px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
+  background: var(--scrolbox-background-gradient);
   border-radius: 28px;
-  box-shadow: 0 18px 38px rgba(124, 97, 62, 0.12);
-  border: 1px solid rgba(219, 210, 195, 0.95);
+  box-shadow: 0 18px 38px var(--secondary-shadow);
+  border: 1px solid var(--scrollbox-border-secondary);
   padding: 18px;
   box-sizing: border-box;
 }
@@ -115,9 +129,10 @@ onMounted(async () => {list.value = await fetchGameListService()})
 }
 
 .sort-label {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: 1rem;
   margin: 0;
+  color: var(--text-primary)
 }
 
 .sort-group {
@@ -128,19 +143,19 @@ onMounted(async () => {list.value = await fetchGameListService()})
 
 .operative-hub_scroll_box_header select,
 .operative-hub_scroll_box_header input {
-  font-family: var(--font-secondary);
+  font-family: var(--font-secondary),sans-serif;
   font-size: 0.9rem;
   padding: 12px 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--secondary-border);
   border-radius: 20px;
   outline: none;
-  background-color: white;
+  background-color: var(--color-secondary);
   transition: border-color 180ms ease;
 }
 
 .operative-hub_scroll_box_header select:focus,
 .operative-hub_scroll_box_header input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
 }
 
 .operative-hub_scroll_box_header input {
@@ -151,16 +166,16 @@ onMounted(async () => {list.value = await fetchGameListService()})
   width: 100%;
   height: calc(100% - 72px);
   border-radius: 24px;
-  background-color: var(--background-color);
-  border: 1px solid #e0d6c6;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background-color: var(--color-bg-base);
+  border: 1px solid var(--scrollbox-border);
+  box-shadow: inset 0 1px 0 var(--shadow-scrollbox);
   overflow: hidden;
 }
 
 .operative-hub_scroll_box{
   width: 100%;
   height: 100%;
-  scrollbar-color: rgba(144, 144, 144, 0.6) transparent;
+  scrollbar-color: var(--scrollbar-color) transparent;
   padding: 0.72rem 0.95rem 0.72rem 0.72rem;
   box-sizing: border-box;
 
@@ -174,17 +189,19 @@ onMounted(async () => {list.value = await fetchGameListService()})
 }
 
 .hub-title{
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   font-size: 3rem;
   font-weight: 500;
   margin: 0;
+  color: var(--text-primary);
 }
 
 .scrollbox-title{
-  font-family: var(--font-main);
+  font-family: var(--font-main),serif;
   font-size: 1.5rem;
   font-weight: 500;
   margin: 0;
+  color: var(--text-primary)
 }
 
 .page-header{
