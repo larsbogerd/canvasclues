@@ -43,9 +43,9 @@ erDiagram
   }
 
   SESSION-CONCEPT {
-    int session_id PK
-    int game_id FK
-    int hint_id FK
+    UUID session_id PK
+    UUID game_id FK
+    UUID hint_id FK
     timestamp started_at
     timestamp finished_at
     int max_guesses

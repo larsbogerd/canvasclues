@@ -8,10 +8,11 @@ import TutorialButton from "@/components/global-components/TutorialButton.vue";
 import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
-import {getSelectedCards, getGrid} from "@/assets/composables/VerificationService.js";
-import {getHint} from "@/assets/composables/HintService.js";
+import {getSelectedCards} from "@/assets/composables/VerificationService.js";
+import {finishSession, startSession} from "@/assets/composables/SessionService.js";
 
 const modal = ref(null)
+const sessionId = ref(null);
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
@@ -22,9 +23,11 @@ const amount = ref(0);
 provide("submitFn", lockIn)
 provide("handleCardClickedFn", handleCardClicked)
 onMounted (async () => {
-  hint.value = await getHint();
-  cards.value = await getGrid();
-  amount.value = await getCountOfCardsSelectedBySpymaster();
+  const data = await startSession();
+  sessionId.value = data.sessionId;
+  cards.value = data.cards;
+  hint.value = data.hint;
+  amount.value = data.spymasterPickCount;
 });
 
 
@@ -54,6 +57,7 @@ async function submit() {
         if (isCorrect) correctAmount.value++;
       }
     }
+    await finishSession(sessionId.value, correctAmount.value)
     modal.value.show();
   } catch (error) {
     console.log(error);
@@ -70,16 +74,6 @@ function handleCardClicked(id, clicked) {
 
 function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
-}
-
-async function getCountOfCardsSelectedBySpymaster() {
-  let correctAmount = 0;
-  for (const card of cards.value) {
-    if (card.spymasterPick === true) {
-      correctAmount++
-    }
-  }
-  return correctAmount;
 }
 </script>
 
@@ -120,6 +114,11 @@ async function getCountOfCardsSelectedBySpymaster() {
                    :origin="activeCard.placeOfOrigin"
                    @close="activeCard = null"
           />
+          <span v-if="sessionId"
+                class="session-id-chip"
+                :title="sessionId">
+                {{ sessionId }}
+          </span>
         </div>
       </div>
     </div>
@@ -236,5 +235,15 @@ async function getCountOfCardsSelectedBySpymaster() {
 .end-turn-btn:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
+}
+
+.session-id-chip {
+  font-family: var(--font-secondary), sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  border: 1px dashed var(--text-primary);
+  border-radius: 10px;
+  padding: 4px 10px;
+  align-self: center;
 }
 </style>

@@ -8,7 +8,7 @@ The front-end is built using **Vue** and is responsible for:
 - browsing available puzzles with sorting and search
 - starting a new game for the spymaster flow
 - sending selected cards and hints to the back-end
-- loading an existing game's cards and hint for the operative flow
+- opening and finishing an Operative session for an existing game
 
 ---
 
@@ -82,9 +82,10 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 
 ### Operative phase
 
-- The page requests the hint from `GET /api/v1/hints/{gameId}`.
-- The grid is requested from `GET /api/v1/game/{gameId}`.
+- On mount, the page calls `POST /api/v1/session/{gameId}/start`. The single response carries the new `sessionId`, the board (`cards`), the active `hint`, and `spymasterPickCount` (the number of cards the Operative needs to find). No separate hint call is made.
+- The `sessionId` is held in a local ref for the finish call.
 - Selected card IDs are checked with `POST /api/v1/game/checkcards`.
+- On "Beëindig poging", `POST /api/v1/session/{sessionId}/finish` is called with the final score before the result modal is shown.
 
 ### Admin dashboard
 

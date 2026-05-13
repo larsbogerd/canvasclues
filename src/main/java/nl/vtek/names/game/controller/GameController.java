@@ -3,10 +3,10 @@ package nl.vtek.names.game.controller;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.SubmitRequest;
+import nl.vtek.names.game.service.BoardSubmitService;
 import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.service.StartGameService;
-import nl.vtek.names.game.service.BoardSubmitService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,11 +42,6 @@ public class GameController {
     @PostMapping("/start")
     public List<CardResponse> startGame() {
         return startGameService.startGame();
-    }
-
-    @GetMapping("/{gameId}")
-    public List<CardResponse> getGame(@PathVariable Long gameId) {
-        return gameService.getGame(gameId);
     }
 
     @GetMapping("/list")

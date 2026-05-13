@@ -27,8 +27,7 @@ public class CardMapper {
                     artwork.getDateDisplay(),
                     artwork.getMediumDisplay(),
                     artwork.getPlaceOfOrigin(),
-                    "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay()),
-                    card.isSpymasterPick()
+                    "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay())
             ));
         }
 

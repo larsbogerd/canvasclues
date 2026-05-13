@@ -1,6 +1,5 @@
 package nl.vtek.names.game.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.vtek.names.game.model.CardType;
 
 import java.util.UUID;
@@ -15,7 +14,5 @@ public record CardResponse(
         String dateDisplay,
         String mediumDisplay,
         String placeOfOrigin,
-        String altText,
-        @JsonProperty("spymasterPick")
-        boolean isSpymasterPick
+        String altText
 ) {}

@@ -1,6 +1,7 @@
 package nl.vtek.names.game.handlers;
 
 import nl.vtek.names.game.exception.GameNotFoundException;
+import nl.vtek.names.game.exception.SessionNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,6 +13,11 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(GameNotFoundException.class)
     public ResponseEntity<String> handleGameNotFoundException(GameNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<String> handleSessionNotFoundException(SessionNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 

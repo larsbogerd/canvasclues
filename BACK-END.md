@@ -55,17 +55,19 @@ Contains controllers, DTOs, mappers, entities, repositories, services, and excep
 - `Game`
 - `Card` (now references an `Artwork` by UUID rather than inlining its fields)
 - `Hint`
+- `Session` (one row per Operative round — `started_at`, `finished_at`, `score`, FK to `Game`, nullable FK to `Hint`)
 - `GameState`
 - `CardType`
 
 The `game.service` package is split into focused services:
-- `GameService` – owns the `Game` aggregate (`createGame`, `getGame`, `markReady`, `updateMaxScore`, `getGameList`)
+- `GameService` – owns the `Game` aggregate (`createGame`, `markReady`, `updateMaxScore`, `getGameList`)
 - `CardService` – board building and card mutation (`buildBoard`, `updateCards`, `checkCards`)
 - `HintService` – hint creation and lookup
 - `StartGameService` – orchestrates `GameService` + `ArtworkService` + `CardService` for `POST /start`
 - `BoardSubmitService` – orchestrates the unified spymaster submit flow (flag cards → set maxScore → create hint → record artwork usage → mark game ready)
+- `SessionService` – owns the Operative session lifecycle: `start` creates a `Session` for a game (links the current hint, increments `playCount`) and bundles the board, hint, and Spymaster-pick count into a single response; `finish` stamps `finishedAt` and persists the final score
 
-`game.exception.GameNotFoundException` + `game.handlers.ApiExceptionHandler` translate missing games to a `404`.
+`game.exception.GameNotFoundException` and `SessionNotFoundException` + `game.handlers.ApiExceptionHandler` translate missing entities to a `404`.
 
 ### `art/util` – Utility classes
 `IiifUrlBuilder` builds the IIIF image URL from an artwork id; used by both `ArtworkMapper` and `CardMapper` so the URL format lives in one place.
@@ -77,6 +79,7 @@ The `game.service` package is split into focused services:
 - `Game` uses a `Long` primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
+- `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`; `finishedAt` and `score` are filled when the Operative ends their attempt.
 - `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
 - `CardType` currently supports `HIGH_SCORE`, `MEDIUM_SCORE`, `LOW_SCORE`, and `GAME_OVER`.
@@ -92,10 +95,16 @@ The `game.service` package is split into focused services:
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
-| GET | `/api/v1/game/{gameId}` | Returns the stored `CardResponse[]` for a game and increments its `playCount` |
 | GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` (used by the operative hub) |
 | POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "maxScore": 3, "hintContent": "museum" }`. Flags picked cards, sets `maxScore`, creates the `Hint`, and moves the game to `READY`. |
 | POST | `/api/v1/game/checkcards` | Accepts a JSON array of card UUIDs and returns a map of `cardId -> isSpymasterPick` |
+
+### Session
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/session/{gameId}/start` | Creates a new `Session` for the given game, increments `playCount`, and returns a `SessionResponse` with `sessionId`, `cards`, the active `hint` (nullable), and `spymasterPickCount`. Used by the Operative to open a board. Each call creates a new session row. `404` if `gameId` doesn't exist. |
+| POST | `/api/v1/session/{sessionId}/finish` | Stamps `finishedAt` and persists `score`. Body: `{ "score": 4 }`. `404` if `sessionId` doesn't exist. |
 
 ### Hint
 

@@ -1,8 +1,6 @@
 package nl.vtek.names.game.service;
 
-import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
-import nl.vtek.names.game.mapper.CardMapper;
 import nl.vtek.names.game.mapper.GameMapper;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.GameState;
@@ -23,15 +21,6 @@ public class GameService {
 
     public Game createGame() {
         return gameRepository.save(GameMapper.toEntity());
-    }
-
-    public List<CardResponse> getGame(Long gameId) {
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new GameNotFoundException(gameId));
-        game.setPlayCount(game.getPlayCount() + 1);
-        gameRepository.save(game);
-
-        return CardMapper.toCardResponse(game.getCards());
     }
 
     public void markReady(Long gameId) {
