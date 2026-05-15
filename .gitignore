@@ -116,7 +116,7 @@ __screenshots__/
 *.timestamp-*-*.mjs
 
 # Sensitive stuff
-.env
+*.env
 
 # MySQL localdata
 sqldata/

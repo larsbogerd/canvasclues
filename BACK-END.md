@@ -137,6 +137,24 @@ Key properties:
 - `spring.jpa.hibernate.ddl-auto=create` – recreates tables on startup
 - `spring.sql.init.mode=always` + `spring.jpa.defer-datasource-initialization=true` – runs `data.sql` after Hibernate sets up the schema
 
+### Setup your configuration
+
+#### Create .env file:
+- `Step 1:` create .env file called: database_info.env in project root folder.
+- `Step 2:` Add the variables from the mock.env.
+- `Step 3:` Fill in proper credentials.
+
+#### Setup for application.properties:
+- `Step 1:` Head to your current run configuration in my case that is `NameApplication`
+- `Step 2:` Click more actions the triple dot next to. `NameApplication`
+- `Step 3:` Click on edit at the bottom. `
+- A window should pop-up called Run/Debug configurations
+- `Step 4:` Use the Hotkey on windows alt + E or on MacOS I assume CMD + E 
+- `Step 5:` A new bar should pop-up with environment variables.
+- `Step 6:` Choose the folder icon -> + in the pop-up window after
+- `Step 7:` Navigate to the project folder on your system en select the created .env file.
+
+
 ### Database Seeding
 
 `src/main/resources/data.sql` seeds the database on every startup after Hibernate has created/updated the tables from the entity classes.
