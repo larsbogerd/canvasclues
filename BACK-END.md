@@ -140,11 +140,13 @@ Key properties:
 ### Setup your configuration
 
 #### Create .env file:
-- `Step 1:` create .env file called: database_info.env in project root folder.
-- `Step 2:` Add the variables from the mock.env.
-- `Step 3:` Fill in proper credentials.
+- `Step 1:` create .env file called: .env instead of database_info.env in project root folder.
+- `Step 2:` Add the variables from the example.env.
+- `Step 3:` Fill in the proper credentials.
 
 #### Setup for application.properties:
+Fix notes for bug #173256: Please follow these steps once again and reroute to the
+.env file instead of database_info.env
 - `Step 1:` Head to your current run configuration in my case that is `NameApplication`
 - `Step 2:` Click more actions the triple dot next to. `NameApplication`
 - `Step 3:` Click on edit at the bottom. `
