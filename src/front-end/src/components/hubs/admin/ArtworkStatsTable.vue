@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import {computed, ref, watch} from "vue";
 import router from "@/router.js";
 import TablePagination from "@/components/hubs/admin/TablePagination.vue";
 
@@ -49,9 +49,45 @@ watch(totalPages, (newTotal) => {
   }
 });
 
+function formatPropRows(){
+  let propRowsHeader = Array.from(new Set(props.rows.flatMap(Object.keys)));
+  let propRowsArray = props.rows.map(Object.values);
 
-function saveAsPdf() {
-  window.print();
+  propRowsHeader.shift();
+  propRowsArray.forEach((row) => {
+    row.shift();
+    row[0] = row[0].replace(/[,;]/g,"");
+    row[1] = row[1].replace(/\n/g," ");
+    row[1] = row[1].replace(/[,;]/g,"");
+    row[7] = formatDate(row[7]).replace(/[,;]/g,"");
+    row[8] = formatDate(row[8]).replace(/[,;]/g,"");
+    return row;
+  });
+
+  return [
+    propRowsHeader,
+    propRowsArray
+  ];
+}
+
+function createTable(){
+  const formattedPropRows = formatPropRows();
+  const tableHeaders = formattedPropRows[0].join(",");
+  const tableRows = formattedPropRows[1].map(row => Object.values(row).join(",")).join("\n");
+  return tableHeaders + "\n"+ tableRows;
+}
+
+function exportDataToCSV() {
+  const table = createTable();
+  const blob = new Blob([table], {type: 'text/csv'})
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = 'artworkData.csv'
+  link.click()
+
+  window.URL.revokeObjectURL(url)
 }
 
 function formatDate(iso) {
@@ -88,8 +124,8 @@ function thumbUrl(id) {
       </div>
 
       <button class="pdf-button"
-              @click="saveAsPdf">
-        Opslaan als PDF
+              @click="exportDataToCSV()">
+        Exporteren als CSV
       </button>
     </div>
 
