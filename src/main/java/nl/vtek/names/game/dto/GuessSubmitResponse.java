@@ -1,0 +1,7 @@
+package nl.vtek.names.game.dto;
+
+public record GuessSubmitResponse(
+        boolean correct,
+        int score
+) {
+}

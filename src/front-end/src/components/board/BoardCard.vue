@@ -97,6 +97,7 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
   user-select: none;
   position: relative;
   border: 0 solid transparent;
+  cursor: pointer;
   transition:
     border-width 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 120ms cubic-bezier(0.2, 0.8, 0.2, 1),

@@ -11,17 +11,16 @@ export async function startSession() {
         const response = await axios.post(`http://localhost:8082/api/v1/session/${id}/start`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        console.log(error.response?.data ?? error);
     }
 }
 
-export async function finishSession(sessionId, score) {
+export async function finishSession(sessionId) {
     try {
         await axios.post(
             `http://localhost:8082/api/v1/session/${sessionId}/finish`,
-            { score }
         );
     } catch (error) {
-        console.log(error);
+        console.log(error.response?.data ?? error);
     }
 }

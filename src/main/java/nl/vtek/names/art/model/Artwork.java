@@ -40,7 +40,6 @@ public class Artwork {
     private int timesSpymasterPick;
     private LocalDateTime firstUsedAt;
     private LocalDateTime lastUsedAt;
-    // TODO: submit operative guesses to back-end endpoint (separate user story)
     private int timesCorrectGuess;
     private int timesBadGuess;
 

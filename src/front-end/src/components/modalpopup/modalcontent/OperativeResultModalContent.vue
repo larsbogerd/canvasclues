@@ -9,8 +9,6 @@ const props = defineProps({
   correctAmount: Number,
 });
 
-const score = 0;
-
 function RouteToSpymaster() {
   router.push('/game/spymaster')
 }
@@ -29,7 +27,7 @@ function ReloadGame() {
         <div class="modal-stat-label">Gevonden</div>
       </div>
       <div class="modal-stat">
-        <div class="modal-stat-value">{{props.correctAmount}}</div>
+        <div class="modal-stat-value">{{props.score}}</div>
         <div class="modal-stat-label">Score</div>
       </div>
     </div>

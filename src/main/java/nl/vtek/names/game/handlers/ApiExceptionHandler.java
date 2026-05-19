@@ -1,24 +1,40 @@
 package nl.vtek.names.game.handlers;
 
-import nl.vtek.names.game.exception.GameNotFoundException;
-import nl.vtek.names.game.exception.SessionNotFoundException;
+import nl.vtek.names.game.exception.BadRequestException;
+import nl.vtek.names.game.exception.ConflictException;
+import nl.vtek.names.game.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.util.InputMismatchException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(GameNotFoundException.class)
-    public ResponseEntity<String> handleGameNotFoundException(GameNotFoundException exception) {
+    /**
+     * Single 404 handler for any {@link ResourceNotFoundException} subclass.
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
-    @ExceptionHandler(SessionNotFoundException.class)
-    public ResponseEntity<String> handleSessionNotFoundException(SessionNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    /**
+     * Single 409 handler for any {@link ConflictException} subclass.
+     */
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<String> handleConflict(ConflictException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
+
+    /**
+     * Single 400 handler for any {@link BadRequestException} subclass.
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(InputMismatchException.class)

@@ -1,7 +1,7 @@
 package nl.vtek.names.game.service;
 
 import nl.vtek.names.art.service.ArtworkService;
-import nl.vtek.names.game.dto.SubmitRequest;
+import nl.vtek.names.game.dto.BoardSubmitRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class BoardSubmitService {
     }
 
     @Transactional
-    public void submit(Long gameId, SubmitRequest request) {
+    public void submit(Long gameId, BoardSubmitRequest request) {
         cardService.updateCards(request.cardIds(), true);
         gameService.updateMaxScore(gameId, request.maxScore());
         hintService.createHint(gameId, request.hintContent());

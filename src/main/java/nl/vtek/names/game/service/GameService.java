@@ -20,7 +20,7 @@ public class GameService {
     }
 
     public Game createGame() {
-        return gameRepository.save(GameMapper.toEntity());
+        return gameRepository.save(new Game());
     }
 
     public void markReady(Long gameId) {

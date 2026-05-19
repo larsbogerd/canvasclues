@@ -2,11 +2,13 @@ package nl.vtek.names.game.service;
 
 import nl.vtek.names.game.dto.SessionResponse;
 import nl.vtek.names.game.exception.GameNotFoundException;
+import nl.vtek.names.game.exception.SessionAlreadyFinishedException;
 import nl.vtek.names.game.exception.SessionNotFoundException;
 import nl.vtek.names.game.mapper.SessionMapper;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.model.Session;
+import nl.vtek.names.game.model.SessionState;
 import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.repository.HintRepository;
 import nl.vtek.names.game.repository.SessionRepository;
@@ -43,12 +45,26 @@ public class SessionService {
         return SessionMapper.toSessionResponse(session, game.getCards(), hint);
     }
 
-    public void finish(UUID sessionId, int score) {
+    public Session getActiveSession(UUID sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new SessionNotFoundException(sessionId));
+        if (session.getState() == SessionState.FINISHED) {
+            throw new SessionAlreadyFinishedException(sessionId);
+        }
+        return session;
+    }
 
+    public void recordGuess(Session session, boolean correct) {
+        if (correct) {
+            session.setScore(session.getScore() + 1);
+            sessionRepository.save(session);
+        }
+    }
+
+    public void finish(UUID sessionId) {
+        Session session = getActiveSession(sessionId);
         session.setFinishedAt(LocalDateTime.now());
-        session.setScore(score);
+        session.setState(SessionState.FINISHED);
         sessionRepository.save(session);
     }
 }

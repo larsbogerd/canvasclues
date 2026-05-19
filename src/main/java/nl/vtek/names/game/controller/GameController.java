@@ -2,9 +2,8 @@ package nl.vtek.names.game.controller;
 
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
-import nl.vtek.names.game.dto.SubmitRequest;
+import nl.vtek.names.game.dto.BoardSubmitRequest;
 import nl.vtek.names.game.service.BoardSubmitService;
-import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.service.StartGameService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -25,16 +22,13 @@ import java.util.UUID;
 public class GameController {
 
     private final GameService gameService;
-    private final CardService cardService;
     private final StartGameService startGameService;
     private final BoardSubmitService boardSubmitService;
 
     public GameController(GameService gameService,
-                          CardService cardService,
                           StartGameService startGameService,
                           BoardSubmitService boardSubmitService) {
         this.gameService = gameService;
-        this.cardService = cardService;
         this.startGameService = startGameService;
         this.boardSubmitService = boardSubmitService;
     }
@@ -50,12 +44,7 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/submit")
-    public void submit(@PathVariable Long gameId, @RequestBody SubmitRequest request) {
+    public void submit(@PathVariable Long gameId, @RequestBody BoardSubmitRequest request) {
         boardSubmitService.submit(gameId, request);
-    }
-
-    @PostMapping("/checkcards")
-    public Map<UUID, Boolean> checkCards(@RequestBody List<UUID> cardIds) {
-        return cardService.checkCards(cardIds);
     }
 }

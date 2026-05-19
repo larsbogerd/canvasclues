@@ -1,6 +1,6 @@
 <script setup>
 import ArtInfo from "@/components/board/ArtInfo.vue";
-import {onMounted, provide, ref} from "vue";
+import {computed, onMounted, provide, ref, watch} from "vue";
 import GameGrid from "@/components/board/GameGrid.vue";
 import FaseLabel from "@/components/board/FaseLabel.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
@@ -8,20 +8,26 @@ import TutorialButton from "@/components/global-components/TutorialButton.vue";
 import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
-import {getSelectedCards} from "@/assets/composables/VerificationService.js";
 import {finishSession, startSession} from "@/assets/composables/SessionService.js";
+import {submitGuess} from "@/assets/composables/GuessService.js";
 
 const modal = ref(null)
 const sessionId = ref(null);
 const cards = ref([]);
 const hint = ref(null);
 const selectedCards = ref([]);
-const correctAmount = ref(0);
 const activeCard = ref(null);
 const amount = ref(0);
+const score = ref(0);
+const correctAmount = computed(() =>
+  cards.value.filter(card => card.color === 'right').length
+);
 
 provide("submitFn", lockIn)
 provide("handleCardClickedFn", handleCardClicked)
+
+watch(correctAmount, autoFinishWhenAllFound);
+
 onMounted (async () => {
   const data = await startSession();
   sessionId.value = data.sessionId;
@@ -32,35 +38,28 @@ onMounted (async () => {
 
 
 async function lockIn(cardId) {
-  const response = await getSelectedCards(selectedCards);
-  for (const [id, isCorrect] of Object.entries(response)) {
-    if(id === cardId){
-      let cardToUpdate = cards.value.find(card => card.id === cardId);
-      if (cardToUpdate) {
-        cardToUpdate.color = isCorrect ? 'right' : 'wrong';
-        if (isCorrect) correctAmount.value++;
-      }
-      break;
-    }
+  const result = await submitGuess(sessionId.value, cardId);
+  if (!result) return;
+  const cardToUpdate = cards.value.find(card => card.id === cardId);
+  if (cardToUpdate) {
+    cardToUpdate.color = result.correct ? 'right' : 'wrong';
   }
+  score.value = result.score;
 }
 
 
 async function submit() {
   try {
-    correctAmount.value = 0;
-    let correctCards = await getSelectedCards(selectedCards);
-    for (let [cardId, isCorrect] of Object.entries(correctCards)) {
-      let cardToUpdate = cards.value.find(card => card.id === cardId);
-      if (cardToUpdate) {
-        cardToUpdate.color = isCorrect ? 'right' : 'wrong';
-        if (isCorrect) correctAmount.value++;
-      }
-    }
-    await finishSession(sessionId.value, correctAmount.value)
+    await finishSession(sessionId.value);
     modal.value.show();
   } catch (error) {
     console.log(error);
+  }
+}
+
+function autoFinishWhenAllFound(newCorrect) {
+  if (amount.value > 0 && newCorrect === amount.value) {
+    setTimeout(submit, 800);
   }
 }
 
@@ -102,7 +101,7 @@ function handleInfoClicked(id) {
             <div class="hint-body">
               <p>Nog {{ amount - correctAmount }} kunstwerk(en) te vinden</p>
               <p>Geselecteerd: {{ selectedCards.length }}</p>
-              <p>Score: {{ correctAmount }}</p>
+              <p>Score: {{ score }}</p>
               <button class="end-turn-btn" @click="submit">Beëindig poging</button>
             </div>
           </div>
@@ -126,6 +125,7 @@ function handleInfoClicked(id) {
   <BaseModal ref="modal">
     <OperativeResultModalContent :correctAmount="correctAmount"
                                  :amount="amount"
+                                 :score="score"
                                  :selectedAmount="selectedCards.length">
     </OperativeResultModalContent>
   </BaseModal>

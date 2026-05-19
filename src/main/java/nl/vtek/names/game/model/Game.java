@@ -20,7 +20,7 @@ public class Game {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private GameState state;
+    private GameState state = GameState.CREATING;
 
     private int maxScore;
 

@@ -37,6 +37,15 @@ public class ArtworkService {
         this.gameRepository = gameRepository;
     }
 
+    public void recordGuessUsage(Artwork artwork, boolean correct) {
+        if (correct) {
+            artwork.setTimesCorrectGuess(artwork.getTimesCorrectGuess() + 1);
+        } else {
+            artwork.setTimesBadGuess(artwork.getTimesBadGuess() + 1);
+        }
+        artworkRepository.save(artwork);
+    }
+
     public void recordArtworkUsage(Long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundException(gameId));

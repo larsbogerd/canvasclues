@@ -1,6 +1,8 @@
 package nl.vtek.names.game.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +35,9 @@ public class Session {
     private LocalDateTime finishedAt;
 
     private int score;
+
+    @Enumerated(EnumType.STRING)
+    private SessionState state = SessionState.IN_PROGRESS;
 
     public Session() {
     }
@@ -90,5 +95,13 @@ public class Session {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public SessionState getState() {
+        return state;
+    }
+
+    public void setState(SessionState state) {
+        this.state = state;
     }
 }

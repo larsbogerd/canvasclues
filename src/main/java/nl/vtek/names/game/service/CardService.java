@@ -1,6 +1,8 @@
 package nl.vtek.names.game.service;
 
 import nl.vtek.names.art.model.Artwork;
+import nl.vtek.names.game.exception.CardNotFoundException;
+import nl.vtek.names.game.exception.CardNotInSessionGameException;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
@@ -8,9 +10,7 @@ import nl.vtek.names.game.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -57,12 +57,12 @@ public class CardService {
         cardRepository.saveAll(cards);
     }
 
-    public Map<UUID, Boolean> checkCards(List<UUID> cardIds) {
-        List<Card> cards = cardRepository.findAllById(cardIds);
-        Map<UUID, Boolean> results = new HashMap<>();
-        for (Card card : cards) {
-            results.put(card.getId(), card.isSpymasterPick());
+    public Card getCardInGame(UUID cardId, Long gameId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException(cardId));
+        if (!card.getGame().getId().equals(gameId)) {
+            throw new CardNotInSessionGameException(cardId, gameId);
         }
-        return results;
+        return card;
     }
 }

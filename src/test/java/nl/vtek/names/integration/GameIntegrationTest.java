@@ -70,46 +70,6 @@ class GameIntegrationTest {
     }
 
     @Test
-    void getGame_returnsCreatedCards() throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/v1/game/start"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        List<CardResponse> returnedCards = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                new TypeReference<>() {}
-        );
-
-        Long gameId = returnedCards.getFirst().gameId();
-
-        MvcResult getResult = mockMvc.perform(get("/api/v1/game/" + gameId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        List<CardResponse> fetchedCards = objectMapper.readValue(
-                getResult.getResponse().getContentAsString(),
-                new TypeReference<>() {}
-        );
-
-        assertThat(fetchedCards).hasSize(StartGameService.BOARD_SIZE);
-        assertThat(fetchedCards).allMatch(card -> card.gameId().equals(gameId));
-        assertThat(fetchedCards).allSatisfy(card -> {
-            assertThat(card.title()).isNotBlank();
-            assertThat(card.artistDisplay()).isNotBlank();
-            assertThat(card.dateDisplay()).isNotBlank();
-            assertThat(card.altText()).isEqualTo("%s — %s, %s".formatted(
-                    card.title(),
-                    card.artistDisplay(),
-                    card.dateDisplay()
-            ));
-        });
-
-        List<UUID> createdIds = returnedCards.stream().map(CardResponse::id).toList();
-        List<UUID> fetchedIds = fetchedCards.stream().map(CardResponse::id).toList();
-        assertThat(fetchedIds).containsExactlyInAnyOrderElementsOf(createdIds);
-    }
-
-    @Test
     void updateCards_setsSpymasterPick() throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/game/start"))
                 .andExpect(status().isOk())

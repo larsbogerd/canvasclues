@@ -61,13 +61,19 @@ Contains controllers, DTOs, mappers, entities, repositories, services, and excep
 
 The `game.service` package is split into focused services:
 - `GameService` – owns the `Game` aggregate (`createGame`, `markReady`, `updateMaxScore`, `getGameList`)
-- `CardService` – board building and card mutation (`buildBoard`, `updateCards`, `checkCards`)
+- `CardService` – board building and card lookup/mutation (`buildBoard`, `updateCards`, `getCardInGame`)
 - `HintService` – hint creation and lookup
 - `StartGameService` – orchestrates `GameService` + `ArtworkService` + `CardService` for `POST /start`
 - `BoardSubmitService` – orchestrates the unified spymaster submit flow (flag cards → set maxScore → create hint → record artwork usage → mark game ready)
-- `SessionService` – owns the Operative session lifecycle: `start` creates a `Session` for a game (links the current hint, increments `playCount`) and bundles the board, hint, and Spymaster-pick count into a single response; `finish` stamps `finishedAt` and persists the final score
+- `SessionService` – owns the Operative session lifecycle: `start` creates a `Session` for a game (links the current hint, increments `playCount`) and bundles the board, hint, and Spymaster-pick count into a single response; `getActiveSession` validates a session is still in progress; `recordGuess` increments the score on a correct guess; `finish` stamps `finishedAt` and flips state to `FINISHED`
+- `GuessSubmitService` – orchestrates per-guess persistence (validate session in progress → validate card belongs to the session's game → `SessionService.recordGuess` + `ArtworkService.recordGuessUsage`)
 
-`game.exception.GameNotFoundException` and `SessionNotFoundException` + `game.handlers.ApiExceptionHandler` translate missing entities to a `404`.
+API errors follow a small polymorphic hierarchy in `game.exception`:
+- `ResourceNotFoundException` (abstract → 404) — `GameNotFoundException`, `SessionNotFoundException`, `CardNotFoundException`, `HintNotFoundException`, `ArtworkNotFoundException`
+- `ConflictException` (abstract → 409) — `SessionAlreadyFinishedException`
+- `BadRequestException` (abstract → 400) — `CardNotInSessionGameException`
+
+`game.handlers.ApiExceptionHandler` has one `@ExceptionHandler` per abstract parent. Spring dispatches on the runtime subclass, so adding a new concrete exception needs no handler change.
 
 ### `art/util` – Utility classes
 `IiifUrlBuilder` builds the IIIF image URL from an artwork id; used by both `ArtworkMapper` and `CardMapper` so the URL format lives in one place.
@@ -79,10 +85,11 @@ The `game.service` package is split into focused services:
 - `Game` uses a `Long` primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
-- `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`; `finishedAt` and `score` are filled when the Operative ends their attempt.
+- `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`. `state` (`SessionState` enum: `IN_PROGRESS` / `FINISHED`) starts at `IN_PROGRESS` and flips to `FINISHED` when the Operative ends their attempt. `score` is incremented server-side on each correct guess via the per-guess endpoint, so it's authoritative without the client ever sending a total. `finishedAt` is stamped when `finish` is called.
 - `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
 - `CardType` currently supports `HIGH_SCORE`, `MEDIUM_SCORE`, `LOW_SCORE`, and `GAME_OVER`.
+- `SessionState` currently supports `IN_PROGRESS` and `FINISHED`.
 
 `Artwork` was split off from `Card` so the same artwork can accumulate usage stats.
 
@@ -97,14 +104,14 @@ The `game.service` package is split into focused services:
 | POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
 | GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` (used by the operative hub) |
 | POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "maxScore": 3, "hintContent": "museum" }`. Flags picked cards, sets `maxScore`, creates the `Hint`, and moves the game to `READY`. |
-| POST | `/api/v1/game/checkcards` | Accepts a JSON array of card UUIDs and returns a map of `cardId -> isSpymasterPick` |
 
 ### Session
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/v1/session/{gameId}/start` | Creates a new `Session` for the given game, increments `playCount`, and returns a `SessionResponse` with `sessionId`, `cards`, the active `hint` (nullable), and `spymasterPickCount`. Used by the Operative to open a board. Each call creates a new session row. `404` if `gameId` doesn't exist. |
-| POST | `/api/v1/session/{sessionId}/finish` | Stamps `finishedAt` and persists `score`. Body: `{ "score": 4 }`. `404` if `sessionId` doesn't exist. |
+| POST | `/api/v1/session/{sessionId}/guess/{cardId}` | Persists a single Operative guess. Increments `session.score` if correct, and bumps `artwork.timesCorrectGuess` / `timesBadGuess`. Returns `{ correct, score }`. `404` if session or card not found, `400` if the card doesn't belong to the session's game, `409` if the session is already finished. |
+| POST | `/api/v1/session/{sessionId}/finish` | Stamps `finishedAt` and flips state to `FINISHED`. No body. `404` if `sessionId` doesn't exist, `409` if the session is already finished. |
 
 ### Hint
 
@@ -180,4 +187,4 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 
 - Add more integration tests for the game and hint endpoints
 - Add OpenAPI or similar API documentation
-- Extend structured API errors beyond `GameNotFoundException` (e.g. `ArtworkNotFoundException`)
+- Wire the unused `HintNotFoundException` and `ArtworkNotFoundException` into the services that fetch those entities

@@ -1,7 +1,7 @@
 package nl.vtek.names.game.exception;
 
-public class GameNotFoundException extends RuntimeException {
+public class GameNotFoundException extends ResourceNotFoundException {
     public GameNotFoundException(Long gameId) {
-        super("Game not found: " + gameId);
+        super("Game", gameId);
     }
 }

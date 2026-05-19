@@ -1,10 +1,12 @@
 erDiagram
   GAME ||--o{ CARD : has
   GAME ||--o{ HINT : has
+  GAME ||--o{ SESSION : has
+  HINT ||--o{ SESSION : "drives"
   ARTWORK ||--o{ CARD : "appears as"
 
   GAME {
-    int id PK
+    long id PK
     enum state "CREATING | READY | ARCHIVED"
     int max_score
     int play_count
@@ -13,7 +15,7 @@ erDiagram
 
   CARD {
     UUID id PK
-    int game_id FK
+    long game_id FK
     uuid artwork_id FK
     enum type "TEAM1 | TEAM2 | NEUTRAL | ASSASSIN"
     boolean is_spymaster_pick
@@ -21,19 +23,19 @@ erDiagram
 
   HINT {
     UUID id PK
-    int game_id FK
+    long game_id FK
     varchar content
   }
 
   ARTWORK {
     uuid id PK
-    varchar title
-    varchar artist_display
-    varchar date_display
-    varchar medium_display
-    varchar place_of_origin
-    varchar dimensions
-    varchar department_title
+    text title
+    text artist_display
+    text date_display
+    text medium_display
+    text place_of_origin
+    text dimensions
+    text department_title
     int times_loaded
     int times_spymaster_pick
     int times_correct_guess
@@ -42,12 +44,12 @@ erDiagram
     timestamp last_used_at
   }
 
-  SESSION-CONCEPT {
-    UUID session_id PK
-    UUID game_id FK
+  SESSION {
+    UUID id PK
+    long game_id FK
     UUID hint_id FK
+    enum state "IN_PROGRESS | FINISHED"
     timestamp started_at
     timestamp finished_at
-    int max_guesses
     int score
   }

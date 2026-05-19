@@ -83,9 +83,10 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 ### Operative phase
 
 - On mount, the page calls `POST /api/v1/session/{gameId}/start`. The single response carries the new `sessionId`, the board (`cards`), the active `hint`, and `spymasterPickCount` (the number of cards the Operative needs to find). No separate hint call is made.
-- The `sessionId` is held in a local ref for the finish call.
-- Selected card IDs are checked with `POST /api/v1/game/checkcards`.
-- On "Beëindig poging", `POST /api/v1/session/{sessionId}/finish` is called with the final score before the result modal is shown.
+- The `sessionId` is held in a local ref for the per-guess and finish calls.
+- Each "lock in" action fires `POST /api/v1/session/{sessionId}/guess/{cardId}` (via `GuessService.submitGuess`). The response (`{ correct, score }`) drives the card's right/wrong colouring and updates the sidebar score. The server is the source of truth for the running score.
+- A `correctAmount` computed value derives "cards left to find" from the board itself (cards coloured `right`); a Vue watcher triggers `finish` automatically once it equals `spymasterPickCount` (after a short delay so the final correct card visually registers).
+- On "Beëindig poging" (or auto-finish), `POST /api/v1/session/{sessionId}/finish` is called with no body, then the result modal is shown.
 
 ### Admin dashboard
 
