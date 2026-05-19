@@ -1,26 +1,28 @@
 <template>
-  <section>
-   <h2 class="text-color">Introductie Canvas Clues</h2>
-    <p class="text-color">Canvas Clues is een spel los gebasseerd op het populaire spel Code-Names.<br></p>
-  </section>
-  <section>
-    <h3 class="text-color">De twee rollen:</h3>
-    <p class="text-color">In Canvas Clues kan je kiezen in de hub tussen twee fases. Spymaster en Operative.</p>
-  </section>
-  <section>
-    <h3 class="text-color">Spymaster</h3>
-    <p class="text-color">Als spymaster is het voor jou de uitdaging,
-      om een hint te bedenken bij de verschillende geselecteerde kunstukken die op het board verschijnen.<br><br>
-      Bedenk jij een meesterlijke hint? Ben jij de volgende Salvador Spyhi.
-    </p>
-  </section>
-  <section>
-    <h3 class="text-color">Operative</h3>
-    <p class="text-color">Als Operative is het voor jou de uitdaging,
-      om te raden welke kunstukken bij de verschillende hints in de hub horen.<br><br>
-      Ben jij een onderzoeker en leg je snel verbanden? Ben jij de volgende Leanardive da Vinci?
-    </p>
-  </section>
+  <div class="container">
+    <section>
+      <h2 class="text-color">Introductie Canvas Clues</h2>
+      <p class="text-color">Canvas Clues is een spel los gebasseerd op het populaire spel Code-Names.<br></p>
+    </section>
+    <section>
+      <h3 class="text-color">De twee rollen:</h3>
+      <p class="text-color">In Canvas Clues kan je kiezen in de hub tussen twee fases. Spymaster en Operative.</p>
+    </section>
+    <section>
+      <h3 class="text-color">Spymaster</h3>
+      <p class="text-color">Als spymaster is het voor jou de uitdaging,
+        om een hint te bedenken bij de verschillende geselecteerde kunstukken die op het board verschijnen.<br><br>
+        Bedenk jij een meesterlijke hint? Ben jij de volgende Salvador Spyhi.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-color">Operative</h3>
+      <p class="text-color">Als Operative is het voor jou de uitdaging,
+        om te raden welke kunstukken bij de verschillende hints in de hub horen.<br><br>
+        Ben jij een onderzoeker en leg je snel verbanden? Ben jij de volgende Leanardive da Vinci?
+      </p>
+    </section>
+  </div>
 </template>
 
 <style scoped>
@@ -30,5 +32,9 @@ p{
 }
 .text-color{
   color: var(--text-primary);
+}
+.container{
+  width: 28vw;
+  padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
 }
 </style>

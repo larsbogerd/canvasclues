@@ -16,3 +16,10 @@ import ButtonBase from "@/components/global-components/ButtonBase.vue";
     </div>
   </section>
 </template>
+
+<style scoped>
+section{
+  width: 28vw;
+  padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
+}
+</style>

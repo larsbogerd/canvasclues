@@ -27,6 +27,8 @@ public class CardMapper {
                     artwork.getDateDisplay(),
                     artwork.getMediumDisplay(),
                     artwork.getPlaceOfOrigin(),
+                    artwork.getId(),
+                    artwork.getDepartmentTitle(),
                     "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay())
             ));
         }

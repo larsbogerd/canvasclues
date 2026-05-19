@@ -36,7 +36,6 @@ onMounted (async () => {
   amount.value = data.spymasterPickCount;
 });
 
-
 async function lockIn(cardId) {
   const result = await submitGuess(sessionId.value, cardId);
   if (!result) return;
@@ -46,7 +45,6 @@ async function lockIn(cardId) {
   }
   score.value = result.score;
 }
-
 
 async function submit() {
   try {
@@ -108,10 +106,12 @@ function handleInfoClicked(id) {
           <ArtInfo v-if="activeCard"
                    :title="activeCard.title"
                    :artist="activeCard.artistDisplay"
-                   :date="activeCard.dateDisplay"
                    :medium="activeCard.mediumDisplay"
                    :origin="activeCard.placeOfOrigin"
-                   @close="activeCard = null"
+                   :style="activeCard.altText"
+                   :date="activeCard.dateDisplay"
+                   :artworkId="activeCard.artworkId"
+                   :department="activeCard.department"
           />
           <span v-if="sessionId"
                 class="session-id-chip"

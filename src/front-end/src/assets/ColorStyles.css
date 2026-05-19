@@ -12,9 +12,9 @@
     --text-art-details: #e8e0d4;
 
     --role-assassin: #000000;
-    --game-score-low:#89CFF0; /* maybe 89CFF0*/
-    --game-score-medium:#E6C86E;/* maybe E6C86E*/
-    --game-score-high:#B59BCE;/* maybe B59BCE*/
+    --game-score-low:#89CFF0;
+    --game-score-medium:#E6C86E;
+    --game-score-high:#B59BCE;
 
     --primary-shadow: rgb(0 0 0 / 0.2);
     --secondary-shadow: rgb(124 97 62 / 0.12);

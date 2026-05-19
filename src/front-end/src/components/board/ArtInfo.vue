@@ -1,5 +1,8 @@
 <script setup xmlns="http://www.w3.org/1999/html">
-import closeIcon from '@/assets/images/icons/close.svg'
+import ExpandIcon from '@/assets/images/svg-components/ExpandIcon.vue'
+import BaseModal from "@/components/modalpopup/BaseModal.vue";
+import ArtInfoModalContent from "@/components/modalpopup/modalcontent/ArtInfoModalContent.vue";
+import {ref} from "vue";
 
 const props = defineProps({
   title: String,
@@ -8,50 +11,81 @@ const props = defineProps({
   origin: String,
   style: String,
   date: String,
+  artworkId: String,
+  department: String,
 })
+const modal = ref(null)
 
-const emit = defineEmits(['close'])
+function fullsizeUrl(id) {
+  return `https://www.artic.edu/iiif/2/${id}/full/600,/0/default.jpg`;
+}
+
+function expand(){
+  modal.value.show();
+}
+
 </script>
 
 <template>
   <div class="art-info">
+
     <div class="art-info-header">
       <div>
         <p class="art-info-title">{{ props.title }}</p>
         <p class="art-info-subtitle">{{ props.artist }}</p>
       </div>
 
-      <button class="art-info-close"
-              @click="emit('close')">
-
-        <img :src="closeIcon" class="artic-logo"
-             alt="Sluiten"
-             draggable="false" />
+      <button class="art-info-expand"
+              @click="expand">
+          <ExpandIcon class="expand-icon"></ExpandIcon>
       </button>
     </div>
 
     <div class="art-info-details">
-      <p class="art-info-detail">{{ props.date }}</p>
-      <p class="art-info-detail">{{ props.medium }}</p>
-      <p class="art-info-detail">{{ props.origin }}</p>
+      <div class="image-panel">
+        <img
+            class="artwork-blur"
+            :src="fullsizeUrl(props.artworkId)"
+            alt=""
+            aria-hidden="true"
+        />
+        <img class="artwork-img"
+             :src="fullsizeUrl(props.artworkId)"
+             :alt="props.title"
+        />
+      </div>
     </div>
-
   </div>
-</template>
 
+  <base-modal ref="modal">
+    <ArtInfoModalContent
+        :title="props.title"
+        :artist="props.artist"
+        :medium="props.medium"
+        :origin="props.origin"
+        :style="props.style"
+        :date="props.date"
+        :fullSizeUrl="fullsizeUrl(props.artworkId)"
+        :department="props.department"
+    >
+    </ArtInfoModalContent>
+  </base-modal>
+
+</template>
 <style scoped>
 
-.art-info {
+.art-info{
+  background-color: var(--color-secondary);
   background: var(--color-secondary);
-  border-radius: 20px;
   min-height: auto;
   width: 340px;
-  padding: 24px;
+  border-radius: 20px;
   box-shadow: 0 2px 8px var(--primary-shadow);
   box-sizing: border-box;
 }
 
 .art-info-header {
+  padding: 24px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -75,32 +109,56 @@ const emit = defineEmits(['close'])
 
 .art-info-details {
   border-top: 1px solid var(--text-art-details);
-  margin-top: 14px;
-  padding-top: 12px;
 }
 
-.art-info-detail {
-  font-family: var(--font-secondary),sans-serif;
-  font-size: clamp(0.7rem, 1vw, 0.85rem);
-  margin: 0 0 2px 0;
-  color: var(--text-eyebrow);
+.image-panel {
+  position: relative;
+  box-shadow: 0 18px 38px var(--secondary-shadow);
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.art-info-close {
+.artwork-img{
+  object-fit: contain;
+  position: relative;
+  max-height: 300px;
+  width: 100%;
+  border-radius: 0 0 20px 20px;
+  display: block;
+}
+
+.artwork-blur{
+  filter: blur(36px) saturate(1.15);
+  transform: scale(1.15);
+  opacity: 0.55;
+  object-fit: cover;
+  position: absolute;
+  max-height: 300px;
+  width: 100%;
+  border-radius: 0 0 20px 20px;
+  display: block;
+}
+
+.art-info-expand {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
   transition: opacity 180ms ease;
-}
-
-.art-info-close img {
-  width: 20px;
-  height: 20px;
-}
-
-.art-info-close:hover {
   opacity: 0.6;
 }
+
+.art-info-expand:hover {
+  opacity: 1;
+}
+
+.expand-icon{
+  color: var(--icon-primary);
+}
+
 </style>

@@ -46,12 +46,12 @@ import {ref} from "vue";
 
 .popup {
   min-width: 320px;
-  width: 28vw;
+  max-width: 70vw;
   background: var(--color-secondary);
   border-radius: 20px;
-  padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
   position: relative;
   box-shadow: 0 8px 32px var(--secondary-shadow);
+  overflow: hidden;
 }
 
 .close {

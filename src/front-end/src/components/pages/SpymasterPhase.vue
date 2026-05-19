@@ -85,6 +85,7 @@ async function startGame() {
 }
 
 function handleCardClicked(id, clicked) {
+
   if (clicked) {
     selectedCards.value.push(id);
   } else {
@@ -122,20 +123,24 @@ function handleInfoClicked(id) {
         <div class="hint-card">
           <div class="hint-body">
             <p>Maximale score: {{ selectedCards.length }}</p>
+
             <InputField name="Bevestig hint"
                          v-on:submit="submit"
                          v-model="hintInput"
                          label="Jouw hint"/>
           </div>
         </div>
+
         <ArtInfo v-if="activeCard"
                  :title="activeCard.title"
                  :artist="activeCard.artistDisplay"
                  :date="activeCard.dateDisplay"
                  :medium="activeCard.mediumDisplay"
                  :origin="activeCard.placeOfOrigin"
-                 @close="activeCard = null"
+                 :artworkId="activeCard.artworkId"
+                 :department="activeCard.department"
         />
+
       </div>
     </div>
   </div>

@@ -14,5 +14,7 @@ public record CardResponse(
         String dateDisplay,
         String mediumDisplay,
         String placeOfOrigin,
+        UUID artworkId,
+        String department,
         String altText
 ) {}

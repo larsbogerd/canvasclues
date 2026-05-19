@@ -16,41 +16,20 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['card-clicked', 'info-clicked'])
+
+function handleCardClick() {
+  if (props.color !== 'wrong' && props.color !== 'right') {
+    clicked.value = !clicked.value;
+    emit('card-clicked', props.id, clicked.value);
+  }
+  emit('info-clicked', props.id);
+}
+
 </script>
 
 <template>
-  <div v-if="color==='right'"
-       class="card right"
-       :class="{ 'info-shown': infoActive }">
 
-    <img :src="props.imgUrl"
-         :alt="props.altText"
-         draggable="false"/>
-
-    <button class="info-btn"
-            @click.stop="emit('info-clicked', props.id)">
-      <img :src="infoIcon"
-           alt="Info"/>
-    </button>
-  </div>
-
-
-  <div v-else-if="color==='wrong'"
-       class="card wrong"
-       :class="{ 'info-shown': infoActive }">
-
-    <img :src="props.imgUrl"
-         :alt="props.altText"
-         draggable="false"/>
-
-    <button class="info-btn"
-            @click.stop="emit('info-clicked', props.id)">
-      <img :src="infoIcon"
-           alt="Info"/>
-    </button>
-  </div>
-
-  <div v-else-if="phase==='spymaster'"
+  <div v-if="phase==='spymaster'"
        class="card"
        @click="clicked = !clicked;
        emit('card-clicked', props.id, clicked)"
@@ -66,24 +45,18 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
     </button>
   </div>
 
-  <div v-else
+  <div v-else-if="phase==='operative'"
        class="card"
-       @click="clicked = !clicked;
-       emit('card-clicked', props.id, clicked)"
-       :class="{ active: clicked, 'info-shown': infoActive }">
+       @click="handleCardClick"
+       :class="props.color, { active: clicked, 'info-shown': infoActive }">
 
     <img :src="props.imgUrl"
          :alt="props.altText"
          draggable="false"/>
-    <LockButton v-if="phase === 'operative'"
+
+    <LockButton v-if="props.color !== 'wrong' && props.color !=='right' "
                 :id="props.id">
     </LockButton>
-    <button class="info-btn"
-            @click.stop="emit('info-clicked', props.id)">
-      <img :src="infoIcon"
-           alt="Info" />
-    </button>
-
   </div>
 </template>
 <style scoped>
