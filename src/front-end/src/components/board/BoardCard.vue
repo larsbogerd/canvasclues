@@ -90,7 +90,7 @@ function handleCardClick() {
 }
 
 .GAME_OVER{
-  border: clamp(4px, 1vh,  6px) solid var(--role-assassin);
+  opacity: 50%;
 }
 
 .right {

@@ -78,7 +78,7 @@ function expand(){
   background-color: var(--color-secondary);
   background: var(--color-secondary);
   min-height: auto;
-  width: 340px;
+  width: 17vw;
   border-radius: 20px;
   box-shadow: 0 2px 8px var(--primary-shadow);
   box-sizing: border-box;

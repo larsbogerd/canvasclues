@@ -1,9 +1,5 @@
-<script setup>
-import ButtonBase from "@/components/global-components/ButtonBase.vue";
-</script>
-
 <template>
-  <section>
+  <section class="container">
     <h1 class="modal-title">Spymaster fase</h1>
     <div class="modal-body">
       <p>Als spymaster maak je hints die meerdere kunstwerken met elkaar verbinden.</p>
@@ -15,17 +11,7 @@ import ButtonBase from "@/components/global-components/ButtonBase.vue";
       <p><strong>Paars</strong> - 3 punten</p>
       <p><strong>Blauw</strong> - 2 punten</p>
       <p><strong>Geel</strong> - 1 punten</p>
-      <p><strong>Zwart</strong> - Game over voor de operative</p>
-    </div>
-    <div class="modal-actions">
-      <ButtonBase>Begrepen</ButtonBase>
+      <p><strong>geen border</strong> - Game over voor de operative</p>
     </div>
   </section>
 </template>
-
-<style scoped>
-section{
-  width: 28vw;
-  padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
-}
-</style>

@@ -2,14 +2,13 @@
 import ArtInfo from "@/components/board/ArtInfo.vue";
 import {computed, onMounted, provide, ref, watch} from "vue";
 import GameGrid from "@/components/board/GameGrid.vue";
-import FaseLabel from "@/components/board/FaseLabel.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
-import TutorialButton from "@/components/global-components/TutorialButton.vue";
-import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
 import {finishSession, startSession} from "@/assets/composables/SessionService.js";
 import {submitGuess} from "@/assets/composables/GuessService.js";
+import GameRules from "@/components/board/GameRules.vue";
+import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 
 const modal = ref(null)
 const sessionId = ref(null);
@@ -76,21 +75,22 @@ function handleInfoClicked(id) {
 
 <template>
   <div class="operative-phase">
-    <PageHeader #tutorial-button username="V-Tek">
-      <TutorialButton>
-        <OperativeModalContent></OperativeModalContent>
-      </TutorialButton>
+    <PageHeader username="V-Tek" phase="Operative">
     </PageHeader>
     <div class="screen">
+      <GameRules class="game-rules">
+        <OperativeModalContent>
+        </OperativeModalContent>
+      </GameRules>
+
       <div class="layout">
         <GameGrid class="grid"
-                   :cards="cards"
-                   :active-info-id="activeCard?.id"
-                   phase="operative"
-                   @card-clicked="handleCardClicked"
-                   @info-clicked="handleInfoClicked"/>
+                  :cards="cards"
+                  :active-info-id="activeCard?.id"
+                  phase="operative"
+                  @card-clicked="handleCardClicked"
+                  @info-clicked="handleInfoClicked"/>
         <div class="sidebar">
-          <FaseLabel fase="Operative"/>
           <div class="hint-card" v-if="hint">
             <div class="hint-header">
               <span>{{ hint.content }}</span>
@@ -149,6 +149,10 @@ function handleInfoClicked(id) {
   justify-content: center;
   align-items: center;
 }
+.game-rules {
+  margin-top: 5vh;
+  align-self: flex-start;
+}
 
 .layout {
   --layout-height: 85vh;
@@ -178,7 +182,7 @@ function handleInfoClicked(id) {
 }
 
 .hint-card {
-  width: 340px;
+  width: 17vw;
   border-radius: 24px;
   border: 1px solid var(--button-border);
   box-shadow: 0 2px 8px var(--primary-shadow);

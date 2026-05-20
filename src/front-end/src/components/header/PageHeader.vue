@@ -4,6 +4,7 @@ import HeaderButton from "@/components/header/HeaderButton.vue";
 
 const props = defineProps({
   username: String,
+  phase: String,
 })
 
 </script>
@@ -11,8 +12,8 @@ const props = defineProps({
 <template>
   <div class="header-element">
   <header-logo/>
+    <p class="role">{{ props.phase }}</p>
     <div class="header-right">
-      <slot name="tutorial-button"></slot>
       <header-button :username="props.username"/>
     </div>
   </div>
@@ -26,11 +27,16 @@ const props = defineProps({
   height: 10vh;
   min-height: 56px;
   padding: 0 2vw;
-  background-color: var(--color-bg-base);
   border-bottom: 1px solid var(--button-border);
   z-index: 1;
 }
 
+.role {
+  font-family: var(--font-main), sans-serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  font-weight: 500;
+  color: var(--text-primary);
+}
 
 .header-right {
   display: flex;
