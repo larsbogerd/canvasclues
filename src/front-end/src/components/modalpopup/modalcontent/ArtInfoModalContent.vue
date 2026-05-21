@@ -69,7 +69,7 @@ const props = defineProps({
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 60vw;
-  max-height: 60.8vh;
+  height: 60vh;
 }
 
 .grid{
@@ -78,7 +78,8 @@ const props = defineProps({
   padding: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 64px);
   gap: 2rem;
   min-width: 27vw;
-  min-height: 50vh;
+  min-height: 0;
+  overflow: auto;
 }
 
 .title-block {
@@ -99,12 +100,13 @@ const props = defineProps({
   position: relative;
   box-shadow: 0 18px 38px var(--secondary-shadow);
   border-radius: 20px 0 0 20px;
-  padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   overflow: hidden;
+  height: 100%;
+  min-height: 0;
 }
 
 .artwork-blur {
@@ -122,11 +124,9 @@ const props = defineProps({
 
 .artwork-img {
   position: relative;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform: scale(1.15);
 }
 
 .trait-card {

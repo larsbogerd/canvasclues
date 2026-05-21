@@ -15,7 +15,7 @@ const props = defineProps({
 .fase-label {
   border-radius: 20px;
   background: var(--color-secondary);
-  width: 23vw;
+  width: 17vw;
   box-shadow: 0 2px 8px var(--primary-shadow);
   padding: 20px 24px;
   box-sizing: border-box;
