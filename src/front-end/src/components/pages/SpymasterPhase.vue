@@ -1,14 +1,12 @@
 <script setup>
 import InputField from "@/components/board/InputField.vue";
-import axios from "axios";
-import { onMounted, ref, computed } from "vue";
+import {onMounted, ref, watch} from "vue";
 import GameGrid from "@/components/board/GameGrid.vue";
 
 import {startGameCall} from "@/assets/composables/StartGameService.js";
 import {submitSpymasterTurn} from "@/assets/composables/SubmitService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
-import { useRouter } from 'vue-router'
 import PageHeader from "@/components/header/PageHeader.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import SpymasterResultModalContent from "@/components/modalpopup/modalcontent/SpymasterResultModalContent.vue";
@@ -21,7 +19,8 @@ const cards = ref([]);
 const selectedCards = ref([]);
 const activeCard = ref(null);
 const emit = defineEmits(['game-started']);
-
+const showInputErrorPopup = ref(false);
+const inputErrorMessage = ref("Dat is geen valide input.");
 let gameId;
 
 onMounted(startGame);
@@ -30,7 +29,8 @@ async function submit(input) {
   let status;
   try {
     if (!validateInput(input)) {
-      console.error("invalid hint input");
+      console.error("invalid input");
+      giveInputFeedback(input);
       return;
     }
 
@@ -73,6 +73,27 @@ function httpStatus(status) {
 function validateInput(input) {
   const regex = /^[a-zA-Z]+$/;
   return regex.test(input);
+}
+
+watch(hintInput, () => {
+  if(hintInput.value !== '' && showInputErrorPopup.value) {
+    showInputErrorPopup.value = false;
+  }
+})
+
+function giveInputFeedback(input) {
+  hintInput.value = "";
+  showInputErrorPopup.value = true;
+  const hasSpace = /\s/.test(input);
+  const hasSpecialChars = /[^a-zA-Z]/.test(input);
+
+  if (hasSpace) {
+    inputErrorMessage.value = "Een hint mag maar één woord bevatten.";
+  } else if (hasSpecialChars) {
+    inputErrorMessage.value = "Een hint mag alleen letters bevatten.";
+  } else {
+    inputErrorMessage.value = "Dat is geen valide input";
+  }
 }
 
 async function startGame() {
@@ -121,6 +142,7 @@ errorMessage.value = "";
       <SpymasterModalContent>
       </SpymasterModalContent>
     </GameRules>
+
     <div class="layout">
       <GameGrid class="grid" phase="spymaster"
                  :cards="cards"
@@ -132,11 +154,17 @@ errorMessage.value = "";
         <div class="hint-card">
           <div class="hint-body">
             <p>Maximale score: {{ selectedCards.length * 20}}</p>
-            <InputField name="Bevestig hint"
+            <div
+                v-if="showInputErrorPopup"
+                class="input-error-popup">
+              {{ inputErrorMessage }}
+            </div>
+
+              <InputField name="Bevestig hint"
                          v-on:submit="submit"
                          v-model="hintInput"
-                         label="Jouw hint"/>
-          </div>
+                         label="Jouw hint."/>
+            </div>
         </div>
 
         <ArtInfo v-if="activeCard"
@@ -217,6 +245,7 @@ errorMessage.value = "";
 }
 
 .hint-body {
+  position: relative;
   padding: 24px;
 }
 
@@ -225,6 +254,15 @@ errorMessage.value = "";
   font-size: 18px;
   margin: 0 0 14px 0;
   color: var(--text-primary);
+}
+
+.input-error-popup {
+  position: relative;
+  padding: 8px 12px;
+  color: var(--game-wrong);
+  margin-top: 4px;
+  box-sizing: border-box;
+  font-family: var(--font-secondary), sans-serif;
 }
 
 </style>
