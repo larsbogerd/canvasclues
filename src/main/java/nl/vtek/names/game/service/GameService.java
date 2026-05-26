@@ -30,16 +30,6 @@ public class GameService {
         gameRepository.save(game);
     }
 
-    public void updateMaxScore(Long gameId, Integer maxScore) {
-        if (maxScore == null) {
-            return;
-        }
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new GameNotFoundException(gameId));
-        game.setMaxScore(maxScore);
-        gameRepository.save(game);
-    }
-
     public List<GameResponse> getGameList() {
         List<Game> games = gameRepository.findByState(GameState.READY);
         return games.stream()

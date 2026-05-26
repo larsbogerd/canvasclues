@@ -30,13 +30,18 @@ async function submit(input) {
   let status;
   try {
     if (!validateInput(input)) {
-      console.error("invalid input");
+      console.error("invalid hint input");
+      return;
+    }
+
+    if (selectedCards.value.length < 2) {
+      console.error("Spymaster must select at least 2 cards");
       return;
     }
 
     status = await submitSpymasterTurn(gameId, {
       cardIds: selectedCards.value,
-      maxScore: selectedCards.value.length,
+      spyScore: selectedCards.value.length,
       hintContent: input,
     });
 
@@ -97,6 +102,11 @@ function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
 }
 
+const errorMessage = ref("");
+errorMessage.value = "";
+
+
+
 </script>
 
 <template>
@@ -121,8 +131,7 @@ function handleInfoClicked(id) {
       <div class="sidebar">
         <div class="hint-card">
           <div class="hint-body">
-            <p>Maximale score: {{ selectedCards.length }}</p>
-
+            <p>Maximale score: {{ selectedCards.length * 20}}</p>
             <InputField name="Bevestig hint"
                          v-on:submit="submit"
                          v-model="hintInput"
@@ -146,7 +155,7 @@ function handleInfoClicked(id) {
   </div>
   <BaseModal ref="modal">
       <SpymasterResultModalContent
-          :score="selectedCards.length"/>
+          :score="selectedCards.length * 20"/>
   </BaseModal>
 </template>
 

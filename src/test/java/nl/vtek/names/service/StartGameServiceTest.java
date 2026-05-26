@@ -13,8 +13,10 @@ import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
+import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
+import nl.vtek.names.game.service.ScoreService;
 import nl.vtek.names.game.service.StartGameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +43,7 @@ class StartGameServiceTest {
     @InjectMocks
     private StartGameService startGameService;
 
+
     @Test
     void startGame_createsAndSaves16Cards() {
         Game fakeGame = new Game();
@@ -59,6 +62,7 @@ class StartGameServiceTest {
         verify(gameService).createGame();
         verify(artworkService).fetchAndSaveArtworks(StartGameService.BOARD_SIZE);
         verify(cardService).buildBoard(fakeGame, fakeArtworks, StartGameService.BOARD_SIZE);
+
 
         Long gameId = result.getFirst().gameId();
         assertThat(gameId).isNotZero();
@@ -85,7 +89,7 @@ class StartGameServiceTest {
     private List<Card> buildFakeCards(Game game, List<Artwork> artworks) {
         List<Card> cards = new ArrayList<>();
         for (Artwork artwork : artworks) {
-            Card card = new Card(game, CardType.MEDIUM_SCORE);
+            Card card = new Card(game, CardType.PLAYABLE);
             card.setArtwork(artwork);
             cards.add(card);
         }

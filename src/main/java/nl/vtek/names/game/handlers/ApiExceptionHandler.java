@@ -39,12 +39,12 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(InputMismatchException.class)
     public ResponseEntity<String> handleInputMismatchException(InputMismatchException exception) {
-        String message = "Hint moet één woord zijn en mag geen cijfers bevatten";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
+
 }

@@ -39,6 +39,11 @@ public class Session {
     @Enumerated(EnumType.STRING)
     private SessionState state = SessionState.IN_PROGRESS;
 
+    private int comboStreak;
+    private int wrongGuesses;
+    private int assassinGuesses;
+
+
     public Session() {
     }
 
@@ -103,5 +108,29 @@ public class Session {
 
     public void setState(SessionState state) {
         this.state = state;
+    }
+
+    public int getComboStreak() {
+        return comboStreak;
+    }
+
+    public void setComboStreak(int comboStreak) {
+        this.comboStreak = comboStreak;
+    }
+
+    public int getWrongGuesses() {
+        return wrongGuesses;
+    }
+
+    public void setWrongGuesses(int wrongGuesses) {
+        this.wrongGuesses = wrongGuesses;
+    }
+
+    public int getAssassinGuesses() {
+        return assassinGuesses;
+    }
+
+    public void setAssassinGuesses(int assassinGuesses) {
+        this.assassinGuesses = assassinGuesses;
     }
 }

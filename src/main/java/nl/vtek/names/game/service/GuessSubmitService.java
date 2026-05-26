@@ -15,13 +15,16 @@ public class GuessSubmitService {
     private final SessionService sessionService;
     private final CardService cardService;
     private final ArtworkService artworkService;
+    private final ScoreService scoreService;
 
     public GuessSubmitService(SessionService sessionService,
                               CardService cardService,
-                              ArtworkService artworkService) {
+                              ArtworkService artworkService,
+                              ScoreService scoreService) {
         this.sessionService = sessionService;
         this.cardService = cardService;
         this.artworkService = artworkService;
+        this.scoreService = scoreService;
     }
 
     @Transactional
@@ -31,9 +34,19 @@ public class GuessSubmitService {
 
         boolean correct = card.isSpymasterPick();
         
-        sessionService.recordGuess(session, correct);
+        scoreService.recordGuess(session, card);
         artworkService.recordGuessUsage(card.getArtwork(), correct);
 
-        return new GuessSubmitResponse(correct, session.getScore());
-    }
+        if (session.getAssassinGuesses() >= 2) {
+            sessionService.finish(sessionId);
+        }
+
+        return new GuessSubmitResponse(
+                correct,
+                session.getScore(),
+                session.getComboStreak(),
+                session.getWrongGuesses(),
+                session.getAssassinGuesses(),
+                card.getType().name()
+        );    }
 }

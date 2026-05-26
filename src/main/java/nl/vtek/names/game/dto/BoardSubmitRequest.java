@@ -5,6 +5,6 @@ import java.util.UUID;
 
 public record BoardSubmitRequest(
         List<UUID> cardIds,
-        Integer maxScore,
+        Integer spyScore,
         String hintContent
 ) {}

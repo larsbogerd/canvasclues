@@ -15,7 +15,7 @@ public class GameMapper {
         return new GameResponse(
                 game.getId(),
                 hint,
-                game.getMaxScore(),
+                game.getSpyScore(),
                 game.getCreatedAt(),
                 game.getPlayCount()
         );

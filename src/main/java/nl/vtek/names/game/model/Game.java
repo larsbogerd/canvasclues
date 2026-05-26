@@ -22,7 +22,7 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameState state = GameState.CREATING;
 
-    private int maxScore;
+    private int spyScore;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -38,10 +38,10 @@ public class Game {
     public Game() {
     }
 
-    public Game(Long id, GameState state, int maxScore, LocalDateTime createdAt, int playCount) {
+    public Game(Long id, GameState state, int spyScore, LocalDateTime createdAt, int playCount) {
         this.id = id;
         this.state = state;
-        this.maxScore = maxScore;
+        this.spyScore = spyScore;
         this.createdAt = createdAt;
         this.playCount = playCount;
     }
@@ -62,12 +62,12 @@ public class Game {
         this.state = state;
     }
 
-    public int getMaxScore() {
-        return maxScore;
+    public int getSpyScore() {
+        return spyScore;
     }
 
-    public void setMaxScore(int maxScore) {
-        this.maxScore = maxScore;
+    public void setSpyScore(int spyScore) {
+        this.spyScore = spyScore;
     }
 
     public LocalDateTime getCreatedAt() {

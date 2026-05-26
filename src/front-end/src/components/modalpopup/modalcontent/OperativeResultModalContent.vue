@@ -7,6 +7,7 @@ const props = defineProps({
   amount: Number,
   selectedAmount: Number,
   correctAmount: Number,
+  gameOver: Boolean,
 });
 
 function RouteToSpymaster() {
@@ -20,7 +21,9 @@ function ReloadGame() {
 
 <template>
   <section>
-    <h1 class="modal-title">Clue voltooid!</h1>
+    <h1 class="modal-title" v-if="props.gameOver">Game Over!</h1>
+    <p class="modal-detail" v-if="props.gameOver">Je hebt 2 foute gokken gemaakt!</p>
+    <h1 class="modal-title" v-else>Clue voltooid!</h1>
     <div class="modal-stats">
       <div class="modal-stat">
         <div class="modal-stat-value">{{props.correctAmount}}/{{props.amount}}</div>

@@ -10,28 +10,31 @@ import nl.vtek.names.game.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
 public class CardService {
 
     private final CardRepository cardRepository;
-    private final Random randomizer = new Random();
 
     public CardService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
 
     public List<Card> buildBoard(Game game, List<Artwork> artworks, int boardSize) {
-        int[] gameOverLoop = {0, randomizer.nextInt(boardSize)};
+
+        List<CardType> cardTypes = cardRandomizer(boardSize);
+        int counter = 0;
+
         List<Card> cards = new ArrayList<>();
         for (Artwork artwork : artworks) {
-            Card card = new Card(game, cardTypeRandomizer(gameOverLoop));
+            Card card = new Card(game, cardTypes.get(counter));
             card.setArtwork(artwork);
             cards.add(card);
-            gameOverLoop[0]++;
+            counter++;
         }
         sendCardsToDatabase(cards);
         return cards;
@@ -41,16 +44,27 @@ public class CardService {
         cardRepository.saveAll(deck);
     }
 
-    private CardType cardTypeRandomizer(int[] assassinPosition) {
-        CardType[] possibleTypeValues = CardType.values();
-        int randomNumber = randomizer.nextInt(possibleTypeValues.length - 1);
-        return assassinPosition[0] == assassinPosition[1] ? possibleTypeValues[3] : possibleTypeValues[randomNumber];
+
+    private List<CardType> cardRandomizer(int boardSize) {
+        List<CardType> cardTypes = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            cardTypes.add(CardType.PLAYABLE);
+        }
+        for (int i = 0; i < 4; i++) {
+            cardTypes.add(CardType.ASSASSIN);
+        }
+        Collections.shuffle(cardTypes);
+        return cardTypes;
     }
 
     public void updateCards(List<UUID> cardIds, Boolean isSpymasterPick) {
         List<Card> cards = cardRepository.findAllById(cardIds);
         for (Card card : cards) {
             if (isSpymasterPick != null) {
+                if (isSpymasterPick && card.getType() == CardType.ASSASSIN) {
+                    throw new InputMismatchException("Wrong Card Type");
+                }
+
                 card.setSpymasterPick(isSpymasterPick);
             }
         }

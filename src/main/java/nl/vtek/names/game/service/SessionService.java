@@ -54,15 +54,13 @@ public class SessionService {
         return session;
     }
 
-    public void recordGuess(Session session, boolean correct) {
-        if (correct) {
-            session.setScore(session.getScore() + 1);
-            sessionRepository.save(session);
-        }
-    }
-
     public void finish(UUID sessionId) {
         Session session = getActiveSession(sessionId);
+
+        if (session.getWrongGuesses() == 0 && session.getAssassinGuesses() == 0) {
+            session.setScore(session.getScore() + 20);
+        }
+
         session.setFinishedAt(LocalDateTime.now());
         session.setState(SessionState.FINISHED);
         sessionRepository.save(session);

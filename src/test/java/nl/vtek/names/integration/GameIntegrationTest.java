@@ -128,7 +128,7 @@ class GameIntegrationTest {
         Long gameId = returnedCards.getFirst().gameId();
 
         String submitBody = """
-                { "cardIds": [], "maxScore": 0, "hintContent": "testclue" }
+                { "cardIds": [], "spyScore": 0, "hintContent": "testclue" }
                 """;
 
         mockMvc.perform(post("/api/v1/game/%d/submit".formatted(gameId))

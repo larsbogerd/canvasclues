@@ -88,7 +88,7 @@ API errors follow a small polymorphic hierarchy in `game.exception`:
 - `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`. `state` (`SessionState` enum: `IN_PROGRESS` / `FINISHED`) starts at `IN_PROGRESS` and flips to `FINISHED` when the Operative ends their attempt. `score` is incremented server-side on each correct guess via the per-guess endpoint, so it's authoritative without the client ever sending a total. `finishedAt` is stamped when `finish` is called.
 - `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
-- `CardType` currently supports `HIGH_SCORE`, `MEDIUM_SCORE`, `LOW_SCORE`, and `GAME_OVER`.
+- `CardType` currently supports `ASSASIN`, `PLAYABLE`.
 - `SessionState` currently supports `IN_PROGRESS` and `FINISHED`.
 
 `Artwork` was split off from `Card` so the same artwork can accumulate usage stats.

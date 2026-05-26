@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record GameResponse(
         Long gameId,
         String hint,
-        int maxScore,
+        int spyScore,
         LocalDateTime createdAt,
         int playCount
 ) {}

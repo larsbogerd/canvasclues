@@ -18,7 +18,7 @@ const sortedList = computed(() => {
       case 'popular':
         return b.playCount - a.playCount;
       case 'difficulty':
-        return b.maxScore - a.maxScore;
+        return b.spyScore - a.spyScore;
       default:
         return 0;
     }
@@ -67,7 +67,7 @@ onMounted(async () => {list.value = await fetchGameListService()})
                               :game-id="card.gameId"
                               :title="card.hint"
                               user="John Doe" game-mode="Classic"
-                              :score="card.maxScore"
+                              :score="card.spyScore"
                               :key="index"/>
           </div>
         </div>

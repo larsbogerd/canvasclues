@@ -1,10 +1,11 @@
 <template>
     <h1 class="modal-title">Operative fase</h1>
     <div class="modal-body">
-      <p>Als operative probeer je te ontdekken welke kunstwerken bij de hint van de spymaster horen.</p>
-      <p>Klik op een kaart om je keuze te maken en bevestig je gok om het resultaat te onthullen.
-      Hoe meer juiste kunstwerken je vindt, hoe meer punten jij en de spymaster verdienen.
-      Maar pas op voor de assasin! Raak je deze zwarte kaart, dan is het spel meteen voorbij.</p>
+      <p>Als operative raad je kunstwerken op basis van de hint van de spymaster. Kies de juiste kunstwerken zonder een assassin te raken.</p>
+
+      <p>Elke correcte gok levert 20 punten op, vermenigvuldigd met je combo multiplier. Hoe meer je op rij raadt, hoe hoger de multiplier.</p>
+
+      <p>Twee assassin-treffers betekenen game over. Fouten resetten je multiplier maar het spel gaat door.</p>
     </div>
 </template>
 

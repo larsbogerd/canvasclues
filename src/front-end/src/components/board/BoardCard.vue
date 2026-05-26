@@ -77,20 +77,19 @@ function handleCardClick() {
     box-shadow 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.HIGH_SCORE{
-  border: clamp(4px, 1vh, 6px) solid var(--game-score-high);
+.PLAYABLE{
+  border: clamp(2px, 1vh,  4px) solid rgba(0, 0, 255, 0);
+  cursor: pointer;
 }
 
-.MEDIUM_SCORE{
-  border: clamp(4px, 1vh,  6px) solid var(--game-score-medium);
+.ASSASSIN {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 30%;
 }
 
-.LOW_SCORE{
-  border: clamp(4px, 1vh,  6px) solid var(--game-score-low);
-}
-
-.GAME_OVER{
-  opacity: 50%;
+.ASSASSIN .info-btn{
+  pointer-events: auto;
 }
 
 .right {
@@ -99,6 +98,15 @@ function handleCardClick() {
 
 .wrong {
   border: clamp(4px, 1vh, 12px) solid var(--game-wrong) !important;
+}
+
+.wrongassassin {
+  border: clamp(4px, 1vh, 12px) solid #000 !important;
+  background: #000;
+}
+
+.wrongassassin img {
+  opacity: 0.15;
 }
 
 .active {

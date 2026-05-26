@@ -18,6 +18,9 @@ const selectedCards = ref([]);
 const activeCard = ref(null);
 const amount = ref(0);
 const score = ref(0);
+const combo = ref(0);
+const assassinGuesses = ref(0);
+const wrongGuesses = ref(0);
 const correctAmount = computed(() =>
   cards.value.filter(card => card.color === 'right').length
 );
@@ -40,14 +43,28 @@ async function lockIn(cardId) {
   if (!result) return;
   const cardToUpdate = cards.value.find(card => card.id === cardId);
   if (cardToUpdate) {
-    cardToUpdate.color = result.correct ? 'right' : 'wrong';
+    cardToUpdate.color = result.correct ? 'right' : (result.cardType === 'ASSASSIN' ? 'wrongassassin' : 'wrong');
   }
   score.value = result.score;
+  combo.value = result.comboStreak;
+  wrongGuesses.value = result.wrongGuesses;
+  assassinGuesses.value = result.assassinGuesses;
+  console.log('result:', result);
+  tooManyAssassinGuesses();
+}
+
+function tooManyAssassinGuesses() {
+  if (assassinGuesses.value >= 2) {
+    setTimeout(submit, 800);
+  }
 }
 
 async function submit() {
   try {
     await finishSession(sessionId.value);
+    if (wrongGuesses.value === 0) {
+      score.value += 20;
+    }
     modal.value.show();
   } catch (error) {
     console.log(error);
@@ -67,6 +84,13 @@ function handleCardClicked(id, clicked) {
     selectedCards.value = selectedCards.value.filter(cardId => cardId !== id);
   }
 }
+
+const comboMultiplier = computed(() => {
+  if (combo.value >= 4) return '3';
+  if (combo.value === 3) return '2';
+  if (combo.value === 2) return '1.5';
+  return '1';
+});
 
 function handleInfoClicked(id) {
   activeCard.value = cards.value.find(c => c.id === id) ?? null;
@@ -100,6 +124,8 @@ function handleInfoClicked(id) {
               <p>Nog {{ amount - correctAmount }} kunstwerk(en) te vinden</p>
               <p>Geselecteerd: {{ selectedCards.length }}</p>
               <p>Score: {{ score }}</p>
+              <p>Combo: ×{{ comboMultiplier }}</p>
+              <p>Assassin gokken: {{ assassinGuesses }} </p>
               <button class="end-turn-btn" @click="submit">Beëindig poging</button>
             </div>
           </div>
@@ -126,7 +152,8 @@ function handleInfoClicked(id) {
     <OperativeResultModalContent :correctAmount="correctAmount"
                                  :amount="amount"
                                  :score="score"
-                                 :selectedAmount="selectedCards.length">
+                                 :selectedAmount="selectedCards.length"
+                                 :gameOver="assassinGuesses >= 2">
     </OperativeResultModalContent>
   </BaseModal>
 </template>
