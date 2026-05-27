@@ -96,14 +96,12 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 ---
 
 ## Back-end Connection
-
-The current views call the API directly with `axios` against:
-
+the backend is called with axios through a proxy on the /api uri and redirected to the following ip
 ```text
-http://localhost:8082/api/v1
+http://localhost:8082
 ```
 
-If the back-end host or port changes, update the request URLs in the page components.
+If the back-end host or port changes, update the request URLs in the vite config.
 
 ---
 

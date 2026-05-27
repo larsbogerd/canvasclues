@@ -1,9 +1,9 @@
-import axios from "axios";
+import ApiClient from "@/assets/composables/ApiClient.js";
 
 export async function submitGuess(sessionId, cardId) {
     try {
-        const response = await axios.post(
-            `http://localhost:8082/api/v1/session/${sessionId}/guess/${cardId}`
+        const response = await ApiClient.post(
+            `/session/${sessionId}/guess/${cardId}`
         );
         return response.data;
     } catch (error) {

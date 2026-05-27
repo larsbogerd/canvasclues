@@ -1,7 +1,7 @@
-import axios from "axios";
+import ApiClient from "@/assets/composables/ApiClient.js";
 
 export async function fetchGameListService() {
-    const response = await axios.get(`http://localhost:8082/api/v1/game/list`);
+    const response = await ApiClient.get(`/game/list`);
     console.log(response);
     return response.data;
 }

@@ -1,8 +1,8 @@
- import axios from "axios";
+import ApiClient from "@/assets/composables/ApiClient.js";
 
  export async function startGameCall() {
    try {
-     const response = await axios.post('http://localhost:8082/api/v1/game/start');
+     const response = await ApiClient.post('/game/start');
      return response.data;
    } catch(error) {
      console.log(error);

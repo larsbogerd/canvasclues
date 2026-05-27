@@ -1,14 +1,13 @@
-import axios from "axios";
+import ApiClient from "@/assets/composables/ApiClient.js";
 
 export async function submitSpymasterTurn(gameId, { cardIds, spyScore, hintContent }) {
     try {
-        const response = await axios.post(
-            `http://localhost:8082/api/v1/game/${gameId}/submit`,
-            { cardIds, spyScore, hintContent}
+        const response = await ApiClient.post(
+            `/game/${gameId}/submit`,
+            { cardIds, spyScore, hintContent }
         );
         console.log("Submitted spymaster turn:", response.status);
         return response.status;
-
     } catch (error) {
         console.log("FULL RESPONSE:", error.response);
         if (error.response) {
