@@ -1,12 +1,18 @@
 <template>
   <section class="container">
-    <h1 class="modal-title">Spymaster fase</h1>
+    <h1 class="modal-title">Curator fase</h1>
     <div class="modal-body">
-      <p>Als spymaster bedenk je een hint die meerdere kunstwerken verbindt. Leid de operatives naar de juiste kunst zonder dat ze een assassin raken.</p>
+      <p>
+        Als curator geef je een hint die meerdere kunstwerken verbindt en leid je bezoekers naar de juiste kaarten, zonder de vervalste (vervaagde) kunstwerken te raken.
+      </p>
 
-      <p>Elke geselecteerde kaart is 20 punten waard. Hoe meer kaarten, hoe hoger de score, maar ook het risico. 4 van de 16 kaarten zijn assassins.</p>
+      <p>
+        Tijdens de bezoekersfase zijn de vervalste kunstwerken niet zichtbaar. Bezoekers vertrouwen volledig op jouw hints. Raakt de bezoeker twee vervalste kaarten, dan eindigt het spel.
+      </p>
 
-      <p>Correcte gokken van de operative verhogen jouw score. Fouten en assassin-treffers verlagen hem.</p>
+      <p>
+        Elke juiste kaart is 20 punten waard: meer kaarten per hint betekent hogere score én meer risico.
+      </p>
     </div>
   </section>
 </template>

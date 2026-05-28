@@ -11,7 +11,7 @@ import router from "@/router.js";
               @click="router.push('/')">
         &larr; Terug naar start
       </button>
-      <h1 class="text-color">Hallo, naam</h1>
+      <h1 class="text-color">Hallo, Admin</h1>
       <p class="subtitle">Inzichten & statistieken</p>
       <div class="cards">
         <button class="card"

@@ -133,7 +133,7 @@ errorMessage.value = "";
 <template>
   <div class="spymaster-phase">
     <div class="header">
-      <PageHeader username="V-Tek" phase="Spymaster">
+      <PageHeader username="ClueCollector" phase="Curator">
       </PageHeader>
     </div>
 

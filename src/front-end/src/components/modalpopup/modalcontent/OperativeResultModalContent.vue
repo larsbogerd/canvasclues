@@ -22,7 +22,7 @@ function ReloadGame() {
 <template>
   <section>
     <h1 class="modal-title" v-if="props.gameOver">Game Over!</h1>
-    <p class="modal-detail" v-if="props.gameOver">Je hebt 2 foute gokken gemaakt!</p>
+    <p class="modal-detail" v-if="props.gameOver">Je hebt 2 vervalste kunstwerken geraakt. Het spel eindigt hier.</p>
     <h1 class="modal-title" v-else>Clue voltooid!</h1>
     <div class="modal-stats">
       <div class="modal-stat">
@@ -37,7 +37,7 @@ function ReloadGame() {
     <p class="modal-detail">Geselecteerde kaarten: {{props.selectedAmount}}</p>
     <hr class="modal-divider" />
     <div class="modal-actions">
-      <ButtonBase @click="RouteToSpymaster">Speel als spymaster</ButtonBase>
+      <ButtonBase @click="RouteToSpymaster">Speel als curator</ButtonBase>
       <ButtonBase @click="ReloadGame">Nieuwe clue</ButtonBase>
     </div>
   </section>

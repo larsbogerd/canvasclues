@@ -1,8 +1,8 @@
 <script setup>
 import router from "@/router.js";
 import GameHubButton from "@/components/hubs/gamehub/GameHubButton.vue";
-import operativeImg from "@/assets/images/icons/Operative.png";
-import spymasterImg from "@/assets/images/icons/Spymaster.png";
+import operativeImg from "@/assets/images/icons/Visitor2.png";
+import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
 function goToSpyPhase() {
@@ -17,23 +17,23 @@ function goToOperativeHub() {
 
 <template>
   <div class="game-hub-page">
-    <PageHeader username="ClueKiller12">
+    <PageHeader username="ClueCollector">
     </PageHeader>
     <div class="game-hub">
       <h1 class="main-text">Wat wil je doen?</h1>
       <div class="game-hub-button">
         <GameHubButton role-name="spymaster"
                        eyeBrow="Creëer"
-                       Phase="Spymaster"
-                       sub-text="Maak een nieuwe puzzel en schrijf hints voor operatives"
+                       Phase="Curator"
+                       sub-text="Stel een nieuwe collectie samen en begeleid bezoekers met jouw hints"
                     :imgUrl="spymasterImg"
                        altText="Spymaster"
                        @button-click="goToSpyPhase"/>
 
-        <GameHubButton role-name="operative"
+        <GameHubButton role-name="Bezoeker"
                        eyeBrow="Ontcijfer"
-                       Phase="Operative"
-                       sub-text="Speel een bestaande puzzel en probeer de hint te ontcijferen"
+                       Phase="Bezoeker"
+                       sub-text="Betreed een bestaande collectie en ontcijfer de hint van de curator"
                     :imgUrl="operativeImg"
                        altText="Operative"
                        @button-click="goToOperativeHub" />

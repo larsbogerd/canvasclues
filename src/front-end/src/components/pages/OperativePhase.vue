@@ -97,7 +97,7 @@ function handleInfoClicked(id) {
 
 <template>
   <div class="operative-phase">
-    <PageHeader username="V-Tek" phase="Operative">
+    <PageHeader username="ClueCollector" phase="Bezoeker">
     </PageHeader>
     <div class="screen">
       <GameRules class="game-rules">
@@ -123,7 +123,7 @@ function handleInfoClicked(id) {
               <p>Geselecteerd: {{ selectedCards.length }}</p>
               <p>Score: {{ score }}</p>
               <p>Combo: ×{{ comboMultiplier }}</p>
-              <p>Assassin gokken: {{ assassinGuesses }} </p>
+              <p>Vervalser geraakt: {{ assassinGuesses }} </p>
               <button class="end-turn-btn" @click="submit">Beëindig poging</button>
             </div>
           </div>

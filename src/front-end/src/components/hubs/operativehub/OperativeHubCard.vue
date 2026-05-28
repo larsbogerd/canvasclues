@@ -15,7 +15,6 @@ const props = defineProps({
   <div class="game-hub-card">
     <div class="text-block">
       <p class="hub-title">{{ props.title }}</p>
-      <p class="hub-description">Spymaster: {{ props.user }}</p>
       <p class="hub-description">Gamemode: {{ props.gameMode }}</p>
       <p class="hub-description">Best score: {{ props.score }}</p>
       <OperativeHubButton :game-id="props.gameId" />
