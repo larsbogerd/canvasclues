@@ -12,6 +12,9 @@ import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import SpymasterResultModalContent from "@/components/modalpopup/modalcontent/SpymasterResultModalContent.vue";
 import GameRules from "@/components/board/GameRules.vue";
 import SpymasterModalContent from "@/components/modalpopup/modalcontent/SpymasterModalContent.vue";
+import HintCard from "@/components/board/HintCard.vue";
+import SpymasterHintCardHeaderContent from "@/components/board/hintCardContent/SpymasterHintCardHeaderContent.vue";
+import SpymasterHintCardContent from "@/components/board/hintCardContent/SpymasterHintCardContent.vue";
 
 const hintInput = ref("");
 const modal = ref(null);
@@ -151,21 +154,31 @@ errorMessage.value = "";
                  @info-clicked="handleInfoClicked"/>
 
       <div class="sidebar">
-        <div class="hint-card">
-          <div class="hint-body">
-            <p>Maximale score: {{ selectedCards.length * 20}}</p>
-            <div
-                v-if="showInputErrorPopup"
-                class="input-error-popup">
-              {{ inputErrorMessage }}
-            </div>
+        <HintCard>
+          <template #hint-header>
+              <SpymasterHintCardHeaderContent
+                :score="selectedCards.length * 20">
+              </SpymasterHintCardHeaderContent>
+          </template>
+          <template #hint-body>
+            <div class="hint-body">
+
+              <SpymasterHintCardContent
+                  :showInputErrorPopup="showInputErrorPopup"
+                  :inputErrorMessage="inputErrorMessage"
+                  v-model="hintInput"
+                  @submit="submit"
+              >
+              </SpymasterHintCardContent>
 
               <InputField name="Bevestig hint"
-                         v-on:submit="submit"
-                         v-model="hintInput"
-                         label="Jouw hint."/>
+                          v-on:submit="submit"
+                          v-model="hintInput"
+                          label="Jouw hint."/>
+
             </div>
-        </div>
+          </template>
+        </HintCard>
 
         <ArtInfo v-if="activeCard"
                  :title="activeCard.title"
@@ -236,13 +249,6 @@ errorMessage.value = "";
   gap: 14px;
 }
 
-.hint-card {
-  width: 17vw;
-  border-radius: 24px;
-  border: 1px solid var(--button-border);
-  box-shadow: 0 2px 8px var(--primary-shadow);
-  background: var(--color-secondary);
-}
 
 .hint-body {
   position: relative;
@@ -253,16 +259,6 @@ errorMessage.value = "";
   font-family: var(--font-secondary),sans-serif;
   font-size: 18px;
   margin: 0 0 14px 0;
-  color: var(--text-primary);
-}
-
-.input-error-popup {
-  position: relative;
-  padding: 8px 12px;
-  color: var(--game-wrong);
-  margin-top: 4px;
-  box-sizing: border-box;
-  font-family: var(--font-secondary), sans-serif;
 }
 
 </style>

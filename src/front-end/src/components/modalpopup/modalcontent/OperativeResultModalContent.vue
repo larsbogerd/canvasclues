@@ -30,11 +30,10 @@ function ReloadGame() {
         <div class="modal-stat-label">Gevonden</div>
       </div>
       <div class="modal-stat">
-        <div class="modal-stat-value">{{props.score}}</div>
+        <div class="modal-stat-value score">{{props.score}}</div>
         <div class="modal-stat-label">Score</div>
       </div>
     </div>
-    <p class="modal-detail">Geselecteerde kaarten: {{props.selectedAmount}}</p>
     <hr class="modal-divider" />
     <div class="modal-actions">
       <ButtonBase @click="RouteToSpymaster">Speel als curator</ButtonBase>

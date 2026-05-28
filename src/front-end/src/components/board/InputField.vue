@@ -18,6 +18,7 @@ function buttonClick() {
 </script>
 <template>
   <div class="text-field">
+    <form class="fields" @submit.prevent="buttonClick">
     <div class="fields">
       <div class="input-field"
            :class="{ 'has-value': (modelValue?.length ?? 0) > 0 }">
@@ -39,7 +40,9 @@ function buttonClick() {
         {{ name }}
       </button>
     </div>
+  </form>
   </div>
+
 </template>
 
 <style scoped>

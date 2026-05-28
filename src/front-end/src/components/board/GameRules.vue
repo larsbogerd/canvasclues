@@ -5,17 +5,19 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="fase-label">
+  <div class="game-rules">
     <slot>
     </slot>
   </div>
 </template>
 
 <style scoped>
-.fase-label {
+.game-rules {
   border-radius: 20px;
   background: var(--color-secondary);
   width: 17vw;
+  min-width: 280px;
+  max-width: 400px;
   box-shadow: 0 2px 8px var(--primary-shadow);
   padding: 20px 24px;
   box-sizing: border-box;

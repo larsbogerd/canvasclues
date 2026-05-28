@@ -84,3 +84,7 @@
 .modal-actions button:not(:only-child) {
     flex: 1;
 }
+
+.score{
+    color: var(--color-primary);
+}
