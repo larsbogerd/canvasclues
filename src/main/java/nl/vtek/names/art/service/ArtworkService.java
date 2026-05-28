@@ -99,7 +99,7 @@ public class ArtworkService {
     }
 
     public List<ArtworkStatsListResponse> getArtworkStatsList() {
-        return artworkRepository.findAll().stream()
+        return artworkRepository.findByFirstUsedAtNotNull().stream()
                 .map(artworkMapper::toStatsResponse)
                 .toList();
     }

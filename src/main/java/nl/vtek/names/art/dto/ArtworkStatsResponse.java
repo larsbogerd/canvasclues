@@ -17,6 +17,7 @@ public record ArtworkStatsResponse(
         int timesCorrectGuess,
         int timesBadGuess,
         Double pickPercentage,
+        Double guessPercentage,
         LocalDateTime firstUsedAt,
         LocalDateTime lastUsedAt
 ) {}

@@ -59,22 +59,26 @@ function formatDate(iso) {
             <p class="artist">{{ artwork.artistDisplay }}</p>
           </header>
 
-          <div class="stat-grid">
-            <div class="stat">
-              <p class="stat-label">Getoond</p>
-              <p class="stat-value">{{ artwork.timesLoaded }}</p>
+          <div class="stat-row">
+            <div class="stat-card">
+              <p class="stat-card-label">Pick-ratio</p>
+              <p class="stat-card-value">
+                {{ artwork.pickPercentage != null ? `${artwork.pickPercentage}%` : "—" }}
+              </p>
+              <div class="stat-card-breakdown">
+                <span><strong>{{ artwork.timesLoaded }}</strong> x getoond</span>
+                <span><strong>{{ artwork.timesSpymasterPick }}</strong> x gekozen</span>
+              </div>
             </div>
-            <div class="stat">
-              <p class="stat-label">Gekozen</p>
-              <p class="stat-value">{{ artwork.timesSpymasterPick }}</p>
-            </div>
-            <div class="stat">
-              <p class="stat-label">Goed geraden</p>
-              <p class="stat-value">{{ artwork.timesCorrectGuess }}</p>
-            </div>
-            <div class="stat">
-              <p class="stat-label">Fout geraden</p>
-              <p class="stat-value">{{ artwork.timesBadGuess }}</p>
+            <div class="stat-card">
+              <p class="stat-card-label">Raadbaarheid</p>
+              <p class="stat-card-value">
+                {{ artwork.guessPercentage != null ? `${artwork.guessPercentage}%` : "—" }}
+              </p>
+              <div class="stat-card-breakdown">
+                <span><strong>{{ artwork.timesCorrectGuess }}</strong> x goed</span>
+                <span><strong>{{ artwork.timesBadGuess }}</strong> x fout</span>
+              </div>
             </div>
           </div>
 
@@ -250,33 +254,32 @@ function formatDate(iso) {
   white-space: pre-line;
 }
 
-/* ---- Stat grid ---- */
-.stat-grid {
+/* ---- Stat cards ---- */
+.stat-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  background: var(--color-secondary);
-  border: 1px solid var(--button-border);
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 18px 38px var(--secondary-shadow);
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 @media (max-width: 520px) {
-  .stat-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .stat-row {
+    grid-template-columns: 1fr;
   }
 }
 
-.stat {
+.stat-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 8px 4px;
+  gap: 8px;
+  background: var(--color-secondary);
+  border: 1px solid var(--button-border);
+  border-radius: 20px;
+  padding: 18px 16px;
+  box-shadow: 0 18px 38px var(--secondary-shadow);
 }
 
-.stat-label {
+.stat-card-label {
   font-family: var(--font-secondary), sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
@@ -286,12 +289,27 @@ function formatDate(iso) {
   margin: 0;
 }
 
-.stat-value {
+.stat-card-value {
   font-family: var(--font-main), serif;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 500;
   color: var(--text-primary);
   margin: 0;
+  line-height: 1;
+}
+
+.stat-card-breakdown {
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-secondary), sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  opacity: 0.7;
+}
+
+.stat-card-breakdown strong {
+  font-weight: 600;
+  opacity: 1;
 }
 
 /* ---- Traits card ---- */

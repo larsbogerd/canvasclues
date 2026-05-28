@@ -14,6 +14,47 @@ const search = ref("");
 const currentPage = ref(1);
 const pageSize = 20;
 
+const sortKey = ref(null);
+const sortDir = ref("asc");
+
+const textSortKeys = new Set(["title", "artistDisplay"]);
+
+function defaultDirFor(key) {
+  return textSortKeys.has(key) ? "asc" : "desc";
+}
+
+function toggleSort(key) {
+  if (sortKey.value === key) {
+    const initial = defaultDirFor(key);
+    if (sortDir.value === initial) {
+      sortDir.value = initial === "asc" ? "desc" : "asc";
+    } else {
+      sortKey.value = null;
+      sortDir.value = "asc";
+    }
+  } else {
+    sortKey.value = key;
+    sortDir.value = defaultDirFor(key);
+  }
+  currentPage.value = 1;
+}
+
+function compareValues(a, b) {
+  if (a == null && b == null) return 0;
+  if (a == null) return 1;
+  if (b == null) return -1;
+
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b;
+  }
+
+  if (sortKey.value === "lastUsedAt" || sortKey.value === "firstUsedAt") {
+    return new Date(a) - new Date(b);
+  }
+
+  return String(a).localeCompare(String(b), "nl", { sensitivity: "base" });
+}
+
 function normalize(value) {
   return String(value ?? "").toLowerCase();
 }
@@ -29,14 +70,29 @@ const filteredRows = computed(() => {
   );
 });
 
+const sortedRows = computed(() => {
+  if (!sortKey.value) return filteredRows.value;
+
+  const dir = sortDir.value === "asc" ? 1 : -1;
+  return [...filteredRows.value].sort((a, b) => {
+    const av = a[sortKey.value];
+    const bv = b[sortKey.value];
+    // nulls always last, regardless of direction
+    if (av == null && bv == null) return 0;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return compareValues(av, bv) * dir;
+  });
+});
+
 const totalPages = computed(() => {
-  return Math.max(1, Math.ceil(filteredRows.value.length / pageSize));
+  return Math.max(1, Math.ceil(sortedRows.value.length / pageSize));
 });
 
 const paginatedRows = computed(() => {
   const start = (currentPage.value - 1) * pageSize;
   const end = start + pageSize;
-  return filteredRows.value.slice(start, end);
+  return sortedRows.value.slice(start, end);
 });
 
 watch(filteredRows, () => {
@@ -59,8 +115,8 @@ function formatPropRows(){
     row[0] = row[0].replace(/[,;]/g,"");
     row[1] = row[1].replace(/\n/g," ");
     row[1] = row[1].replace(/[,;]/g,"");
-    row[7] = formatDate(row[7]).replace(/[,;]/g,"");
     row[8] = formatDate(row[8]).replace(/[,;]/g,"");
+    row[9] = formatDate(row[9]).replace(/[,;]/g,"");
     return row;
   });
 
@@ -123,7 +179,7 @@ function thumbUrl(id) {
         <span class="result-count">{{ filteredRows.length }} resultaten</span>
       </div>
 
-      <button class="pdf-button"
+      <button class="export-button"
               @click="exportDataToCSV()">
         Exporteren als CSV
       </button>
@@ -140,12 +196,35 @@ function thumbUrl(id) {
         <thead>
         <tr>
           <th class="thumb-col"></th>
-          <th>Titel</th>
-          <th>Kunstenaar</th>
-          <th title="Hoe vaak dit kunstwerk in boards is verschenen">Getoond</th>
-          <th title="Hoe vaak dit kunstwerk gekozen is door de spymaster">Gekozen</th>
-          <th title="Het percentage van boards waarin dit artwork gekozen is voor de hint">Pick ratio</th>
-          <th>Laatst gebruikt</th>
+          <th class="sortable" :class="{ active: sortKey === 'title' }" @click="toggleSort('title')">
+            Titel<span class="sort-indicator">{{ sortKey === 'title' ? (sortDir === 'asc' ? '▲' : '▼') : '' }}</span>
+          </th>
+          <th class="sortable" :class="{ active: sortKey === 'artistDisplay' }" @click="toggleSort('artistDisplay')">
+            Kunstenaar<span
+              class="sort-indicator">{{ sortKey === 'artistDisplay' ? (sortDir === 'asc' ? '▲' : '▼') : '' }}</span>
+          </th>
+          <th class="sortable" :class="{ active: sortKey === 'timesLoaded' }" @click="toggleSort('timesLoaded')"
+              title="Hoe vaak dit kunstwerk in gegenereerde borden voorkomt">
+            Voorgekomen<span class="sort-indicator">{{
+              sortKey === 'timesLoaded' ? (sortDir === 'asc' ? '▲' : '▼') : ''
+            }}</span>
+          </th>
+          <th class="sortable" :class="{ active: sortKey === 'pickPercentage' }" @click="toggleSort('pickPercentage')"
+              title="Percentage van boards waarin dit artwork door de spymaster is gekozen">
+            Pick-ratio<span class="sort-indicator">{{
+              sortKey === 'pickPercentage' ? (sortDir === 'asc' ? '▲' : '▼') : ''
+            }}</span>
+          </th>
+          <th class="sortable" :class="{ active: sortKey === 'guessPercentage' }" @click="toggleSort('guessPercentage')"
+              title="Percentage van de keren dat dit artwork correct geraden is">
+            Raadbaarheid<span
+              class="sort-indicator">{{ sortKey === 'guessPercentage' ? (sortDir === 'asc' ? '▲' : '▼') : '' }}</span>
+          </th>
+          <th class="sortable" :class="{ active: sortKey === 'lastUsedAt' }" @click="toggleSort('lastUsedAt')"
+              title="Datum waarop dit artwork voor het laatst op een bord verscheen">
+            Laatst op bord<span
+              class="sort-indicator">{{ sortKey === 'lastUsedAt' ? (sortDir === 'asc' ? '▲' : '▼') : '' }}</span>
+          </th>
         </tr>
         </thead>
 
@@ -170,8 +249,8 @@ function thumbUrl(id) {
           <td>{{ artwork.title }}</td>
           <td>{{ artwork.artistDisplay }}</td>
           <td>{{ artwork.timesLoaded }}</td>
-          <td>{{ artwork.timesSpymasterPick }}</td>
           <td>{{ artwork.pickPercentage != null ? `${artwork.pickPercentage}%` : "-" }}</td>
+          <td>{{ artwork.guessPercentage != null ? `${artwork.guessPercentage}%` : "-" }}</td>
           <td>{{ formatDate(artwork.lastUsedAt) }}</td>
         </tr>
         </tbody>
@@ -214,12 +293,16 @@ function thumbUrl(id) {
   justify-self: start;
 }
 
-.table-header .pdf-button {
+.table-header input:focus {
+  border-color: var(--color-primary);
+}
+
+.table-header .export-button {
   justify-self: end;
 }
 
 .table-header input,
-.pdf-button {
+.export-button {
   font-family: var(--font-secondary), sans-serif;
   font-size: 0.9rem;
   padding: 12px 16px;
@@ -252,12 +335,12 @@ function thumbUrl(id) {
   opacity: 0.5;
 }
 
-.pdf-button {
+.export-button {
   cursor: pointer;
   color: var(--text-primary);
 }
 
-.pdf-button:hover {
+.export-button:hover {
   border-color: var(--color-primary);
 }
 
@@ -301,6 +384,23 @@ th[title] {
   cursor: help;
   text-decoration: underline dotted;
   text-underline-offset: 3px;
+}
+
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+th.sortable.active {
+  color: var(--color-primary);
+}
+
+.sort-indicator {
+  font-size: 11px;
+  margin-left: 4px;
+  display: inline-block;
+  min-width: 1em;
+  text-align: center;
 }
 
 tr.empty td {

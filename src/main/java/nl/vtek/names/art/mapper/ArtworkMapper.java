@@ -40,6 +40,7 @@ public class ArtworkMapper {
                 artwork.getTimesCorrectGuess(),
                 artwork.getTimesBadGuess(),
                 calculatePickPercentage(artwork),
+                calculateGuessPercentage(artwork),
                 artwork.getFirstUsedAt(),
                 artwork.getLastUsedAt()
         );
@@ -60,6 +61,7 @@ public class ArtworkMapper {
                 artwork.getTimesCorrectGuess(),
                 artwork.getTimesBadGuess(),
                 calculatePickPercentage(artwork),
+                calculateGuessPercentage(artwork),
                 artwork.getFirstUsedAt(),
                 artwork.getLastUsedAt()
         );
@@ -69,5 +71,12 @@ public class ArtworkMapper {
         int loaded = artwork.getTimesLoaded();
         int picked = artwork.getTimesSpymasterPick();
         return loaded == 0 ? null : Math.round((picked / (double) loaded) * 1000) / 10.0;
+    }
+
+    private Double calculateGuessPercentage(Artwork artwork) {
+        int correct = artwork.getTimesCorrectGuess();
+        int bad = artwork.getTimesBadGuess();
+        int total = correct + bad;
+        return total == 0 ? null : Math.round((correct / (double) total) * 1000) / 10.0;
     }
 }
