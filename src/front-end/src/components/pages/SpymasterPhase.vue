@@ -112,12 +112,11 @@ async function startGame() {
   }
 }
 
-function handleCardClicked(id, clicked) {
-
-  if (clicked) {
-    selectedCards.value.push(id);
-  } else {
+function handleCardClicked(id) {
+  if (selectedCards.value.includes(id)) {
     selectedCards.value = selectedCards.value.filter(cardId => cardId !== id);
+  } else {
+    selectedCards.value.push(id);
   }
   console.log("Selected cards:", selectedCards.value);
 }
@@ -150,6 +149,7 @@ errorMessage.value = "";
       <GameGrid class="grid" phase="spymaster"
                  :cards="cards"
                  :active-info-id="activeCard?.id"
+                 :selected-ids="selectedCards"
                  @card-clicked="handleCardClicked"
                  @info-clicked="handleInfoClicked"/>
 

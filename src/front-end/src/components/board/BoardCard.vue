@@ -1,9 +1,7 @@
 <script setup>
-import {ref} from "vue";
+import {computed} from "vue";
 import infoIcon from '@/assets/images/icons/info.svg'
 import LockButton from "@/components/board/LockButton.vue";
-
-const clicked = ref(false);
 
 const props = defineProps({
   id: String,
@@ -12,15 +10,23 @@ const props = defineProps({
   color: String,
   infoActive: Boolean,
   phase: String,
-  type: String
+  type: String,
+  selected: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['card-clicked', 'info-clicked'])
 
-function handleCardClick() {
-  if (props.color !== 'wrong' && props.color !== 'right') {
-    clicked.value = !clicked.value;
-    emit('card-clicked', props.id, clicked.value);
+const revealed = computed(() =>
+  ['right', 'wrong', 'wrongassassin'].includes(props.color)
+);
+
+function handleSpymasterClick() {
+  emit('card-clicked', props.id);
+}
+
+function handleOperativeClick() {
+  if (!revealed.value) {
+    emit('card-clicked', props.id);
   }
   emit('info-clicked', props.id);
 }
@@ -31,9 +37,8 @@ function handleCardClick() {
 
   <div v-if="phase==='spymaster'"
        class="card"
-       @click="clicked = !clicked;
-       emit('card-clicked', props.id, clicked)"
-       :class="props.type, { active: clicked, 'info-shown': infoActive }">
+       @click="handleSpymasterClick"
+       :class="[props.type, { active: props.selected, 'info-shown': infoActive }]">
 
     <img :src="props.imgUrl"
          :alt="props.altText" draggable="false"/>
@@ -47,14 +52,14 @@ function handleCardClick() {
 
   <div v-else-if="phase==='operative'"
        class="card"
-       @click="handleCardClick"
-       :class="props.color, { active: clicked, 'info-shown': infoActive }">
+       @click="handleOperativeClick"
+       :class="[props.color, { active: props.selected, 'info-shown': infoActive }]">
 
     <img :src="props.imgUrl"
          :alt="props.altText"
          draggable="false"/>
 
-    <LockButton v-if="props.color !== 'wrong' && props.color !=='right' "
+    <LockButton v-if="!revealed"
                 :id="props.id">
     </LockButton>
   </div>
@@ -85,6 +90,9 @@ function handleCardClick() {
 .ASSASSIN {
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.ASSASSIN > img {
   opacity: 30%;
 }
 
@@ -114,8 +122,7 @@ function handleCardClick() {
   box-shadow: 7px 6px 28px 1px var(--active-card-shadow);
 }
 
-.card.active:hover :deep(.lock-btn),
-.card.active:focus-within :deep(.lock-btn) {
+.card.active :deep(.lock-btn) {
   opacity: 1;
   pointer-events: auto;
 }

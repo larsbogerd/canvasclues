@@ -4,7 +4,9 @@
 
 <style scoped>
 button {
+  font-family: var(--font-secondary), sans-serif;
   font-size: 1.2rem;
+  font-weight: 600;
   padding: 0.6rem 4rem;
   border-radius: 20px;
   cursor: pointer;

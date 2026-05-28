@@ -17,7 +17,7 @@ const modal = ref(null)
 const sessionId = ref(null);
 const cards = ref([]);
 const hint = ref(null);
-const selectedCards = ref([]);
+const selectedCardId = ref(null);
 const activeCard = ref(null);
 const amount = ref(0);
 const score = ref(0);
@@ -99,12 +99,8 @@ async function submit() {
   }
 }
 
-function handleCardClicked(id, clicked) {
-  if (clicked) {
-    selectedCards.value.push(id);
-  } else {
-    selectedCards.value = selectedCards.value.filter(cardId => cardId !== id);
-  }
+function handleCardClicked(id) {
+  selectedCardId.value = selectedCardId.value === id ? null : id;
 }
 
 function handleInfoClicked(id) {
@@ -128,6 +124,7 @@ function handleInfoClicked(id) {
         <GameGrid class="grid"
                   :cards="cards"
                   :active-info-id="activeCard?.id"
+                  :selected-ids="selectedCardId ? [selectedCardId] : []"
                   phase="operative"
                   @card-clicked="handleCardClicked"
                   @info-clicked="handleInfoClicked"
@@ -182,7 +179,7 @@ function handleInfoClicked(id) {
     <OperativeResultModalContent :correctAmount="correctAmount"
                                  :amount="amount"
                                  :score="score"
-                                 :selectedAmount="selectedCards.length"
+                                 :selectedAmount="selectedCardId ? 1 : 0"
                                  :gameOver="assassinGuesses >= 2">
     </OperativeResultModalContent>
   </BaseModal>

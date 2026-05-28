@@ -5,6 +5,7 @@ const prop = defineProps({
       cards: Array,
       activeInfoId: String,
       phase: String,
+      selectedIds: { type: Array, default: () => [] },
 })
 
 const emit = defineEmits(['card-clicked', 'info-clicked'])
@@ -21,8 +22,9 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
                 :info-active="card.id === prop.activeInfoId"
                 :phase="prop.phase"
                 :type="card.type"
+                :selected="prop.selectedIds.includes(card.id)"
                 :key="index"
-                @card-clicked="(id, clicked) => emit('card-clicked', id, clicked)"
+                @card-clicked="(id) => emit('card-clicked', id)"
                 @info-clicked="(id) => emit('info-clicked', id)"
     />
   </div>
