@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -27,4 +28,15 @@ public class HintController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/getHints")
+    public ResponseEntity<List<HintResponse>> getHints() {
+        return ResponseEntity.ok(hintService.getGameHints());
+    }
+
+    @GetMapping("/count")
+    public void getHintCounts() {
+        hintService.putHintDataInFile();
+    }
+
 }
