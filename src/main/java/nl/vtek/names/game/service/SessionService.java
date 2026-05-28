@@ -1,5 +1,6 @@
 package nl.vtek.names.game.service;
 
+import nl.vtek.names.game.dto.FinishSessionResponse;
 import nl.vtek.names.game.dto.SessionResponse;
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.exception.SessionAlreadyFinishedException;
@@ -54,7 +55,13 @@ public class SessionService {
         return session;
     }
 
-    public void finish(UUID sessionId) {
+    public void finishIfAssassinated(Session session) {
+        if (session.getAssassinGuesses() >= 2) {
+            finish(session.getId());
+        }
+    }
+
+    public FinishSessionResponse finish(UUID sessionId) {
         Session session = getActiveSession(sessionId);
 
         if (session.getWrongGuesses() == 0 && session.getAssassinGuesses() == 0) {
@@ -63,6 +70,8 @@ public class SessionService {
 
         session.setFinishedAt(LocalDateTime.now());
         session.setState(SessionState.FINISHED);
-        sessionRepository.save(session);
+        Session saved = sessionRepository.save(session);
+
+        return SessionMapper.toFinishSessionResponse(saved);
     }
 }

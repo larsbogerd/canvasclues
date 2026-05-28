@@ -61,10 +61,8 @@ function tooManyAssassinGuesses() {
 
 async function submit() {
   try {
-    await finishSession(sessionId.value);
-    if (wrongGuesses.value === 0) {
-      score.value += 20;
-    }
+    const result = await finishSession(sessionId.value);
+    if (result) score.value = result.score;
     modal.value.show();
   } catch (error) {
     console.log(error);

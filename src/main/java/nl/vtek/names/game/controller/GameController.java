@@ -3,9 +3,9 @@ package nl.vtek.names.game.controller;
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.BoardSubmitRequest;
-import nl.vtek.names.game.service.BoardSubmitService;
+import nl.vtek.names.game.orchestrator.BoardSubmitOrchestrator;
 import nl.vtek.names.game.service.GameService;
-import nl.vtek.names.game.service.StartGameService;
+import nl.vtek.names.game.orchestrator.StartGameOrchestrator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,20 +22,20 @@ import java.util.List;
 public class GameController {
 
     private final GameService gameService;
-    private final StartGameService startGameService;
-    private final BoardSubmitService boardSubmitService;
+    private final StartGameOrchestrator startGameOrchestrator;
+    private final BoardSubmitOrchestrator boardSubmitOrchestrator;
 
     public GameController(GameService gameService,
-                          StartGameService startGameService,
-                          BoardSubmitService boardSubmitService) {
+                          StartGameOrchestrator startGameOrchestrator,
+                          BoardSubmitOrchestrator boardSubmitOrchestrator) {
         this.gameService = gameService;
-        this.startGameService = startGameService;
-        this.boardSubmitService = boardSubmitService;
+        this.startGameOrchestrator = startGameOrchestrator;
+        this.boardSubmitOrchestrator = boardSubmitOrchestrator;
     }
 
     @PostMapping("/start")
     public List<CardResponse> startGame() {
-        return startGameService.startGame();
+        return startGameOrchestrator.startGame();
     }
 
     @GetMapping("/list")
@@ -45,6 +45,6 @@ public class GameController {
 
     @PostMapping("/{gameId}/submit")
     public void submit(@PathVariable Long gameId, @RequestBody BoardSubmitRequest request) {
-        boardSubmitService.submit(gameId, request);
+        boardSubmitOrchestrator.submit(gameId, request);
     }
 }

@@ -1,5 +1,6 @@
 package nl.vtek.names.game.mapper;
 
+import nl.vtek.names.game.dto.FinishSessionResponse;
 import nl.vtek.names.game.dto.SessionResponse;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Session;
@@ -19,6 +20,14 @@ public class SessionMapper {
                 CardMapper.toCardResponse(cards),
                 hint == null ? null : HintMapper.toHintResponse(hint),
                 spymasterPickCount
+        );
+    }
+
+    public static FinishSessionResponse toFinishSessionResponse(Session session) {
+        return new FinishSessionResponse(
+                session.getScore(),
+                session.getWrongGuesses(),
+                session.getAssassinGuesses()
         );
     }
 }

@@ -1,13 +1,17 @@
-package nl.vtek.names.game.service;
+package nl.vtek.names.game.orchestrator;
 
 import nl.vtek.names.art.service.ArtworkService;
 import nl.vtek.names.game.dto.BoardSubmitRequest;
+import nl.vtek.names.game.service.CardService;
+import nl.vtek.names.game.service.GameService;
+import nl.vtek.names.game.service.HintService;
+import nl.vtek.names.game.service.ScoreService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class BoardSubmitService {
+public class BoardSubmitOrchestrator {
 
     private final GameService gameService;
     private final CardService cardService;
@@ -15,11 +19,11 @@ public class BoardSubmitService {
     private final ArtworkService artworkService;
     private final ScoreService scoreService;
 
-    public BoardSubmitService(GameService gameService,
-                              CardService cardService,
-                              HintService hintService,
-                              ArtworkService artworkService,
-                              ScoreService scoreService) {
+    public BoardSubmitOrchestrator(GameService gameService,
+                                   CardService cardService,
+                                   HintService hintService,
+                                   ArtworkService artworkService,
+                                   ScoreService scoreService) {
         this.gameService = gameService;
         this.cardService = cardService;
         this.hintService = hintService;

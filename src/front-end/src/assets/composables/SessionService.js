@@ -17,9 +17,10 @@ export async function startSession() {
 
 export async function finishSession(sessionId) {
     try {
-        await ApiClient.post(
+        const response = await ApiClient.post(
             `/session/${sessionId}/finish`,
         );
+        return response.data;
     } catch (error) {
         console.log(error.response?.data ?? error);
     }

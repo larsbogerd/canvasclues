@@ -1,8 +1,9 @@
 package nl.vtek.names.game.controller;
 
+import nl.vtek.names.game.dto.FinishSessionResponse;
 import nl.vtek.names.game.dto.GuessSubmitResponse;
 import nl.vtek.names.game.dto.SessionResponse;
-import nl.vtek.names.game.service.GuessSubmitService;
+import nl.vtek.names.game.orchestrator.GuessSubmitOrchestrator;
 import nl.vtek.names.game.service.SessionService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +19,12 @@ import java.util.UUID;
 public class SessionController {
 
     private final SessionService sessionService;
-    private final GuessSubmitService guessSubmitService;
+    private final GuessSubmitOrchestrator guessSubmitOrchestrator;
 
     public SessionController(SessionService sessionService,
-                             GuessSubmitService guessSubmitService) {
+                             GuessSubmitOrchestrator guessSubmitOrchestrator) {
         this.sessionService = sessionService;
-        this.guessSubmitService = guessSubmitService;
+        this.guessSubmitOrchestrator = guessSubmitOrchestrator;
     }
 
     @PostMapping("/{gameId}/start")
@@ -33,11 +34,11 @@ public class SessionController {
 
     @PostMapping("/{sessionId}/guess/{cardId}")
     public GuessSubmitResponse guess(@PathVariable UUID sessionId, @PathVariable UUID cardId) {
-        return guessSubmitService.submit(sessionId, cardId);
+        return guessSubmitOrchestrator.submit(sessionId, cardId);
     }
 
     @PostMapping("/{sessionId}/finish")
-    public void finish(@PathVariable UUID sessionId) {
-        sessionService.finish(sessionId);
+    public FinishSessionResponse finish(@PathVariable UUID sessionId) {
+        return sessionService.finish(sessionId);
     }
 }

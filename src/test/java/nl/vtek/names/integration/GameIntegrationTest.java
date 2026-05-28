@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.dto.GameResponse;
-import nl.vtek.names.game.service.StartGameService;
+import nl.vtek.names.game.orchestrator.StartGameOrchestrator;
 import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.model.Card;
 import tools.jackson.core.type.TypeReference;
@@ -47,7 +47,7 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        assertThat(returnedCards).hasSize(StartGameService.BOARD_SIZE);
+        assertThat(returnedCards).hasSize(StartGameOrchestrator.BOARD_SIZE);
 
         Long gameId = returnedCards.getFirst().gameId();
         assertThat(gameId).isNotZero();
@@ -66,7 +66,7 @@ class GameIntegrationTest {
         });
 
         List<Card> dbCards = cardRepository.findByGame_Id(gameId);
-        assertThat(dbCards).hasSize(StartGameService.BOARD_SIZE);
+        assertThat(dbCards).hasSize(StartGameOrchestrator.BOARD_SIZE);
     }
 
     @Test

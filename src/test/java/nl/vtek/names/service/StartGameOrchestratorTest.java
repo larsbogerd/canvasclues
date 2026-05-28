@@ -13,11 +13,9 @@ import nl.vtek.names.game.dto.CardResponse;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
-import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.service.CardService;
 import nl.vtek.names.game.service.GameService;
-import nl.vtek.names.game.service.ScoreService;
-import nl.vtek.names.game.service.StartGameService;
+import nl.vtek.names.game.orchestrator.StartGameOrchestrator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-class StartGameServiceTest {
+class StartGameOrchestratorTest {
 
     @Mock
     private GameService gameService;
@@ -41,7 +39,7 @@ class StartGameServiceTest {
     private CardService cardService;
 
     @InjectMocks
-    private StartGameService startGameService;
+    private StartGameOrchestrator startGameOrchestrator;
 
 
     @Test
@@ -53,15 +51,15 @@ class StartGameServiceTest {
         List<Card> fakeCards = buildFakeCards(fakeGame, fakeArtworks);
 
         given(gameService.createGame()).willReturn(fakeGame);
-        given(artworkService.fetchAndSaveArtworks(StartGameService.BOARD_SIZE)).willReturn(fakeArtworks);
+        given(artworkService.fetchAndSaveArtworks(StartGameOrchestrator.BOARD_SIZE)).willReturn(fakeArtworks);
         given(cardService.buildBoard(any(Game.class), anyList(), anyInt())).willReturn(fakeCards);
 
-        List<CardResponse> result = startGameService.startGame();
+        List<CardResponse> result = startGameOrchestrator.startGame();
 
-        assertThat(result).hasSize(StartGameService.BOARD_SIZE);
+        assertThat(result).hasSize(StartGameOrchestrator.BOARD_SIZE);
         verify(gameService).createGame();
-        verify(artworkService).fetchAndSaveArtworks(StartGameService.BOARD_SIZE);
-        verify(cardService).buildBoard(fakeGame, fakeArtworks, StartGameService.BOARD_SIZE);
+        verify(artworkService).fetchAndSaveArtworks(StartGameOrchestrator.BOARD_SIZE);
+        verify(cardService).buildBoard(fakeGame, fakeArtworks, StartGameOrchestrator.BOARD_SIZE);
 
 
         Long gameId = result.getFirst().gameId();
@@ -71,7 +69,7 @@ class StartGameServiceTest {
 
     private List<Artwork> buildFakeArtworks() {
         List<Artwork> artworks = new ArrayList<>();
-        for (int i = 1; i <= StartGameService.BOARD_SIZE; i++) {
+        for (int i = 1; i <= StartGameOrchestrator.BOARD_SIZE; i++) {
             artworks.add(new Artwork(
                     UUID.randomUUID(),
                     "Painting " + i,
