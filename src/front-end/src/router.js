@@ -5,9 +5,9 @@ import GameHub from "@/components/hubs/gamehub/GameHub.vue";
 import SpyView from './components/pages/SpymasterPhase.vue'
 import OperativeHub from "@/components/hubs/operativehub/OperativeHub.vue";
 import OperativeView from './components/pages/OperativePhase.vue'
-import AdminHub from "@/components/hubs/admin/AdminHub.vue";
-import AdminArtworks from "@/components/hubs/admin/AdminArtworks.vue";
-import ArtworkStats from "@/components/hubs/admin/ArtworkStats.vue";
+import StatisticsHub from "@/components/hubs/statistics/StatisticsHub.vue";
+import StatisticsArtworks from "@/components/hubs/statistics/StatisticsArtworks.vue";
+import ArtworkStats from "@/components/hubs/statistics/ArtworkStats.vue";
 
 const routes = [
     { path: '/', component: StartingPage},
@@ -15,9 +15,9 @@ const routes = [
     { path: '/game/spymaster', component: SpyView },
     { path: '/game/operative', component: OperativeHub },
     { path: '/game/operative/:gameId', component: OperativeView },
-    { path: '/admin', component: AdminHub },
-    { path: '/admin/artworks', component: AdminArtworks },
-    { path: '/admin/artworks/:artworkId', component: ArtworkStats }
+    { path: '/statistics', component: StatisticsHub },
+    { path: '/statistics/artworks', component: StatisticsArtworks },
+    { path: '/statistics/artworks/:artworkId', component: ArtworkStats }
 ]
 
 const router = createRouter({

@@ -1,9 +1,9 @@
 <script setup>
 import PageHeader from "@/components/header/PageHeader.vue";
-import ArtworkStatsTable from "@/components/hubs/admin/ArtworkStatsTable.vue";
+import ArtworkStatsTable from "@/components/hubs/statistics/ArtworkStatsTable.vue";
 import router from "@/router.js";
 import { onMounted, ref } from "vue";
-import { getArtworkStatsList } from "@/assets/composables/AdminStatsService.js";
+import { getArtworkStatsList } from "@/assets/composables/StatisticsService.js";
 
 const artworks = ref([]);
 
@@ -13,11 +13,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="admin-artworks">
-    <PageHeader username="Admin" />
+  <div class="statistics-artworks">
+    <PageHeader />
     <main class="content">
       <button class="back-link"
-              @click="router.push('/admin')">
+              @click="router.push('/statistics')">
         &larr; Terug naar hub
       </button>
       <header class="page-header">
@@ -48,7 +48,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.admin-artworks {
+.statistics-artworks {
   display: flex;
   flex-direction: column;
   min-height: 100vh;

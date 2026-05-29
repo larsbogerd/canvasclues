@@ -48,7 +48,7 @@ The back-end starts on port **8082**.
 ## Package Structure
 
 ### `art` – Artwork fetching & persistence
-Calls the Art Institute of Chicago API, maps responses to the `Artwork` entity, and persists artworks so their gameplay usage (times loaded, times picked by spymaster, correct/bad guesses, first/last used) can be tracked for the admin dashboard.
+Calls the Art Institute of Chicago API, maps responses to the `Artwork` entity, and persists artworks so their gameplay usage (times loaded, times picked by spymaster, correct/bad guesses, first/last used) can be tracked for the statistics dashboard.
 
 ### `game` – Game logic & persistence
 Contains controllers, DTOs, mappers, entities, repositories, services, and exception handling for:
@@ -124,8 +124,8 @@ API errors follow a small polymorphic hierarchy in `game.exception`:
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/v1/artwork/test?size=25` | Fetches random artworks from the AIC API for testing. `size` defaults to `25` |
-| GET | `/api/v1/artwork/statslist` | Returns every persisted `Artwork` as `ArtworkStatsListResponse[]`, including usage counters and `pickPercentage`. Used by the admin dashboard table. |
-| GET | `/api/v1/artwork/{id}/stats` | Returns a single artwork's full detail + usage stats as `ArtworkStatsResponse`. Used by the admin detail page. |
+| GET | `/api/v1/artwork/statslist` | Returns every persisted `Artwork` as `ArtworkStatsListResponse[]`, including usage counters and `pickPercentage`. Used by the statistics dashboard table. |
+| GET | `/api/v1/artwork/{id}/stats` | Returns a single artwork's full detail + usage stats as `ArtworkStatsResponse`. Used by the statistics detail page. |
 
 ---
 

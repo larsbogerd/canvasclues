@@ -4,18 +4,17 @@ import router from "@/router.js";
 </script>
 
 <template>
-  <div class="admin-hub">
-    <PageHeader username="Admin" />
+  <div class="statistics-hub">
+    <PageHeader />
     <main class="content">
       <button class="back-link"
               @click="router.push('/')">
         &larr; Terug naar start
       </button>
-      <h1 class="text-color">Hallo, Admin</h1>
-      <p class="subtitle">Inzichten & statistieken</p>
+      <h1 class="text-color">Inzichten & statistieken</h1>
       <div class="cards">
         <button class="card"
-                @click="router.push('/admin/artworks')">
+                @click="router.push('/statistics/artworks')">
           <h2>Kunstwerken</h2>
           <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
         </button>
@@ -33,7 +32,7 @@ import router from "@/router.js";
   color: var(--text-primary);
 }
 
-.admin-hub {
+.statistics-hub {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -64,15 +63,8 @@ import router from "@/router.js";
 }
 
 h1 {
-  margin: 0;
+  margin: 0 0 32px 0;
   font-size: 40px;
-}
-
-.subtitle {
-  font-family: var(--font-secondary), sans-serif;
-  color: var(--text-primary);
-  opacity: 0.7;
-  margin: 4px 0 32px 0;
 }
 
 .cards {

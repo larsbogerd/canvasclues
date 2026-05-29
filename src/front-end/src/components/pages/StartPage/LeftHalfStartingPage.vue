@@ -27,12 +27,14 @@ function goToGameHubPhase() {
         Vind de verborgen verbanden tussen meesterwerken!
       </p>
       <div class="button-group">
-        <button-base @click="goToGameHubPhase" >Start een spel</button-base>
+        <button-base @click="goToGameHubPhase"
+                     id="primary-btn">Start een spel</button-base>
         <button-base @click="modal?.show()"
-                     id="secondary-btn">Hoe werkt het?</button-base>
+                     class="secondary-btn">Hoe werkt het?</button-base>
+        <button-base @click="router.push('/statistics')"
+                     class="secondary-btn">Statistieken</button-base>
       </div>
     </div>
-    <button class="admin-secret" @click="router.push('/admin')"></button>
   </div>
   <BaseModal ref="modal">
     <StartingPageModalContent></StartingPageModalContent>
@@ -86,37 +88,33 @@ function goToGameHubPhase() {
   color: var(--text-secondary);
 }
 
-.admin-secret {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 200px;
-  background: transparent;
-  border: none;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.admin-secret:hover {
-  opacity: 1;
-}
-
 .button-group {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   gap: 0.9rem;
   margin-top: 0.75rem;
-  flex-wrap: wrap;
 }
 
-:deep(#secondary-btn) {
+:deep(#primary-btn) {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 100%;
+  height: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1.4rem;
+}
+
+:deep(.secondary-btn) {
+  width: 100%;
+  padding: 0.6rem 1rem;
   background-color: transparent;
   color: var(--text-primary);
   border: 2px solid var(--button-border);
   box-shadow: 0 14px 28px var(--tertiary-shadow);
 }
 
-:deep(#secondary-btn:hover) {
+:deep(.secondary-btn:hover) {
   border-color: var(--color-primary);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }

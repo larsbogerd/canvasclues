@@ -2,7 +2,7 @@
 import PageHeader from "@/components/header/PageHeader.vue";
 import router from "@/router.js";
 import { ref, onMounted } from "vue";
-import { getArtworkStats } from "@/assets/composables/AdminStatsService.js";
+import { getArtworkStats } from "@/assets/composables/StatisticsService.js";
 
 const artworkId = router.currentRoute.value.params.artworkId;
 
@@ -31,10 +31,10 @@ function formatDate(iso) {
 
 <template>
   <div class="artwork-stats">
-    <PageHeader username="Admin" />
+    <PageHeader />
 
     <main class="content">
-      <button class="back-link" @click="router.push('/admin/artworks')">
+      <button class="back-link" @click="router.push('/statistics/artworks')">
         &larr; Terug naar kunstwerken
       </button>
 

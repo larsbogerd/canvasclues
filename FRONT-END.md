@@ -4,7 +4,7 @@
 
 The front-end is built using **Vue** and is responsible for:
 
-- rendering the landing page, game hub, operative hub, admin hub, and phase screens
+- rendering the landing page, game hub, operative hub, statistics hub, and phase screens
 - browsing available puzzles with sorting and search
 - starting a new game for the spymaster flow
 - sending selected cards and hints to the back-end
@@ -59,9 +59,9 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 | `/game/spymaster`            | `SpymasterPhase` | Starts a new game, shows the 4x4 grid, lets the spymaster select cards and submit a one-word hint |
 | `/game/operative`            | `OperativeHub`   | Browse available puzzles with sorting (newest, popular, difficulty) and search |
 | `/game/operative/:gameId`    | `OperativePhase` | Loads a game's grid and hint, then lets the operative validate selected cards |
-| `/admin`                     | `AdminHub`       | Admin landing page |
-| `/admin/artworks`            | `AdminArtworks`  | Lists every persisted artwork with usage counters, search, pagination, and PDF export |
-| `/admin/artworks/:artworkId` | `ArtworkStats`   | Detail view for a single artwork: image, metadata, usage stats, and boards it appeared in |
+| `/statistics`                     | `StatisticsHub`       | Statistics landing page |
+| `/statistics/artworks`            | `StatisticsArtworks`  | Lists every persisted artwork with usage counters, search, pagination, and PDF export |
+| `/statistics/artworks/:artworkId` | `ArtworkStats`        | Detail view for a single artwork: image, metadata, usage stats, and boards it appeared in |
 
 ---
 
@@ -88,10 +88,10 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 - A `correctAmount` computed value derives "cards left to find" from the board itself (cards coloured `right`); a Vue watcher triggers `finish` automatically once it equals `spymasterPickCount` (after a short delay so the final correct card visually registers).
 - On "Beëindig poging" (or auto-finish), `POST /api/v1/session/{sessionId}/finish` is called with no body, then the result modal is shown.
 
-### Admin dashboard
+### Statistics dashboard
 
-- `/admin/artworks` calls `GET /api/v1/artwork/statslist` on mount and renders every persisted artwork in a paginated, filterable table with usage counters and pick-ratio.
-- Clicking a row navigates to `/admin/artworks/:artworkId`, which calls `GET /api/v1/artwork/{id}/stats` and renders the full-size image, metadata (date, medium, dimensions, department, origin), and usage stats.
+- `/statistics/artworks` calls `GET /api/v1/artwork/statslist` on mount and renders every persisted artwork in a paginated, filterable table with usage counters and pick-ratio.
+- Clicking a row navigates to `/statistics/artworks/:artworkId`, which calls `GET /api/v1/artwork/{id}/stats` and renders the full-size image, metadata (date, medium, dimensions, department, origin), and usage stats.
 
 ---
 

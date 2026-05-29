@@ -1,7 +1,7 @@
 <script setup>
 import {computed, ref, watch} from "vue";
 import router from "@/router.js";
-import TablePagination from "@/components/hubs/admin/TablePagination.vue";
+import TablePagination from "@/components/hubs/statistics/TablePagination.vue";
 
 const props = defineProps({
   rows: {
@@ -236,7 +236,7 @@ function thumbUrl(id) {
         <tr
             v-for="artwork in paginatedRows"
             :key="artwork.id"
-            @click="router.push(`/admin/artworks/${artwork.id}`)"
+            @click="router.push(`/statistics/artworks/${artwork.id}`)"
         >
           <td>
             <img
