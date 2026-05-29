@@ -3,7 +3,25 @@ import router from "@/router.js";
 
 const props = defineProps({
   gameId: Number,
+  gameIdsToRandomize: Array,
+  gameMode: String
 })
+
+function gameboardPicker(){
+  if( props.gameMode === "Willekeurige clue" ){
+    goToRandomOperativePhase()
+  }else if( props.gameMode === "Dagelijkse clue" ){
+    goToRandomOperativePhase()
+  }else{
+    goToOperativePhase();
+  }
+}
+
+function goToRandomOperativePhase(){
+  let randomIndex = Math.floor(props.gameIdsToRandomize.length * Math.random())
+  let randomId = props.gameIdsToRandomize[randomIndex];
+  router.push(`/game/operative/${randomId}`)
+}
 
 function goToOperativePhase() {
   router.push(`/game/operative/${props.gameId}`)
@@ -11,7 +29,7 @@ function goToOperativePhase() {
 </script>
 
 <template>
-<button @click="goToOperativePhase">
+<button @click="gameboardPicker">
   Speel
 </button>
 </template>

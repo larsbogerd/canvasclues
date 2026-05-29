@@ -1,6 +1,6 @@
 <script setup>
 import {inject} from "vue";
-import lockIcon from '@/assets/images/svg-components/plaque.vue'
+import lockIcon from '@/assets/images/svg-components/Plaque.vue'
 
 const props = defineProps({
   id: String

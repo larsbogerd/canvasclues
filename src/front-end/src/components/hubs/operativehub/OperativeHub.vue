@@ -5,6 +5,7 @@ import {computed, onMounted, ref} from "vue";
 import {fetchGameListService} from "@/assets/composables/FetchGameListService.js";
 import PageHeader from "@/components/header/PageHeader.vue";
 const list = ref([]);
+const gameIdList = [];
 const sortBy = ref('newest');
 const search = ref('');
 
@@ -25,7 +26,16 @@ const sortedList = computed(() => {
   });
 });
 
-onMounted(async () => {list.value = await fetchGameListService()})
+async function fillGameIdList(){
+  list.value.map(Object.values).forEach((Array) =>{
+    gameIdList.push(Array[0]);
+  });
+}
+
+onMounted(async () => {
+  list.value = await fetchGameListService()
+  await fillGameIdList()
+})
 
 </script>
 
@@ -39,7 +49,8 @@ onMounted(async () => {list.value = await fetchGameListService()})
     <div class="operative-hub">
       <div class="operative-hub_header">
         <GameModeCard game-mode="Willekeurige clue"
-                      description="Laat Canvas Clues een puzzel voor je kiezen"/>
+                      description="Laat Canvas Clues een puzzel voor je kiezen"
+                      :game-ids-to-randomize="gameIdList"/>
 
         <GameModeCard game-mode="Dagelijkse clue"
                       description="Speel de dagelijkse hint"/>
