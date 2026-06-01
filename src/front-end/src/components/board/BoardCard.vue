@@ -2,6 +2,7 @@
 import {computed} from "vue";
 import infoIcon from '@/assets/images/icons/info.svg'
 import LockButton from "@/components/board/LockButton.vue";
+import AssassinLabel from "@/components/board/AssassinLabel.vue";
 
 const props = defineProps({
   id: String,
@@ -35,10 +36,15 @@ function handleOperativeClick() {
 
 <template>
 
+
+
   <div v-if="phase==='spymaster'"
        class="card"
        @click="handleSpymasterClick"
        :class="[props.type, { active: props.selected, 'info-shown': infoActive }]">
+
+    <AssassinLabel v-if="props.type ==='ASSASSIN'">
+    </AssassinLabel>
 
     <img :src="props.imgUrl"
          :alt="props.altText" draggable="false"/>
@@ -90,10 +96,6 @@ function handleOperativeClick() {
 .ASSASSIN {
   cursor: not-allowed;
   pointer-events: none;
-}
-
-.ASSASSIN > img {
-  opacity: 30%;
 }
 
 .ASSASSIN .info-btn{
