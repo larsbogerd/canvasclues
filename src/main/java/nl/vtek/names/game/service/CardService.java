@@ -3,6 +3,7 @@ package nl.vtek.names.game.service;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.game.exception.CardNotFoundException;
 import nl.vtek.names.game.exception.CardNotInSessionGameException;
+import nl.vtek.names.game.interfaces.GameMode;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
@@ -24,17 +25,13 @@ public class CardService {
         this.cardRepository = cardRepository;
     }
 
-    public List<Card> buildBoard(Game game, List<Artwork> artworks, int boardSize) {
-
-        List<CardType> cardTypes = cardRandomizer(boardSize);
-        int counter = 0;
-
+    public List<Card> buildBoard(Game game, List<Artwork> artworks, GameMode gamemode) {
+        List<CardType> cardTypes = gamemode.getCardDistribution();
         List<Card> cards = new ArrayList<>();
-        for (Artwork artwork : artworks) {
-            Card card = new Card(game, cardTypes.get(counter));
-            card.setArtwork(artwork);
+        for (int i = 0; i < artworks.size(); i++) {
+            Card card = new Card(game, cardTypes.get(i));
+            card.setArtwork(artworks.get(i));
             cards.add(card);
-            counter++;
         }
         sendCardsToDatabase(cards);
         return cards;
@@ -44,18 +41,6 @@ public class CardService {
         cardRepository.saveAll(deck);
     }
 
-
-    private List<CardType> cardRandomizer(int boardSize) {
-        List<CardType> cardTypes = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            cardTypes.add(CardType.PLAYABLE);
-        }
-        for (int i = 0; i < 4; i++) {
-            cardTypes.add(CardType.ASSASSIN);
-        }
-        Collections.shuffle(cardTypes);
-        return cardTypes;
-    }
 
     public void updateCards(List<UUID> cardIds, Boolean isSpymasterPick) {
         List<Card> cards = cardRepository.findAllById(cardIds);

@@ -1,31 +1,56 @@
 package nl.vtek.names.game.service;
 
+
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.exception.MinimumSelectedException;
 import nl.vtek.names.game.exception.NullScoreException;
+import nl.vtek.names.game.interfaces.GameMode;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.CardType;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Session;
-import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.repository.SessionRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class ScoreService {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+@Component("hard")
+public class HardGameModeService implements GameMode {
 
-    private final GameRepository gameRepository;
-    private final SessionRepository sessionRepository;
+    GameRepository gameRepository;
+    SessionRepository sessionRepository;
 
-
-    public ScoreService(GameRepository gameRepository,
-                        SessionRepository sessionRepository) {
+    public HardGameModeService(GameRepository gameRepository,
+                               SessionRepository sessionRepository) {
         this.gameRepository = gameRepository;
         this.sessionRepository = sessionRepository;
     }
 
+    @Override
+    public String gameMode() {
+        return "hard";
+    }
+
+    @Override
+    public int boardSize() {
+        return 16;
+    }
+
+    @Override
+    public List<CardType> getCardDistribution() {
+        List<CardType> cardTypes = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            cardTypes.add(CardType.PLAYABLE);
+        }
+        for (int i = 0; i < 8; i++) {
+            cardTypes.add(CardType.ASSASSIN);
+        }
+        Collections.shuffle(cardTypes);
+        return cardTypes;
+    }
 
     public void calcSpyScore(Long gameId, Integer spyScore) {
         if (spyScore == null) {
@@ -43,6 +68,7 @@ public class ScoreService {
         }
     }
 
+    @Override
     public void handleSpyScore(Long gameId, Integer spyScore) {
         if (spyScore == null) {
             throw new NullScoreException();
@@ -51,18 +77,27 @@ public class ScoreService {
         calcSpyScore(gameId, spyScore);
     }
 
+    @Override
     public int calcOperativeScore(int currentScore, int comboStreak) {
         double multiplier = getMultiplier(comboStreak);
         return currentScore + (int) (20 * multiplier);
     }
 
+    @Override
     public double getMultiplier(int streak) {
-        if (streak >= 4) return 3.0;
-        if (streak == 3) return 2.0;
-        if (streak == 2) return 1.5;
+        if (streak >= 4) {
+            return 3.0;
+        }
+        if (streak == 3) {
+            return 2.0;
+        }
+        if (streak == 2) {
+            return 1.5;
+        }
         return 1.0;
     }
 
+    @Override
     public void recordGuess(Session session, Card card) {
         if (card.isSpymasterPick()) {
             int newStreak = session.getComboStreak() + 1;

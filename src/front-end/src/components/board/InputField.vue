@@ -35,8 +35,7 @@ function buttonClick() {
 
       </div>
       <button class="submit-btn"
-              type="submit"
-              @click="buttonClick">
+              type="submit">
         {{ name }}
       </button>
     </div>

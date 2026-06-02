@@ -5,7 +5,6 @@ public record GuessSubmitResponse(
         int score,
         int comboStreak,
         int wrongGuesses,
-        int assassinGuesses,
-        String cardType
+        int assassinGuesses
 ) {
 }

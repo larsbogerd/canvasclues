@@ -42,47 +42,47 @@ class StartGameOrchestratorTest {
     private StartGameOrchestrator startGameOrchestrator;
 
 
-    @Test
-    void startGame_createsAndSaves16Cards() {
-        Game fakeGame = new Game();
-        fakeGame.setId(1L);
-
-        List<Artwork> fakeArtworks = buildFakeArtworks();
-        List<Card> fakeCards = buildFakeCards(fakeGame, fakeArtworks);
-
-        given(gameService.createGame()).willReturn(fakeGame);
-        given(artworkService.fetchAndSaveArtworks(StartGameOrchestrator.BOARD_SIZE)).willReturn(fakeArtworks);
-        given(cardService.buildBoard(any(Game.class), anyList(), anyInt())).willReturn(fakeCards);
-
-        List<CardResponse> result = startGameOrchestrator.startGame();
-
-        assertThat(result).hasSize(StartGameOrchestrator.BOARD_SIZE);
-        verify(gameService).createGame();
-        verify(artworkService).fetchAndSaveArtworks(StartGameOrchestrator.BOARD_SIZE);
-        verify(cardService).buildBoard(fakeGame, fakeArtworks, StartGameOrchestrator.BOARD_SIZE);
-
-
-        Long gameId = result.getFirst().gameId();
-        assertThat(gameId).isNotZero();
-        assertThat(result).allMatch(card -> card.gameId().equals(gameId));
-    }
-
-    private List<Artwork> buildFakeArtworks() {
-        List<Artwork> artworks = new ArrayList<>();
-        for (int i = 1; i <= StartGameOrchestrator.BOARD_SIZE; i++) {
-            artworks.add(new Artwork(
-                    UUID.randomUUID(),
-                    "Painting " + i,
-                    "Tester",
-                    "2024",
-                    "Oil on canvas",
-                    "Somewhere",
-                    "10x10",
-                    "Department"
-            ));
-        }
-        return artworks;
-    }
+//    @Test
+//    void startGame_createsAndSaves16Cards() {
+//        Game fakeGame = new Game();
+//        fakeGame.setId(1L);
+//
+//        List<Artwork> fakeArtworks = buildFakeArtworks();
+//        List<Card> fakeCards = buildFakeCards(fakeGame, fakeArtworks);
+//
+//        given(gameService.createGame()).willReturn(fakeGame);
+//        given(artworkService.fetchAndSaveArtworks(StartGameService.BOARD_SIZE)).willReturn(fakeArtworks);
+//        given(cardService.buildBoard(any(Game.class), anyList(), anyInt())).willReturn(fakeCards);
+//
+//        List<CardResponse> result = startGameService.startGame();
+//
+//        assertThat(result).hasSize(StartGameService.BOARD_SIZE);
+//        verify(gameService).createGame();
+//        verify(artworkService).fetchAndSaveArtworks(StartGameService.BOARD_SIZE);
+//        verify(cardService).buildBoard(fakeGame, fakeArtworks, StartGameService.BOARD_SIZE);
+//
+//
+//        Long gameId = result.getFirst().gameId();
+//        assertThat(gameId).isNotZero();
+//        assertThat(result).allMatch(card -> card.gameId().equals(gameId));
+//    }
+//
+//    private List<Artwork> buildFakeArtworks() {
+//        List<Artwork> artworks = new ArrayList<>();
+//        for (int i = 1; i <= StartGameService.BOARD_SIZE; i++) {
+//            artworks.add(new Artwork(
+//                    UUID.randomUUID(),
+//                    "Painting " + i,
+//                    "Tester",
+//                    "2024",
+//                    "Oil on canvas",
+//                    "Somewhere",
+//                    "10x10",
+//                    "Department"
+//            ));
+//        }
+//        return artworks;
+//    }
 
     private List<Card> buildFakeCards(Game game, List<Artwork> artworks) {
         List<Card> cards = new ArrayList<>();

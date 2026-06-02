@@ -73,6 +73,18 @@ API errors follow a small polymorphic hierarchy in `game.exception`:
 - `ConflictException` (abstract → 409) — `SessionAlreadyFinishedException`
 - `BadRequestException` (abstract → 400) — `CardNotInSessionGameException`
 
+Game difficulty is set by the classes EasyGameModeService & HardGameModeService using the same methods set by interface GameMode:
+Add another gamemode by duplicating a previous GameModeService class and adjust the methods to whatever the gamemode needs
+- `gameModeName`
+- `BoardSize`
+- `getCardDistribution`
+- `handleSpyScore`
+- `calcOperativeScore`
+- `getMultiplier`
+- `recordGuess`
+
+
+
 `game.handlers.ApiExceptionHandler` has one `@ExceptionHandler` per abstract parent. Spring dispatches on the runtime subclass, so adding a new concrete exception needs no handler change.
 
 ### `art/util` – Utility classes

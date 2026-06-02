@@ -35,6 +35,9 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Hint> hints;
 
+    private String gameModeName;
+
+
     public Game() {
     }
 
@@ -100,6 +103,14 @@ public class Game {
 
     public void setPlayCount(int playCount) {
         this.playCount = playCount;
+    }
+
+    public String getGameModeName() {
+        return gameModeName;
+    }
+
+    public void setGameModeName(String gameModeName) {
+        this.gameModeName = gameModeName;
     }
 }
 

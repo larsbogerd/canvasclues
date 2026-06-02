@@ -19,8 +19,10 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game createGame() {
-        return gameRepository.save(new Game());
+    public Game createGame(String modeName) {
+        Game game = new Game();
+        game.setGameModeName(modeName);
+        return gameRepository.save(game);
     }
 
     public void markReady(Long gameId) {
@@ -35,6 +37,12 @@ public class GameService {
         return games.stream()
                 .map(GameMapper::toGameResponse)
                 .toList();
+    }
+
+    public String getModeName(Long gameId) {
+        return gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId))
+                .getGameModeName();
     }
 
 }
