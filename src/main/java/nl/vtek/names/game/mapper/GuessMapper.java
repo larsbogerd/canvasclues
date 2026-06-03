@@ -15,7 +15,8 @@ public class GuessMapper {
                 session.getScore(),
                 session.getComboStreak(),
                 session.getWrongGuesses(),
-                session.getAssassinGuesses()
+                session.getAssassinGuesses(),
+                card.getType().name()
         );
     }
 }
