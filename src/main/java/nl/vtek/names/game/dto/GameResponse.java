@@ -8,5 +8,6 @@ public record GameResponse(
         int spyScore,
         LocalDateTime createdAt,
         int playCount,
+        Double qualityRatio,
         String gameMode
 ) {}

@@ -1,6 +1,7 @@
 package nl.vtek.names.game.controller;
 
 import nl.vtek.names.game.dto.CardResponse;
+import nl.vtek.names.game.dto.GameQualityRequest;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.dto.BoardSubmitRequest;
 import nl.vtek.names.game.orchestrator.BoardSubmitOrchestrator;
@@ -8,6 +9,7 @@ import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.orchestrator.StartGameOrchestrator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,13 +41,19 @@ public class GameController {
         return startGameOrchestrator.startGame(gameMode);
     }
 
+    @PostMapping("/{gameId}/submit")
+    public void submit(@PathVariable Long gameId, @RequestBody BoardSubmitRequest request) {
+        boardSubmitOrchestrator.submit(gameId, request);
+    }
+
+    @PatchMapping("/game-quality/submit")
+    public void submitGameQuality(@RequestBody GameQualityRequest request) {
+        gameService.updateRating(request);
+    }
+
     @GetMapping("/list")
     public List<GameResponse> getGameList() {
         return gameService.getGameList();
     }
 
-    @PostMapping("/{gameId}/submit")
-    public void submit(@PathVariable Long gameId, @RequestBody BoardSubmitRequest request) {
-        boardSubmitOrchestrator.submit(gameId, request);
-    }
 }

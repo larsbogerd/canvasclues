@@ -7,6 +7,16 @@
     margin: 0 0 clamp(12px, 1.5vw, 24px);
 }
 
+.modal-sub-title {
+    font-family: var(--font-secondary), serif;
+    font-size: clamp(0.5rem, 0.8vw, 0.8rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0 0 clamp(12px, 1.5vw, 24px);
+}
+
+
 .modal-body {
     font-family: var(--font-secondary), sans-serif;
     font-size: clamp(0.85rem, 1vw, 1rem);

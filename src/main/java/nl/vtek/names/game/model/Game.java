@@ -37,6 +37,9 @@ public class Game {
 
     private String gameMode;
 
+    private int likes;
+
+    private int dislikes;
 
     public Game() {
     }
@@ -112,6 +115,22 @@ public class Game {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likeRate) {
+        this.likes = likeRate;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikeRate) {
+        this.dislikes = dislikeRate;
     }
 }
 

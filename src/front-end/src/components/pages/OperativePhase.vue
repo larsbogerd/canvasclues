@@ -7,11 +7,13 @@ import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
 import {finishSession, startSession} from "@/assets/composables/SessionService.js";
 import {submitGuess} from "@/assets/composables/GuessService.js";
+import {submitRating} from "@/assets/composables/SubmitService.js";
 import GameRules from "@/components/board/GameRules.vue";
 import OperativeModalContent from "@/components/modalpopup/modalcontent/OperativeModalContent.vue";
 import HintCard from "@/components/board/HintCard.vue";
 import OperativeHintCardContent from "@/components/board/hintCardContent/OperativeHintCardContent.vue";
 import OperativeHintCardHeaderContent from "@/components/board/hintCardContent/OperativeHintCardHeaderContent.vue";
+import GameQualityModalContent from "@/components/modalpopup/modalcontent/GameQualityModalContent.vue";
 
 const modal = ref(null)
 const sessionId = ref(null);
@@ -24,10 +26,10 @@ const score = ref(0);
 const comboMultiplier = ref(0);
 const wrongGuesses = ref(0);
 const assassinGuesses = ref(0);
+let showResultModal = ref(false);
 
 const baseScore = 20;
 const comboTiers = [1, 1.5, 2, 3];
-
 
 const currentCardValue = computed(() => {
   return baseScore * activeCombo.value;
@@ -93,10 +95,14 @@ async function submit() {
     const result = await finishSession(sessionId.value);
     if (result) score.value = result.score;
     modal.value.show();
-
   } catch (error) {
     console.log(error);
   }
+}
+
+async function submitGameQuality(rating){
+  await submitRating(hint.value.gameId, rating);
+  showResultModal.value = true;
 }
 
 function handleCardClicked(id) {
@@ -176,7 +182,11 @@ function handleInfoClicked(id) {
   </div>
 
   <BaseModal ref="modal">
-    <OperativeResultModalContent :correctAmount="correctAmount"
+    <GameQualityModalContent v-if="showResultModal === false"
+                        @submit-game-quality="submitGameQuality"
+    ></GameQualityModalContent>
+    <OperativeResultModalContent v-else-if="showResultModal === true"
+                                 :correctAmount="correctAmount"
                                  :amount="amount"
                                  :score="score"
                                  :selectedAmount="selectedCardId ? 1 : 0"

@@ -22,3 +22,15 @@ export async function submitSpymasterTurn(gameId, { cardIds, spyScore, hintConte
         }
     }
 }
+
+export async function submitRating(gameId, rating){
+    try{
+        const response = await ApiClient.patch(
+            `/game/game-quality/submit`,
+            { gameId, rating }
+        );
+        return response.status;
+    }catch(error){
+        console.log(error);
+    }
+}

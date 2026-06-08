@@ -26,6 +26,9 @@
     --game-good: #66bb6a;
     --game-wrong: #fd3d3d;
 
+    --game-liked: #cffda8;
+    --game-disliked: #e59898;
+
     --assasin-red: #ba1424;
 
     --button-border-gradient: color-mix(in srgb, var(--color-primary) 40%, #ddd5c9);

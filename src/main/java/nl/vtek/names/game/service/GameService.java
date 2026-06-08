@@ -1,5 +1,6 @@
 package nl.vtek.names.game.service;
 
+import nl.vtek.names.game.dto.GameQualityRequest;
 import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.mapper.GameMapper;
 import nl.vtek.names.game.model.Game;
@@ -37,5 +38,16 @@ public class GameService {
         return games.stream()
                 .map(GameMapper::toGameResponse)
                 .toList();
+    }
+
+    public void updateRating(GameQualityRequest qualityRequest) {
+        Game game = gameRepository.findById(qualityRequest.gameId())
+                        .orElseThrow(() -> new GameNotFoundException(qualityRequest.gameId()));
+        if (qualityRequest.rating()) {
+            game.setLikes(game.getLikes() + 1);
+        } else {
+            game.setDislikes(game.getDislikes() + 1);
+        }
+        gameRepository.save(game);
     }
 }
