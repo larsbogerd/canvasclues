@@ -1,13 +1,16 @@
 package nl.vtek.names.game.controller;
 
 import nl.vtek.names.game.dto.HintResponse;
+import nl.vtek.names.game.dto.HintStatsListResponse;
 import nl.vtek.names.game.service.HintService;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 
@@ -17,9 +20,11 @@ import java.util.List;
 public class HintController {
 
     private final HintService hintService;
+    private final ResourceLoader resourceLoader;
 
-    public HintController(HintService hintService) {
+    public HintController(HintService hintService, ResourceLoader resourceLoader) {
         this.hintService = hintService;
+        this.resourceLoader = resourceLoader;
     }
 
     @GetMapping("/{gameId}")
@@ -29,14 +34,8 @@ public class HintController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/getHints")
-    public ResponseEntity<List<HintResponse>> getHints() {
-        return ResponseEntity.ok(hintService.getGameHints());
+    @GetMapping("/stats")
+    public ResponseEntity<List<HintStatsListResponse>> hintOccurrence() {
+        return ResponseEntity.ok(hintService.getHintOccurrence());
     }
-
-    @GetMapping("/count")
-    public void getHintCounts() {
-        hintService.putHintDataInFile();
-    }
-
 }

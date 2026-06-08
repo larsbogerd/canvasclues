@@ -1,54 +1,42 @@
 <script setup>
+import { getStatisticsHints} from '@/assets/composables/StatisticsHintStatsService.js';
+import {onMounted, ref} from "vue";
 import PageHeader from "@/components/header/PageHeader.vue";
-import ArtworkStatsTable from "@/components/hubs/statistics/ArtworkStatsTable.vue";
 import router from "@/router.js";
-import { onMounted, ref } from "vue";
-import { getArtworkStatsList } from "@/assets/composables/StatisticsService.js";
+import HintStatsTable from "@/components/hubs/statistics/hint/HintStatsTable.vue";
 
-const artworks = ref([]);
+const hintOccurrenceList = ref([]);
 
 onMounted(async () => {
-  artworks.value = await getArtworkStatsList();
-});
+  hintOccurrenceList.value = await getStatisticsHints();
+
+})
+
 </script>
 
 <template>
-  <div class="statistics-artworks">
+  <div class="admin-artworks">
     <PageHeader />
+
     <main class="content">
+
       <button class="back-link"
               @click="router.push('/statistics')">
         &larr; Terug naar hub
       </button>
+
       <header class="page-header">
-        <div>
-          <h1>Kunstwerken</h1>
-          <p class="subtitle">Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
-        </div>
+        <h1>Hints</h1>
+        <p class="subtitle"> hoe vaak een hint is voorgekomen</p>
       </header>
 
-      <section class="highlights">
-        <div class="highlight-card">
-          <h3>Meest gekozen</h3>
-          <p class="placeholder">Top 5 placeholder</p>
-        </div>
-        <div class="highlight-card">
-          <h3>Meest verwarrend</h3>
-          <p class="placeholder">Laagste correct-ratio placeholder</p>
-        </div>
-        <div class="highlight-card">
-          <h3>Vergeten</h3>
-          <p class="placeholder">Langst ongebruikt placeholder</p>
-        </div>
-      </section>
-
-      <ArtworkStatsTable :rows="artworks" />
+<HintStatsTable :rows="hintOccurrenceList" />
     </main>
   </div>
 </template>
 
 <style scoped>
-.statistics-artworks {
+.admin-artworks {
   display: flex;
   flex-direction: column;
   min-height: 100vh;

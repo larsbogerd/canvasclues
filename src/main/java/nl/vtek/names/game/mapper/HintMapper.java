@@ -1,6 +1,7 @@
 package nl.vtek.names.game.mapper;
 
 import nl.vtek.names.game.dto.HintResponse;
+import nl.vtek.names.game.dto.HintStatsListResponse;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.model.Hint;
 
@@ -21,6 +22,13 @@ public class HintMapper {
                 hint.getId(),
                 hint.getGame().getId(),
                 hint.getContent()
+        );
+    }
+
+    public static HintStatsListResponse toHintStatsListResponse(String hint, Long frequency) {
+        return new HintStatsListResponse(
+                hint,
+                frequency
         );
     }
 }

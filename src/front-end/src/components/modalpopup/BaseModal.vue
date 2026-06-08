@@ -21,7 +21,7 @@ import {ref} from "vue";
 <template>
   <div v-show="visible">
     <div class="overlay"
-         @click="hide">
+         @click.self="hide">
       <div class="popup">
         <button  class="close"
                  @click="hide">

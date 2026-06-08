@@ -1,6 +1,5 @@
 <script setup>
 import HeaderLogo from "@/components/header/HeaderLogo.vue";
-import HeaderButton from "@/components/header/HeaderButton.vue";
 
 const props = defineProps({
   username: String,
@@ -14,7 +13,6 @@ const props = defineProps({
   <header-logo/>
     <p class="role">{{ props.phase }}</p>
     <div class="header-right">
-      <header-button :username="props.username"/>
     </div>
   </div>
 </template>
@@ -42,5 +40,6 @@ const props = defineProps({
   display: flex;
   gap: 1.5rem;
   align-items: center;
+  width: 10%;
 }
 </style>

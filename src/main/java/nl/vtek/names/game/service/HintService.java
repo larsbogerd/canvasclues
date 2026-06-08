@@ -1,6 +1,7 @@
 package nl.vtek.names.game.service;
 
 import nl.vtek.names.game.dto.HintResponse;
+import nl.vtek.names.game.dto.HintStatsListResponse;
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.mapper.HintMapper;
 import nl.vtek.names.game.model.Game;
@@ -9,8 +10,7 @@ import nl.vtek.names.game.repository.GameRepository;
 import nl.vtek.names.game.repository.HintRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -29,7 +29,6 @@ public class HintService {
         this.gameRepository = gameRepository;
     }
 
-
     public void createHint(Long gameId, String content) {
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
@@ -38,11 +37,9 @@ public class HintService {
         hintRepository.save(hint);
     }
 
-
     public Optional<HintResponse> getHintByGameId(Long gameId) {
         return hintRepository.findByGame_Id(gameId).map(HintMapper::toHintResponse);
     }
-
 
     private void validateHint(Hint hint) {
         if (hint == null || hint.getContent().isBlank()) {
@@ -54,36 +51,31 @@ public class HintService {
         }
     }
 
-    public List<HintResponse> findAllHints() {
-        return hintRepository.findAll().stream().map(HintMapper::toHintResponse).toList();
+    public List<HintStatsListResponse> getHintOccurrence() {
+        List<String> hints = getHints();
+        Map<String, Long> hintCounts = countHintOccurrence(hints);
+        List<HintStatsListResponse> allHints = new ArrayList<>();
+
+        for (Map.Entry<String, Long> entry : hintCounts.entrySet()) {
+            allHints.add(HintMapper.toHintStatsListResponse(entry.getKey(), entry.getValue()));
+        }
+
+        return allHints;
     }
 
-    public Map<String, Integer> countHints() {
-        List<HintResponse> hints = findAllHints();
+    public Map<String, Long> countHintOccurrence(List<String> hints) {
+        Map<String, Long> counts = new HashMap<>();
 
-        Map<String, Integer> counts = new HashMap<>();
-
-        for (HintResponse hint : hints) {
-            String content = hint.content();
-            counts.put(content, counts.getOrDefault(content, 0) + 1);
+        for (String hint : hints) {
+            counts.put(hint, counts.getOrDefault(hint, 0L) + 1);
         }
         return counts;
     }
 
-
-    public void putHintDataInFile() {
-        Map<String, Integer> counts = countHints();
-        try (FileWriter myWriter = new FileWriter("hintData.csv")) {
-            for (Map.Entry<String, Integer> entry : counts.entrySet()) {
-                myWriter.write(entry.getKey() + "," + entry.getValue() + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<HintResponse> getGameHints() {
+    public List<String> getHints() {
         List<Hint> hints = hintRepository.findAll();
-        return hints.stream().map(HintMapper::toHintResponse).toList();
+        return hints.stream()
+                .map(Hint::getContent)
+                .toList();
     }
 }

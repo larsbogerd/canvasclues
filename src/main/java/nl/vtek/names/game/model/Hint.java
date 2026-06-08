@@ -20,7 +20,6 @@ public class Hint {
     @Column(nullable = false, length = 50)
     private String content;
 
-
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;

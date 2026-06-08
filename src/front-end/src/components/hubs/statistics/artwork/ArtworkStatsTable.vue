@@ -109,6 +109,7 @@ function formatPropRows(){
   let propRowsHeader = Array.from(new Set(props.rows.flatMap(Object.keys)));
   let propRowsArray = props.rows.map(Object.values);
 
+
   propRowsHeader.shift();
   propRowsArray.forEach((row) => {
     row.shift();
@@ -135,6 +136,7 @@ function createTable(){
 
 function exportDataToCSV() {
   const table = createTable();
+
   const blob = new Blob([table], {type: 'text/csv'})
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a')

@@ -18,9 +18,10 @@ import router from "@/router.js";
           <h2>Kunstwerken</h2>
           <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
         </button>
-        <button class="card disabled" disabled>
+        <button class="card"
+        @click="router.push('/statistics/hints')">
           <h2>Hints</h2>
-          <p>Binnenkort beschikbaar</p>
+          <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
         </button>
       </div>
     </main>
@@ -86,7 +87,6 @@ h1 {
   cursor: pointer;
   transition: transform 0.12s ease, border-color 180ms ease;
 }
-
 .card:hover:not(.disabled) {
   border-color: var(--color-primary);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);

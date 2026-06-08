@@ -128,8 +128,6 @@ function handleInfoClicked(id) {
 const errorMessage = ref("");
 errorMessage.value = "";
 
-
-
 </script>
 
 <template>
@@ -166,8 +164,6 @@ errorMessage.value = "";
               <SpymasterHintCardContent
                   :showInputErrorPopup="showInputErrorPopup"
                   :inputErrorMessage="inputErrorMessage"
-                  v-model="hintInput"
-                  @submit="submit"
               >
               </SpymasterHintCardContent>
 
