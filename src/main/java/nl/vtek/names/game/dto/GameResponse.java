@@ -7,5 +7,6 @@ public record GameResponse(
         String hint,
         int spyScore,
         LocalDateTime createdAt,
-        int playCount
+        int playCount,
+        String gameMode
 ) {}

@@ -6,11 +6,22 @@ const props = defineProps({
   subText : String,
   imgUrl: String,
   altText: String,
+
+  difficulties: {
+    type: Array,
+    default: () => [],
+  },
+
+  modelValue: String,
 })
 
 const emit = defineEmits(
-    ['button-click']
+    ['button-click', 'update:modelValue']
 )
+
+function selectDifficulty(value) {
+  emit('update:modelValue', value);
+}
 
 </script>
 
@@ -22,6 +33,21 @@ const emit = defineEmits(
       <span class="eyebrow">{{ props.eyeBrow }}</span>
       <span class="h1">{{ props.Phase }}</span>
       <span class="subtext">{{ props.subText }}</span>
+
+      <span v-if="props.difficulties.length" class="difficulty-toggle">
+        <span
+            v-for="option in props.difficulties"
+            :key="option"
+            class="difficulty-option"
+            :class="{ active: props.modelValue === option }"
+            role="button"
+            tabindex="0"
+            @click.stop="selectDifficulty(option)"
+            @keydown.enter.stop.prevent="selectDifficulty(option)"
+            @keydown.space.stop.prevent="selectDifficulty(option)">
+          {{ option }}
+        </span>
+      </span>
     </span>
     <span class="icon-wrap">
       <img :src="props.imgUrl" :alt="props.altText" />
@@ -64,6 +90,40 @@ const emit = defineEmits(
   line-height: 1.45;
   max-width: 32ch;
   color:var(--text-secondary);
+}
+
+.difficulty-toggle {
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.difficulty-option {
+  font-family: var(--font-secondary),sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--button-border);
+  background-color: var(--color-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  text-transform: capitalize;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.difficulty-option:hover,
+.difficulty-option:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.difficulty-option.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-bg-base);
 }
 
 .icon-wrap {

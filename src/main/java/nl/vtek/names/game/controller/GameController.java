@@ -35,7 +35,7 @@ public class GameController {
     }
 
     @PostMapping("/start")
-    public List<CardResponse> startGame(@RequestParam(defaultValue = "easy") String gameMode) {
+    public List<CardResponse> startGame(@RequestParam String gameMode) {
         return startGameOrchestrator.startGame(gameMode);
     }
 

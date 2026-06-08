@@ -21,7 +21,7 @@ public class GameService {
 
     public Game createGame(String modeName) {
         Game game = new Game();
-        game.setGameModeName(modeName);
+        game.setGameMode(modeName);
         return gameRepository.save(game);
     }
 
@@ -38,11 +38,4 @@ public class GameService {
                 .map(GameMapper::toGameResponse)
                 .toList();
     }
-
-    public String getModeName(Long gameId) {
-        return gameRepository.findById(gameId)
-                .orElseThrow(() -> new GameNotFoundException(gameId))
-                .getGameModeName();
-    }
-
 }

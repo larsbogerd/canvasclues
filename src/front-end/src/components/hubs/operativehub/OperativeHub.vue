@@ -7,23 +7,27 @@ import PageHeader from "@/components/header/PageHeader.vue";
 const list = ref([]);
 const gameIdList = [];
 const sortBy = ref('newest');
-const search = ref('');
+const searchHint = ref('');
+const difficultyOptions = ['makkelijk', 'gemiddeld', 'moeilijk'];
+const selectedDifficulties = ref([]);
 
 const sortedList = computed(() => {
   return [...list.value]
-    .filter(game => game.hint.toLowerCase().includes(search.value.toLowerCase()))
-    .sort((a, b) => {
-    switch (sortBy.value) {
-      case 'newest':
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      case 'popular':
-        return b.playCount - a.playCount;
-      case 'difficulty':
-        return b.spyScore - a.spyScore;
-      default:
-        return 0;
-    }
-  });
+      .filter(card => selectedDifficulties.value.length === 0
+          || selectedDifficulties.value.includes(card.gameMode.toLowerCase()))
+      .filter(game => game.hint.toLowerCase().includes(searchHint.value.toLowerCase()))
+      .sort((a, b) => {
+        switch (sortBy.value) {
+          case 'newest':
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          case 'popular':
+            return b.playCount - a.playCount;
+          case 'difficulty':
+            return b.modeName - a.modeName;
+          default:
+            return 0;
+        }
+      });
 });
 
 async function fillGameIdList(){
@@ -65,20 +69,29 @@ onMounted(async () => {
               <option value="difficulty">Moeilijkheid</option>
             </select>
           </div>
-          <p class="scrollbox-title">
-            Beschikbare clues
-          </p>
-          <input class="text-color" v-model="search"
-                 type="text"
-                 placeholder="Zoek op hint..." />
+
+          <div>
+            <input v-for="difficulty in difficultyOptions"
+                   :key="difficulty"
+                   type="checkbox"
+                   :value="difficulty"
+                   v-model="selectedDifficulties" />
+          </div>
+
+          <div class="search-group">
+            <input class="text-color" v-model="searchHint"
+                   type="text"
+                   placeholder="Zoek op hint..." />
+          </div>
         </div>
         <div class="operative-hub_scroll_box_shell">
           <div class="operative-hub_scroll_box">
             <OperativeHubCard v-for="(card,index) in sortedList"
                               :game-id="card.gameId"
                               :title="card.hint"
-                              user="John Doe" game-mode="Classic"
+                              user="John Doe"
                               :score="card.spyScore"
+                              :game-mode="card.gameMode"
                               :key="index"/>
           </div>
         </div>
@@ -129,14 +142,13 @@ onMounted(async () => {
   box-sizing: border-box;
 }
 
-.operative-hub_scroll_box_header{
-  display: flex;
-  justify-content: space-between;
+.operative-hub_scroll_box_header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
   padding: 0 0.72rem 0.9rem;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
 .sort-label {
@@ -150,6 +162,12 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.search-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
 
 .operative-hub_scroll_box_header select,
@@ -170,7 +188,8 @@ onMounted(async () => {
 }
 
 .operative-hub_scroll_box_header input {
-  min-width: 220px;
+  width: 140px;
+  min-width: 0;
 }
 
 .operative-hub_scroll_box_shell {
@@ -207,14 +226,6 @@ onMounted(async () => {
   color: var(--text-primary);
 }
 
-.scrollbox-title{
-  font-family: var(--font-main),serif;
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 0;
-  color: var(--text-primary)
-}
-
 .page-header{
   display: flex;
   flex-direction: column;
@@ -231,6 +242,15 @@ onMounted(async () => {
 @media (max-width: 760px) {
   .operative-hub_scroll_box {
     grid-template-columns: 1fr;
+  }
+
+  .operative-hub_scroll_box_header {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .search-group {
+    justify-content: center;
   }
 }
 </style>

@@ -35,18 +35,19 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Hint> hints;
 
-    private String gameModeName;
+    private String gameMode;
 
 
     public Game() {
     }
 
-    public Game(Long id, GameState state, int spyScore, LocalDateTime createdAt, int playCount) {
+    public Game(Long id, GameState state, int spyScore, LocalDateTime createdAt, int playCount, String gameMode) {
         this.id = id;
         this.state = state;
         this.spyScore = spyScore;
         this.createdAt = createdAt;
         this.playCount = playCount;
+        this.gameMode = gameMode;
     }
 
     public Long getId() {
@@ -105,12 +106,12 @@ public class Game {
         this.playCount = playCount;
     }
 
-    public String getGameModeName() {
-        return gameModeName;
+    public String getGameMode() {
+        return gameMode;
     }
 
-    public void setGameModeName(String gameModeName) {
-        this.gameModeName = gameModeName;
+    public void setGameMode(String gameMode) {
+        this.gameMode = gameMode;
     }
 }
 

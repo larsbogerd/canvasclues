@@ -9,6 +9,7 @@ import nl.vtek.names.game.dto.GameResponse;
 import nl.vtek.names.game.orchestrator.StartGameOrchestrator;
 import nl.vtek.names.game.repository.CardRepository;
 import nl.vtek.names.game.model.Card;
+import nl.vtek.names.game.service.GameModeRegistry;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ class GameIntegrationTest {
                 new TypeReference<>() {}
         );
 
-        assertThat(returnedCards).hasSize(StartGameOrchestrator.BOARD_SIZE);
+        assertThat(returnedCards).hasSize(16);
 
         Long gameId = returnedCards.getFirst().gameId();
         assertThat(gameId).isNotZero();
@@ -66,7 +67,7 @@ class GameIntegrationTest {
         });
 
         List<Card> dbCards = cardRepository.findByGame_Id(gameId);
-        assertThat(dbCards).hasSize(StartGameOrchestrator.BOARD_SIZE);
+        assertThat(dbCards).hasSize(16);
     }
 
     @Test

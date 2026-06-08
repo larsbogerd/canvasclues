@@ -2,11 +2,10 @@ package nl.vtek.names.game.orchestrator;
 
 import nl.vtek.names.art.service.ArtworkService;
 import nl.vtek.names.game.dto.BoardSubmitRequest;
-import nl.vtek.names.game.interfaces.GameMode;
 import nl.vtek.names.game.service.CardService;
-import nl.vtek.names.game.service.GameModeRegistry;
 import nl.vtek.names.game.service.GameService;
 import nl.vtek.names.game.service.HintService;
+import nl.vtek.names.game.service.ScoreService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +17,18 @@ public class BoardSubmitOrchestrator {
     private final CardService cardService;
     private final HintService hintService;
     private final ArtworkService artworkService;
-    private final GameModeRegistry gameModeRegistry;
+    private final ScoreService scoreService;
 
     public BoardSubmitOrchestrator(GameService gameService,
                                    CardService cardService,
                                    HintService hintService,
                                    ArtworkService artworkService,
-                                   GameModeRegistry gameModeRegistry) {
+                                   ScoreService scoreService) {
         this.gameService = gameService;
         this.cardService = cardService;
         this.hintService = hintService;
         this.artworkService = artworkService;
-        this.gameModeRegistry = gameModeRegistry;
+        this.scoreService = scoreService;
     }
 
     @Transactional
@@ -38,7 +37,6 @@ public class BoardSubmitOrchestrator {
         hintService.createHint(gameId, request.hintContent());
         artworkService.recordArtworkUsage(gameId);
         gameService.markReady(gameId);
-        GameMode gameMode = gameModeRegistry.getMode(gameService.getModeName(gameId));
-        gameMode.handleSpyScore(gameId, request.spyScore());
+        scoreService.handleSpyScore(gameId, request.spyScore());
     }
 }

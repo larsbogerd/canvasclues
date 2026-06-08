@@ -17,7 +17,8 @@ public class GameMapper {
                 hint,
                 game.getSpyScore(),
                 game.getCreatedAt(),
-                game.getPlayCount()
+                game.getPlayCount(),
+                game.getGameMode()
         );
     }
 

@@ -1,11 +1,18 @@
 <script setup>
+import {ref} from "vue";
 import router from "@/router.js";
 import GameHubButton from "@/components/hubs/gamehub/GameHubButton.vue";
 import operativeImg from "@/assets/images/icons/Visitor2.png";
 import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
+import {setGameMode} from "@/assets/composables/StartGameService.js";
+
+const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];
+const difficulty = ref('makkelijk');
+
 function goToSpyPhase() {
+  setGameMode(difficulty.value)
   router.push('/game/spymaster')
 }
 
@@ -28,6 +35,8 @@ function goToOperativeHub() {
                        sub-text="Stel een nieuwe collectie samen en begeleid bezoekers met jouw hints"
                     :imgUrl="spymasterImg"
                        altText="Spymaster"
+                    :difficulties="difficulties"
+                       v-model="difficulty"
                        @button-click="goToSpyPhase"/>
 
         <GameHubButton role-name="Bezoeker"
