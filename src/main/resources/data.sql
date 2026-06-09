@@ -1,8 +1,9 @@
 -- Seed: game board
-INSERT IGNORE INTO game (id, state, spy_score, created_at, play_count, game_mode_name, likes, dislikes, game_mode)
-VALUES (1, 'READY', 60, '2026-03-25 13:00:00', 50, 'easy', 4, 2, 'makkelijk'),
-       (2, 'READY', 80, '2026-03-31 16:30:00', 5, 'easy',3, 1, 'makkelijk'),
-       (3, 'READY', 100, '2026-04-01 10:20:00', 10, 'easy', 700, 1, 'makkelijk');
+INSERT IGNORE INTO game (id, state, spy_score, created_at, play_count, likes, dislikes, game_mode)
+VALUES (1, 'READY', 60, '2026-03-25 13:00:00', 50, 3, 2, 'makkelijk'),
+       (2, 'READY', 80, '2026-03-31 16:30:00', 5, 4,3, 'makkelijk'),
+       (3, 'READY', 100, '2026-04-01 10:20:00', 10, 4, 8, 'makkelijk');
+
 
 -- Seed: artwork table
 INSERT IGNORE INTO artwork (id, title, artist_display, date_display, medium_display, place_of_origin, dimensions, department_title)
