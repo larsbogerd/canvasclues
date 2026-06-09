@@ -11,7 +11,7 @@ const props = defineProps({
 });
 
 function RouteToSpymaster() {
-  router.push('/game/spymaster')
+  router.push('/game/curator')
 }
 
 function ReloadGame() {

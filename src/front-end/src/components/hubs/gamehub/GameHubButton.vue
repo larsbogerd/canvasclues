@@ -27,7 +27,7 @@ function selectDifficulty(value) {
 
 <template>
   <button @click="emit('button-click')"
-          class="button">
+          class="toggle-puzzles-button">
 
     <span class="text-block">
       <span class="eyebrow">{{ props.eyeBrow }}</span>
@@ -146,7 +146,7 @@ img{
   object-fit: contain;
 }
 
-.button {
+.toggle-puzzles-button {
   font-family: inherit;
   color: inherit;
   outline: none;
@@ -167,20 +167,20 @@ img{
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.button:hover,
-.button:focus-visible {
+.toggle-puzzles-button:hover,
+.toggle-puzzles-button:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 22%, transparent);
 }
 
 @media (max-width: 1100px) {
-  .button {
+  .toggle-puzzles-button {
     width: min(760px, 88vw);
   }
 }
 
 @media (max-width: 760px) {
-  .button {
+  .toggle-puzzles-button {
     min-height: 260px;
     padding: 1.5rem;
   }

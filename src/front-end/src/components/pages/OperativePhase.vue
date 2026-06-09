@@ -117,7 +117,7 @@ function handleInfoClicked(id) {
 
 <template>
   <div class="operative-phase">
-    <PageHeader username="ClueCollector" phase="Bezoeker">
+    <PageHeader phase="Bezoeker">
     </PageHeader>
     <div class="screen">
       <div class="layout">

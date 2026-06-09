@@ -7,7 +7,7 @@ const props = defineProps({ score: Number })
 
 
 function RouteToOpertive() {
-  router.push('/game/operative')
+  router.push('/game/bezoeker')
 }
 
 function ReloadGame() {

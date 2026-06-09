@@ -6,7 +6,7 @@ const props = defineProps({
 })
 
 function goToOperativePhase() {
-  router.push(`/game/operative/${props.gameId}`)
+  router.push(`/game/bezoeker/${props.gameId}`)
 }
 </script>
 

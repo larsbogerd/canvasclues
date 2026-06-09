@@ -52,13 +52,13 @@ src/front-end/vite.config.js
 
 Routes are defined in `src/front-end/src/router.js` using hash-based routing (`createWebHashHistory`).
 
-| Route                        | Component        | Description |
-|------------------------------|------------------|-------------|
-| `/`                          | `StartingPage`   | Landing page with the project intro and rules popup |
-| `/game`                      | `GameHub`        | Role selection screen for spymaster or operative |
-| `/game/spymaster`            | `SpymasterPhase` | Starts a new game, shows the 4x4 grid, lets the spymaster select cards and submit a one-word hint |
-| `/game/operative`            | `OperativeHub`   | Browse available puzzles with sorting (newest, popular, difficulty) and search |
-| `/game/operative/:gameId`    | `OperativePhase` | Loads a game's grid and hint, then lets the operative validate selected cards |
+| Route                             | Component        | Description |
+|-----------------------------------|------------------|-------------|
+| `/`                               | `StartingPage`   | Landing page with the project intro and rules popup |
+| `/game`                           | `GameHub`        | Role selection screen for spymaster or operative |
+| `/game/curator`                   | `SpymasterPhase` | Starts a new game, shows the 4x4 grid, lets the spymaster select cards and submit a one-word hint |
+| `/game/bezoeker`                  | `OperativeHub`   | Browse available puzzles with sorting (newest, popular, difficulty) and search |
+| `/game/bezoeker/:gameId`          | `OperativePhase` | Loads a game's grid and hint, then lets the operative validate selected cards |
 | `/statistics`                     | `StatisticsHub`       | Statistics landing page |
 | `/statistics/artworks`            | `StatisticsArtworks`  | Lists every persisted artwork with usage counters, search, pagination, and PDF export |
 | `/statistics/artworks/:artworkId` | `ArtworkStats`        | Detail view for a single artwork: image, metadata, usage stats, and boards it appeared in |
@@ -78,7 +78,7 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 - On mount, the page calls `GET /api/v1/game/list` to fetch all available puzzles.
 - Games can be sorted by newest, popularity (`playCount`), or difficulty (`maxScore`).
 - A search field filters puzzles by hint text (case-insensitive).
-- Clicking a puzzle navigates to `/game/operative/:gameId`.
+- Clicking a puzzle navigates to `/game/bezoeker/:gameId`.
 
 ### Operative phase
 

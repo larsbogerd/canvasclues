@@ -13,18 +13,18 @@ const difficulty = ref('makkelijk');
 
 function goToSpyPhase() {
   setGameMode(difficulty.value)
-  router.push('/game/spymaster')
+  router.push('/game/curator')
 }
 
 function goToOperativeHub() {
-  router.push('/game/operative')
+  router.push('/game/bezoeker')
 }
 
 </script>
 
 <template>
   <div class="game-hub-page">
-    <PageHeader username="ClueCollector">
+    <PageHeader>
     </PageHeader>
     <div class="game-hub">
       <h1 class="main-text">Wat wil je doen?</h1>
