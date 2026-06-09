@@ -15,6 +15,15 @@ export async function startSession() {
     }
 }
 
+export async function fetchRandomGameId() {
+    try{
+        const response = await ApiClient.post(`/session/start/random`)
+        return response.data;
+    }catch(error){
+        console.log(error.response?.data ?? error);
+    }
+}
+
 export async function finishSession(sessionId) {
     try {
         const response = await ApiClient.post(

@@ -4,7 +4,7 @@ import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButto
 const props = defineProps({
   description: String,
   gameMode: String,
-  gameIdsToRandomize: Array
+  randomGameId: Number,
 })
 
 </script>
@@ -19,10 +19,7 @@ const props = defineProps({
         {{props.description}}
       </p>
     </div>
-    <OperativeHubButton
-        :game-mode="props.gameMode"
-        :game-ids-to-randomize="props.gameIdsToRandomize"
-    />
+    <OperativeHubButton :game-id="props.randomGameId" />
   </div>
 </template>
 

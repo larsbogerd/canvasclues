@@ -7,6 +7,7 @@ import nl.vtek.names.game.exception.SessionAlreadyFinishedException;
 import nl.vtek.names.game.exception.SessionNotFoundException;
 import nl.vtek.names.game.mapper.SessionMapper;
 import nl.vtek.names.game.model.Game;
+import nl.vtek.names.game.model.GameState;
 import nl.vtek.names.game.model.Hint;
 import nl.vtek.names.game.model.Session;
 import nl.vtek.names.game.model.SessionState;
@@ -16,6 +17,8 @@ import nl.vtek.names.game.repository.SessionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -44,6 +47,13 @@ public class SessionService {
         Session session = sessionRepository.save(new Session(game, hint));
 
         return SessionMapper.toSessionResponse(session, game.getCards(), hint);
+    }
+
+    public Long randomStart() {
+        Random random = new Random();
+        List<Game> games = gameRepository.findByState(GameState.READY);
+        int randomIndex = random.nextInt(games.size());
+        return games.get(randomIndex).getId();
     }
 
     public Session getActiveSession(UUID sessionId) {

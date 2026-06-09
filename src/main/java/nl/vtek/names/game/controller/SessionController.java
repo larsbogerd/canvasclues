@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -30,6 +32,11 @@ public class SessionController {
     @PostMapping("/{gameId}/start")
     public SessionResponse play(@PathVariable Long gameId) {
         return sessionService.start(gameId);
+    }
+
+    @PostMapping("/start/random")
+    public Long startRandom() {
+        return sessionService.randomStart();
     }
 
     @PostMapping("/{sessionId}/guess/{cardId}")

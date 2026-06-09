@@ -4,9 +4,10 @@ import GameModeCard from "@/components/hubs/operativehub/GameModeCard.vue";
 import {computed, onMounted, ref} from "vue";
 import {fetchGameListService} from "@/assets/composables/FetchGameListService.js";
 import PageHeader from "@/components/header/PageHeader.vue";
+import {fetchRandomGameId} from "@/assets/composables/SessionService.js";
 const list = ref([]);
-const gameIdList = [];
 const sortBy = ref('newest');
+const randomId = ref();
 const searchHint = ref('');
 const difficultyOptions = ['makkelijk', 'gemiddeld', 'moeilijk'];
 const selectedDifficulties = ref([]);
@@ -30,15 +31,9 @@ const sortedList = computed(() => {
       });
 });
 
-async function fillGameIdList(){
-  list.value.map(Object.values).forEach((Array) =>{
-    gameIdList.push(Array[0]);
-  });
-}
-
 onMounted(async () => {
   list.value = await fetchGameListService()
-  await fillGameIdList()
+  randomId.value = await fetchRandomGameId();
 })
 
 </script>
@@ -54,7 +49,7 @@ onMounted(async () => {
       <div class="operative-hub_header">
         <GameModeCard game-mode="Willekeurige clue"
                       description="Laat Canvas Clues een puzzel voor je kiezen"
-                      :game-ids-to-randomize="gameIdList"/>
+                      :random-game-id="randomId"/>
 
         <GameModeCard game-mode="Dagelijkse clue"
                       description="Speel de dagelijkse hint"/>

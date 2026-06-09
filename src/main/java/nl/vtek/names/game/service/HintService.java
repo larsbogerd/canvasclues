@@ -23,7 +23,6 @@ public class HintService {
     private final HintRepository hintRepository;
     private final GameRepository gameRepository;
 
-
     public HintService(HintRepository hintRepository, GameRepository gameRepository) {
         this.hintRepository = hintRepository;
         this.gameRepository = gameRepository;
