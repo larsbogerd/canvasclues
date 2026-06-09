@@ -14,8 +14,8 @@ function RouteToSpymaster() {
   router.push('/game/curator')
 }
 
-function ReloadGame() {
-  router.go()
+function NewClue() {
+  router.push('/game/operative')
 }
 </script>
 
@@ -37,7 +37,7 @@ function ReloadGame() {
     <hr class="modal-divider" />
     <div class="modal-actions">
       <ButtonBase @click="RouteToSpymaster">Speel als curator</ButtonBase>
-      <ButtonBase @click="ReloadGame">Nieuwe clue</ButtonBase>
+      <ButtonBase @click="NewClue">Nieuwe clue</ButtonBase>
     </div>
   </section>
 </template>

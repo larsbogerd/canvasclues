@@ -42,6 +42,7 @@ const emit = defineEmits(['submit'])
   display: flex;
   flex-direction: row;
   gap: 7px;
+  width: 80%;
 }
 
 .info-container {
@@ -52,8 +53,10 @@ const emit = defineEmits(['submit'])
   gap: 9px;
   background-color: var(--color-bg-base);
   border-radius: 12px;
-  width: 100px;
-  height: 82px;
+  flex: 1;
+  min-height: 82px;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .score-container{
@@ -62,22 +65,27 @@ const emit = defineEmits(['submit'])
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  gap: 7px;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px;
+  width: 80%;
+  box-sizing: border-box;
 }
 
 .center-body{
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 14px;
+  align-self: stretch;
 }
 
 .info-text{
-  /*should be main but font weight doesnt work */
   font-family: var(--font-secondary), sans-serif;
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-size: clamp(1.4rem, 2vw, 2rem);
   color: var(--text-primary);
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .score{
@@ -85,18 +93,17 @@ const emit = defineEmits(['submit'])
 }
 
 .score-text{
-  /*should be main but font weight doesnt work */
   font-family: var(--font-secondary), sans-serif;
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  letter-spacing: 0.06em;
-  font-weight: 800;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .eyebrow {
   font-family: var(--font-secondary), sans-serif;
   color: var(--text-eyebrow);
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -137,9 +144,7 @@ const emit = defineEmits(['submit'])
 
 .hint-header-text{
   font-family: var(--font-secondary), sans-serif;
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 600;
 }
 </style>

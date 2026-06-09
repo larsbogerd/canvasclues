@@ -37,23 +37,12 @@ const emit = defineEmits(['submitGameQuality'])
 
 .modal-stat{
   background-color: var(--color-primary);
-  -webkit-transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease-out;
+  transition: transform 180ms ease;
 }
 
-.modal-stat:first-child:hover{
+.modal-stat:hover{
   cursor: pointer;
-  -webkit-transition-duration: 0.3s;
-  -webkit-transition-timing-function: ease-in;
-  transform: scale(1.2);
-}
-
-
-.modal-stat:nth-child(2):hover{
-  cursor: pointer;
-  -webkit-transition-duration: 0.3s;
-  -webkit-transition-timing-function: ease-in;
-  transform: scale(1.2);
+  transform: scale(1.05);
 }
 
 .modal-stat-label{

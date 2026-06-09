@@ -1,0 +1,78 @@
+classDiagram
+    direction TB
+
+    namespace Strategy {
+        class GameMode {
+            <<interface>>
+            +gameMode() String
+            +boardSize() int
+            +getCardDistribution() List~CardType~
+        }
+        class EasyModeStrategy {
+            +gameMode() String
+            +boardSize() int
+            +getCardDistribution() List~CardType~
+        }
+        class MediumModeStrategy {
+            +gameMode() String
+            +boardSize() int
+            +getCardDistribution() List~CardType~
+        }
+        class HardModeStrategy {
+            +gameMode() String
+            +boardSize() int
+            +getCardDistribution() List~CardType~
+        }
+    }
+
+    namespace Services {
+        class Scoring {
+            <<interface>>
+             +handleSpyScore()
+             +calcOperativeScore()
+             +getMultiplier()
+             +recordGuess()
+
+
+
+        }
+        class GameModeRegistry {
+            <<Service>>
+            -modes Map~String, GameMode~
+            +getMode(name String) GameMode
+        }
+        class ScoreService {
+            <<Service>>
+            +calcSpyScore(gameId Long, spyScore Integer) void
+            +validateSpyScore(selectedCardCount int) void
+            +handleSpyScore(gameId Long, spyScore Integer) void
+            +calcOperativeScore(currentScore int, comboStreak int) int
+            +getMultiplier(streak int) double
+            +recordGuess(session Session, card Card) void
+        }
+    }
+
+    namespace Orchestrators {
+        class StartGameOrchestrator {
+            <<Service>>
+            +startGame(modeName String) List~CardResponse~
+        }
+        class BoardSubmitOrchestrator {
+            <<Service>>
+            +submit(gameId Long, request BoardSubmitRequest) void
+        }
+        class GuessSubmitOrchestrator {
+            <<Service>>
+            +submit(sessionId UUID, cardId UUID) GuessSubmitResponse
+        }
+    }
+
+    GameMode <|.. EasyModeStrategy : implements
+    GameMode <|.. MediumModeStrategy : implements
+    GameMode <|.. HardModeStrategy : implements
+    Scoring <|.. ScoreService : implements
+GameModeRegistry "1" o-- "*" GameMode : manages
+StartGameOrchestrator --> GameModeRegistry
+StartGameOrchestrator --> ScoreService
+BoardSubmitOrchestrator --> ScoreService
+GuessSubmitOrchestrator --> ScoreService

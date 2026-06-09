@@ -29,21 +29,6 @@ onMounted(async () => {
         </div>
       </header>
 
-      <section class="highlights">
-        <div class="highlight-card">
-          <h3>Meest gekozen</h3>
-          <p class="placeholder">Top 5 placeholder</p>
-        </div>
-        <div class="highlight-card">
-          <h3>Meest verwarrend</h3>
-          <p class="placeholder">Laagste correct-ratio placeholder</p>
-        </div>
-        <div class="highlight-card">
-          <h3>Vergeten</h3>
-          <p class="placeholder">Langst ongebruikt placeholder</p>
-        </div>
-      </section>
-
       <ArtworkStatsTable :rows="artworks" />
     </main>
   </div>
@@ -99,21 +84,6 @@ h1 {
   margin: 4px 0 0 0;
 }
 
-.highlights {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.highlight-card {
-  background: var(--scrolbox-background-gradient);
-  border: 1px solid var(--scrollbox-border-secondary);
-  border-radius: 28px;
-  padding: 20px;
-  box-shadow: 0 18px 38px var(--secondary-shadow);
-}
-
 .highlight-card h3 {
   margin: 0 0 8px 0;
   font-family: var(--font-main), serif;
@@ -121,11 +91,4 @@ h1 {
   font-size: 18px;
 }
 
-.placeholder {
-  margin: 0;
-  font-family: var(--font-secondary), sans-serif;
-  color: var(--text-primary);
-  opacity: 0.5;
-  font-style: italic;
-}
 </style>

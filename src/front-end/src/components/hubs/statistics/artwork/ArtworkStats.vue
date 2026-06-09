@@ -117,25 +117,6 @@ function formatDate(iso) {
           </div>
         </section>
       </div>
-
-      <section v-if="artwork" class="boards-card">
-        <h2>Gebruikt in boards</h2>
-        <table>
-          <thead>
-          <tr>
-            <th>Game-ID</th>
-            <th>Hint</th>
-            <th>Uitkomst</th>
-            <th>Datum</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr class="empty">
-            <td colspan="4">Nog geen data</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
     </main>
   </div>
 </template>
@@ -313,8 +294,7 @@ function formatDate(iso) {
 }
 
 /* ---- Traits card ---- */
-.trait-card,
-.boards-card {
+.trait-card {
   background: var(--color-secondary);
   border: 1px solid var(--button-border);
   border-radius: 28px;
@@ -325,10 +305,6 @@ function formatDate(iso) {
 
 .trait-card {
   flex: 1;
-}
-
-.boards-card {
-  margin-top: 4px;
 }
 
 .trait-card h2,
@@ -401,31 +377,6 @@ function formatDate(iso) {
   padding: 32px 16px;
   opacity: 0.5;
   font-style: italic;
-}
-
-.outcome {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-}
-
-.outcome-correct {
-  background-color: #ebf4ea;
-  border-color: #cfe3cd;
-  color: #436b3f;
-}
-
-.outcome-wrong {
-  background-color: #f7e8e6;
-  border-color: #e6c8c3;
-  color: #8a4239;
-}
-
-.outcome-skipped {
-  background-color: #f1ebdc;
-  border-color: #dfd2b6;
-  color: #7a6a46;
 }
 
 </style>

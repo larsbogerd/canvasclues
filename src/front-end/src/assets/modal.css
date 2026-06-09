@@ -52,8 +52,6 @@
     padding: clamp(12px, 1.2vw, 20px);
     background: var(--color-bg-base);
     border-radius: 12px;
-    max-width: 150px;
-    margin: 0 auto 20px auto;
 }
 
 .modal-stat-value {

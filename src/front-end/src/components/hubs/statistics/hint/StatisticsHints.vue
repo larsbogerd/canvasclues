@@ -27,7 +27,7 @@ onMounted(async () => {
 
       <header class="page-header">
         <h1>Hints</h1>
-        <p class="subtitle"> hoe vaak een hint is voorgekomen</p>
+        <p class="subtitle"> Hoe vaak een hint is voorgekomen</p>
       </header>
 
 <HintStatsTable :rows="hintOccurrenceList" />

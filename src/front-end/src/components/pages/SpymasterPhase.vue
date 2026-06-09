@@ -138,12 +138,18 @@ errorMessage.value = "";
     </div>
 
   <div class="screen">
-    <GameRules class="game-rules">
-      <SpymasterModalContent>
-      </SpymasterModalContent>
-    </GameRules>
-
     <div class="layout">
+      <ArtInfo v-if="activeCard"
+               :title="activeCard.title"
+               :artist="activeCard.artistDisplay"
+               :date="activeCard.dateDisplay"
+               :medium="activeCard.mediumDisplay"
+               :origin="activeCard.placeOfOrigin"
+               :artworkId="activeCard.artworkId"
+               :department="activeCard.department"
+      />
+      <div v-else class="sidebar-placeholder"></div>
+
       <GameGrid class="grid" phase="spymaster"
                  :cards="cards"
                  :active-info-id="activeCard?.id"
@@ -176,15 +182,10 @@ errorMessage.value = "";
           </template>
         </HintCard>
 
-        <ArtInfo v-if="activeCard"
-                 :title="activeCard.title"
-                 :artist="activeCard.artistDisplay"
-                 :date="activeCard.dateDisplay"
-                 :medium="activeCard.mediumDisplay"
-                 :origin="activeCard.placeOfOrigin"
-                 :artworkId="activeCard.artworkId"
-                 :department="activeCard.department"
-        />
+        <GameRules>
+          <SpymasterModalContent>
+          </SpymasterModalContent>
+        </GameRules>
       </div>
 
     </div>
@@ -214,22 +215,23 @@ errorMessage.value = "";
   align-items: center;
 }
 
-.game-rules {
-  margin-top: 5vh;
-  align-self: flex-start;
-}
-
 .layout {
   --layout-height: 85vh;
   --layout-padding: 20px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   grid-template-rows: 1fr;
   align-items: start;
   gap: 32px;
   height: var(--layout-height);
   box-sizing: border-box;
   padding: var(--layout-padding);
+}
+
+.sidebar-placeholder {
+  width: 17vw;
+  min-width: 280px;
+  max-width: 400px;
 }
 
 .grid {

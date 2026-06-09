@@ -190,7 +190,7 @@ function exportDataToCSV() {
         >
           <td>
           </td>
-          <td>{{ hint.hint }}</td>
+          <td class="hint-cell">{{ hint.hint }}</td>
           <td>{{ hint.frequency }}</td>
         </tr>
         </tbody>
@@ -361,6 +361,10 @@ tbody .thumb {
   object-fit: cover;
   display: block;
   background: var(--hub-border-bottom);
+}
+
+.hint-cell {
+  text-transform: capitalize;
 }
 
 tbody tr:not(.empty) {

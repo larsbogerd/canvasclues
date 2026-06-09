@@ -19,29 +19,27 @@ const props = defineProps({
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  gap: 7px;
-  width: 80%;
-  padding: 10px;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .hint-header-text{
   font-family: var(--font-secondary), sans-serif;
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 600;
 }
 .score{
   color: var(--color-primary);
 }
 
 .score-text{
-  /*should be main but font weight doesnt work */
   font-family: var(--font-secondary), sans-serif;
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-  letter-spacing: 0.06em;
-  font-weight: 800;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 p {

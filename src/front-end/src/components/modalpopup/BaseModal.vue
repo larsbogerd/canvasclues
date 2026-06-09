@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from "vue";
+import {onBeforeUnmount, ref, watch} from "vue";
 
   const visible = ref(false);
 
@@ -11,6 +11,22 @@ import {ref} from "vue";
     visible.value = false;
   }
 
+  function onKeydown(e) {
+    if (e.key === 'Escape') hide();
+  }
+
+  watch(visible, (isVisible) => {
+    if (isVisible) {
+      window.addEventListener('keydown', onKeydown);
+    } else {
+      window.removeEventListener('keydown', onKeydown);
+    }
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('keydown', onKeydown);
+  });
+
   defineExpose ({
     show,
     hide,
@@ -19,18 +35,23 @@ import {ref} from "vue";
 </script>
 
 <template>
-  <div v-show="visible">
-    <div class="overlay"
-         @click.self="hide">
-      <div class="popup">
-        <button  class="close"
-                 @click="hide">
-          ✕
-        </button>
-        <slot></slot>
+  <Teleport to="body">
+    <Transition name="modal">
+      <div v-if="visible"
+           class="overlay"
+           @click.self="hide">
+        <div class="popup"
+             @click.stop>
+          <button type="button"
+                  class="close"
+                  @click="hide">
+            ✕
+          </button>
+          <slot></slot>
+        </div>
       </div>
-    </div>
-  </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -68,5 +89,24 @@ import {ref} from "vue";
 
 .close:hover {
   color: var(--text-primary);
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 200ms ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active .popup,
+.modal-leave-active .popup {
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 220ms ease;
+}
+.modal-enter-from .popup,
+.modal-leave-to .popup {
+  transform: scale(0.96);
+  opacity: 0;
 }
 </style>

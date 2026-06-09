@@ -27,60 +27,65 @@ function expand(){
 </script>
 
 <template>
-  <div class="art-info">
+  <div class="art-info-root">
+    <div class="art-info">
 
-    <div class="art-info-header">
-      <div>
-        <p class="art-info-title">{{ props.title }}</p>
-        <p class="art-info-subtitle">{{ props.artist }}</p>
+      <div class="art-info-header">
+        <div>
+          <p class="art-info-title">{{ props.title }}</p>
+          <p class="art-info-subtitle">{{ props.artist }}</p>
+        </div>
+
+        <button class="art-info-expand"
+                @click="expand">
+            <ExpandIcon class="expand-icon"></ExpandIcon>
+        </button>
       </div>
 
-      <button class="art-info-expand"
-              @click="expand">
-          <ExpandIcon class="expand-icon"></ExpandIcon>
-      </button>
-    </div>
-
-    <div class="art-info-details">
-      <div class="image-panel">
-        <img
-            class="artwork-blur"
-            :src="fullsizeUrl(props.artworkId)"
-            alt=""
-            aria-hidden="true"
-        />
-        <img class="artwork-img"
-             :src="fullsizeUrl(props.artworkId)"
-             :alt="props.title"
-        />
+      <div class="art-info-details">
+        <div class="image-panel">
+          <img
+              class="artwork-blur"
+              :src="fullsizeUrl(props.artworkId)"
+              alt=""
+              aria-hidden="true"
+          />
+          <img class="artwork-img"
+               :src="fullsizeUrl(props.artworkId)"
+               :alt="props.title"
+          />
+        </div>
       </div>
     </div>
+
+    <base-modal ref="modal">
+      <ArtInfoModalContent
+          :title="props.title"
+          :artist="props.artist"
+          :medium="props.medium"
+          :origin="props.origin"
+          :style="props.style"
+          :date="props.date"
+          :fullSizeUrl="fullsizeUrl(props.artworkId)"
+          :department="props.department"
+      >
+      </ArtInfoModalContent>
+    </base-modal>
   </div>
-
-  <base-modal ref="modal">
-    <ArtInfoModalContent
-        :title="props.title"
-        :artist="props.artist"
-        :medium="props.medium"
-        :origin="props.origin"
-        :style="props.style"
-        :date="props.date"
-        :fullSizeUrl="fullsizeUrl(props.artworkId)"
-        :department="props.department"
-    >
-    </ArtInfoModalContent>
-  </base-modal>
-
 </template>
 <style scoped>
+
+.art-info-root {
+  width: 17vw;
+  min-width: 280px;
+  max-width: 400px;
+}
 
 .art-info{
   background-color: var(--color-secondary);
   background: var(--color-secondary);
   min-height: auto;
-  width: 17vw;
-  min-width: 280px;
-  max-width: 400px;
+  width: 100%;
   border-radius: 20px;
   box-shadow: 0 2px 8px var(--primary-shadow);
   box-sizing: border-box;

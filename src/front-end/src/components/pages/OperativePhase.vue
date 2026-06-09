@@ -122,10 +122,17 @@ function handleInfoClicked(id) {
     <div class="screen">
       <div class="layout">
 
-        <GameRules>
-          <OperativeModalContent>
-          </OperativeModalContent>
-        </GameRules>
+        <ArtInfo v-if="activeCard"
+                 :title="activeCard.title"
+                 :artist="activeCard.artistDisplay"
+                 :medium="activeCard.mediumDisplay"
+                 :origin="activeCard.placeOfOrigin"
+                 :style="activeCard.altText"
+                 :date="activeCard.dateDisplay"
+                 :artworkId="activeCard.artworkId"
+                 :department="activeCard.department"
+        />
+        <div v-else class="sidebar-placeholder"></div>
 
         <GameGrid class="grid"
                   :cards="cards"
@@ -159,16 +166,10 @@ function handleInfoClicked(id) {
 
           </HintCard>
 
-          <ArtInfo v-if="activeCard"
-                   :title="activeCard.title"
-                   :artist="activeCard.artistDisplay"
-                   :medium="activeCard.mediumDisplay"
-                   :origin="activeCard.placeOfOrigin"
-                   :style="activeCard.altText"
-                   :date="activeCard.dateDisplay"
-                   :artworkId="activeCard.artworkId"
-                   :department="activeCard.department"
-          />
+          <GameRules>
+            <OperativeModalContent>
+            </OperativeModalContent>
+          </GameRules>
 
           <span v-if="sessionId"
                 class="session-id-chip"
@@ -244,7 +245,11 @@ function handleInfoClicked(id) {
   gap: 14px;
 }
 
-
+.sidebar-placeholder {
+  width: 17vw;
+  min-width: 280px;
+  max-width: 400px;
+}
 
 .session-id-chip {
   font-family: var(--font-secondary), sans-serif;

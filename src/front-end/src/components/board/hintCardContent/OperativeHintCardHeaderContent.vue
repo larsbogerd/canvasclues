@@ -16,5 +16,8 @@ const props = defineProps({
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 </style>
