@@ -18,7 +18,7 @@ function ReloadGame() {
 <template>
   <section>
     <h1 class="modal-title">Puzzel gepubliceerd!</h1>
-    <div class="modal-stat">
+    <div class="modal-stat modal-stat--solo">
       <div class="modal-stat-value score">{{props.score}}</div>
       <div class="modal-stat-label">Score</div>
     </div>

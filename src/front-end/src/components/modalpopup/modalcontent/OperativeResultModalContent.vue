@@ -15,7 +15,7 @@ function RouteToSpymaster() {
 }
 
 function NewClue() {
-  router.push('/game/operative')
+  router.push('/game/bezoeker')
 }
 </script>
 
