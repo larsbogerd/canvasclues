@@ -1,10 +1,7 @@
 <script setup>
-import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButton.vue";
-
 const props = defineProps({
   description: String,
-  gameMode: String,
-  randomGameId: Number,
+  gameMode: String
 })
 
 </script>
@@ -19,7 +16,8 @@ const props = defineProps({
         {{props.description}}
       </p>
     </div>
-    <OperativeHubButton :game-id="props.randomGameId" />
+      <slot>
+      </slot>
   </div>
 </template>
 
@@ -28,7 +26,7 @@ const props = defineProps({
 .game-hub-card{
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 350px;
   min-height: 220px;
   box-sizing: border-box;
   background-color: var(--color-secondary);
@@ -66,8 +64,6 @@ const props = defineProps({
   color: var(--text-tertiary);
 }
 
-.game-hub-card :deep(button) {
-  align-self: flex-start;
-}
+
 
 </style>

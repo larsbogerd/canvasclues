@@ -34,9 +34,9 @@ public class SessionController {
         return sessionService.start(gameId);
     }
 
-    @PostMapping("/start/random")
-    public Long startRandom() {
-        return sessionService.randomStart();
+    @PostMapping("/start/random/{difficulty}")
+    public Long startRandom(@PathVariable String difficulty) {
+        return sessionService.randomStart(difficulty);
     }
 
     @PostMapping("/{sessionId}/guess/{cardId}")

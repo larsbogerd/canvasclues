@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findByState(GameState state);
+
+    List<Game> findByStateAndGameMode(GameState state, String difficulty);
 }

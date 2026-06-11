@@ -49,9 +49,9 @@ public class SessionService {
         return SessionMapper.toSessionResponse(session, game.getCards(), hint);
     }
 
-    public Long randomStart() {
+    public Long randomStart(String difficulty) {
         Random random = new Random();
-        List<Game> games = gameRepository.findByState(GameState.READY);
+        List<Game> games = gameRepository.findByStateAndGameMode(GameState.READY, difficulty);
         int randomIndex = random.nextInt(games.size());
         return games.get(randomIndex).getId();
     }

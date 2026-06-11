@@ -1,5 +1,6 @@
 <script setup>
 import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButton.vue";
+import router from "@/router.js";
 
 const props = defineProps({
   gameId: Number,
@@ -8,6 +9,10 @@ const props = defineProps({
   gameMode: String,
   score: Number,
 })
+function goToOperativePhase() {
+  router.push(`/game/bezoeker/${props.gameId}`)
+  console.log(props.gameId);
+}
 
 </script>
 
@@ -17,13 +22,13 @@ const props = defineProps({
       <p class="hub-title">{{ props.title }}</p>
       <p class="hub-description">Moeilijkheid: {{ props.gameMode }}</p>
       <p class="hub-description">Best score: {{ props.score }}</p>
-      <OperativeHubButton :game-id="props.gameId" />
+      <OperativeHubButton @GoToOperative="goToOperativePhase"
+                          text="Speel" />
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .game-hub-card{
   width: 100%;
   box-sizing: border-box;

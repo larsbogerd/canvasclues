@@ -15,9 +15,9 @@ export async function startSession() {
     }
 }
 
-export async function fetchRandomGameId() {
+export async function fetchRandomGameId(difficulty) {
     try{
-        const response = await ApiClient.post(`/session/start/random`)
+        const response = await ApiClient.post(`/session/start/random/${difficulty}`)
         return response.data;
     }catch(error){
         console.log(error.response?.data ?? error);

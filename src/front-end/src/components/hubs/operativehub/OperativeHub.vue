@@ -1,23 +1,34 @@
 <script setup>
 
 import { useToggle } from '@vueuse/core'
-
-import GameModeCard from "@/components/hubs/operativehub/GameModeCard.vue";
 import {onMounted, ref} from "vue";
 import {fetchGameListService} from "@/assets/composables/FetchGameListService.js";
 import PageHeader from "@/components/header/PageHeader.vue";
-import {fetchRandomGameId} from "@/assets/composables/SessionService.js";
 const list = ref([]);
-const randomId = ref();
 import OperativeScrollBox from "@/components/hubs/operativehub/OperativeScrollBox.vue";
+import GameModeCard from "@/components/hubs/operativehub/GameModeCard.vue";
+import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButton.vue";
+import router from "@/router.js";
+import {fetchRandomGameId} from "@/assets/composables/SessionService.js";
 
 const [showScrollBox, toggle] = useToggle()
 
+let randomId = 0;
 
 onMounted(async () => {
   list.value = await fetchGameListService()
-  randomId.value = await fetchRandomGameId();
 })
+
+
+async function goToRandomOperativePhase(difficulty) {
+  randomId = await fetchRandomGameId(difficulty);
+  await router.push(`/game/bezoeker/${randomId}`)
+}
+
+async function goToDailyOperativePhase(randomId) {
+  await router.push(`/game/bezoeker/${randomId}`)
+}
+
 
 </script>
 
@@ -33,11 +44,27 @@ onMounted(async () => {
 <div class="operative-hub_container">
   <div class="operative-hub_header">
       <GameModeCard game-mode="Willekeurige clue"
-                    description="Laat Canvas Clues een puzzel voor je kiezen"
-                    :random-game-id="randomId"/>
+                    description="Laat Canvas Clues een puzzel voor je kiezen">
+        <div class="difficulty-select-container">
+          <OperativeHubButton class="difficulty-button"
+                              @GoToOperative="goToRandomOperativePhase('makkelijk')"
+                              text="Makkelijk"/>
+
+          <OperativeHubButton class="difficulty-button"
+                              @GoToOperative="goToRandomOperativePhase('gemiddeld')"
+                              text="Normaal"/>
+
+          <OperativeHubButton class="difficulty-button"
+                              @GoToOperative="goToRandomOperativePhase('moeilijk')"
+                              text="Moeilijk"/>
+        </div>
+      </GameModeCard>
 
       <GameModeCard game-mode="Dagelijkse clue"
-                    description="Speel de dagelijkse hint"/>
+                    description="Speel de dagelijkse hint">
+        <OperativeHubButton @GoToOperative="goToDailyOperativePhase(1)"
+                            text="Speel"/>
+      </GameModeCard>
   </div>
 
   <button class="toggle-puzzles-button"
@@ -52,6 +79,16 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
+.difficulty-select-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.difficulty-button{
+  align-self: flex-start;
+}
 
 .operative-hub-page {
   min-height: 100vh;

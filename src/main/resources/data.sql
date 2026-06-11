@@ -1,8 +1,8 @@
 -- Seed: game board
 INSERT IGNORE INTO game (id, state, spy_score, created_at, play_count, likes, dislikes, game_mode)
 VALUES (1, 'READY', 60, '2026-03-25 13:00:00', 50, 3, 2, 'makkelijk'),
-       (2, 'READY', 80, '2026-03-31 16:30:00', 5, 4,3, 'makkelijk'),
-       (3, 'READY', 100, '2026-04-01 10:20:00', 10, 4, 8, 'makkelijk');
+       (2, 'READY', 80, '2026-03-31 16:30:00', 5, 4,3, 'gemiddeld'),
+       (3, 'READY', 100, '2026-04-01 10:20:00', 10, 4, 8, 'moeilijk');
 
 
 -- Seed: artwork table
@@ -70,13 +70,13 @@ SET times_loaded             = 42,
     times_correct_guess  = 12,
     times_bad_guess          = 4
 WHERE id IN (
-    UUID_TO_BIN('a38e2828-ec6f-ece1-a30f-70243449197b'), -- Stacks of Wheat (Monet)
-    UUID_TO_BIN('6644829f-f292-c5c4-a73c-0356a6fdbf0d'), -- The Bedroom (Van Gogh)
-    UUID_TO_BIN('3c27b499-af56-f0d5-93b5-a7f2f1ad5813'), -- Water Lilies (Monet)
-    UUID_TO_BIN('2d484387-2509-5e8e-2c43-22f9981972eb'), -- La Grande Jatte (Seurat)
-    UUID_TO_BIN('2fa24f36-cc26-41b6-4b49-12bba2a6c1c8'), -- The Great Wave (Hokusai)
-    UUID_TO_BIN('f8fd76e9-c396-5678-36ed-6a348c904d27')  -- Paris Street Rainy Day (Caillebotte)
-);
+             UUID_TO_BIN('a38e2828-ec6f-ece1-a30f-70243449197b'), -- Stacks of Wheat (Monet)
+             UUID_TO_BIN('6644829f-f292-c5c4-a73c-0356a6fdbf0d'), -- The Bedroom (Van Gogh)
+             UUID_TO_BIN('3c27b499-af56-f0d5-93b5-a7f2f1ad5813'), -- Water Lilies (Monet)
+             UUID_TO_BIN('2d484387-2509-5e8e-2c43-22f9981972eb'), -- La Grande Jatte (Seurat)
+             UUID_TO_BIN('2fa24f36-cc26-41b6-4b49-12bba2a6c1c8'), -- The Great Wave (Hokusai)
+             UUID_TO_BIN('f8fd76e9-c396-5678-36ed-6a348c904d27')  -- Paris Street Rainy Day (Caillebotte)
+    );
 
 -- Tier A: popular
 UPDATE artwork
@@ -85,17 +85,17 @@ SET times_loaded             = 28,
     times_correct_guess  = 7,
     times_bad_guess          = 3
 WHERE id IN (
-    UUID_TO_BIN('47fd1564-93f5-f30b-7786-013421133b4a'),
-    UUID_TO_BIN('defb4004-b500-218d-3d9b-9a02423f097d'),
-    UUID_TO_BIN('47c5bcb8-62ef-e5d7-55e7-f5121f409a30'),
-    UUID_TO_BIN('3a608f55-d76e-fa96-d0b1-0789fbc48f1e'),
-    UUID_TO_BIN('0f1cc0e0-e42e-be16-3f71-2022da38cb93'),
-    UUID_TO_BIN('d0ff5b36-bb38-b156-6042-5c8545352c2f'),
-    UUID_TO_BIN('52ac8996-3460-cf71-cb42-5c4d0aa29b74'),
-    UUID_TO_BIN('65db9e21-83c3-1cc6-7240-1e1996d87f52'),
-    UUID_TO_BIN('d0e36029-27fc-bf4e-357a-55cfbaf7bdfd'),
-    UUID_TO_BIN('d7df2633-3b40-f570-c906-211503a37cde')
-);
+             UUID_TO_BIN('47fd1564-93f5-f30b-7786-013421133b4a'),
+             UUID_TO_BIN('defb4004-b500-218d-3d9b-9a02423f097d'),
+             UUID_TO_BIN('47c5bcb8-62ef-e5d7-55e7-f5121f409a30'),
+             UUID_TO_BIN('3a608f55-d76e-fa96-d0b1-0789fbc48f1e'),
+             UUID_TO_BIN('0f1cc0e0-e42e-be16-3f71-2022da38cb93'),
+             UUID_TO_BIN('d0ff5b36-bb38-b156-6042-5c8545352c2f'),
+             UUID_TO_BIN('52ac8996-3460-cf71-cb42-5c4d0aa29b74'),
+             UUID_TO_BIN('65db9e21-83c3-1cc6-7240-1e1996d87f52'),
+             UUID_TO_BIN('d0e36029-27fc-bf4e-357a-55cfbaf7bdfd'),
+             UUID_TO_BIN('d7df2633-3b40-f570-c906-211503a37cde')
+    );
 
 -- Tier B: moderate
 UPDATE artwork
@@ -104,20 +104,20 @@ SET times_loaded             = 15,
     times_correct_guess  = 3,
     times_bad_guess          = 2
 WHERE id IN (
-    UUID_TO_BIN('fec5d023-0b46-45df-eb57-cbf64e24121d'),
-    UUID_TO_BIN('0675f9a9-1a7b-c90a-3bb6-7f7be2afb678'),
-    UUID_TO_BIN('fae6d055-fe95-17e2-a00a-c2307ace531c'),
-    UUID_TO_BIN('416b87c8-515f-0066-5c44-b7562162f2c0'),
-    UUID_TO_BIN('aa870b0d-5a1b-660a-6dc6-56c12109cf6e'),
-    UUID_TO_BIN('93270aaf-16a5-1604-c6c8-0f3c003eb7a1'),
-    UUID_TO_BIN('8641479e-c93e-f1a8-9925-19be061706da'),
-    UUID_TO_BIN('321c45f5-22a3-84a2-44cc-cf66642d4cf2'),
-    UUID_TO_BIN('2ae64c8a-266d-470a-a25a-c83127564636'),
-    UUID_TO_BIN('cf50f037-5fb2-e197-0e56-3ae701edb3e2'),
-    UUID_TO_BIN('237c25a2-6051-a8e7-1610-a01938d4deab'),
-    UUID_TO_BIN('5dca7347-c6dc-24dd-d073-d705b9cdc575'),
-    UUID_TO_BIN('0f951635-312c-0829-451b-553f461c5518')
-);
+             UUID_TO_BIN('fec5d023-0b46-45df-eb57-cbf64e24121d'),
+             UUID_TO_BIN('0675f9a9-1a7b-c90a-3bb6-7f7be2afb678'),
+             UUID_TO_BIN('fae6d055-fe95-17e2-a00a-c2307ace531c'),
+             UUID_TO_BIN('416b87c8-515f-0066-5c44-b7562162f2c0'),
+             UUID_TO_BIN('aa870b0d-5a1b-660a-6dc6-56c12109cf6e'),
+             UUID_TO_BIN('93270aaf-16a5-1604-c6c8-0f3c003eb7a1'),
+             UUID_TO_BIN('8641479e-c93e-f1a8-9925-19be061706da'),
+             UUID_TO_BIN('321c45f5-22a3-84a2-44cc-cf66642d4cf2'),
+             UUID_TO_BIN('2ae64c8a-266d-470a-a25a-c83127564636'),
+             UUID_TO_BIN('cf50f037-5fb2-e197-0e56-3ae701edb3e2'),
+             UUID_TO_BIN('237c25a2-6051-a8e7-1610-a01938d4deab'),
+             UUID_TO_BIN('5dca7347-c6dc-24dd-d073-d705b9cdc575'),
+             UUID_TO_BIN('0f951635-312c-0829-451b-553f461c5518')
+    );
 
 -- Tier C: rare
 UPDATE artwork
@@ -126,19 +126,19 @@ SET times_loaded             = 7,
     times_correct_guess  = 1,
     times_bad_guess          = 1
 WHERE id IN (
-    UUID_TO_BIN('d4ca6321-8656-3d3f-a362-2ee297b2b813'),
-    UUID_TO_BIN('77951d0c-d781-eac6-f4ff-f13cc5cfc0cf'),
-    UUID_TO_BIN('f0b3ff64-d68e-3fd2-ffc9-5470eb9fea6e'),
-    UUID_TO_BIN('72227c9e-413c-8930-477d-5a90e0a2123c'),
-    UUID_TO_BIN('239e0072-de08-cb26-1484-4776fc27b0fb'),
-    UUID_TO_BIN('7abbfd97-fb03-2366-cfe5-b53738a3d93e'),
-    UUID_TO_BIN('d9bde524-38b2-4262-3338-e4d06a50746d'),
-    UUID_TO_BIN('d63b9402-c42b-cce3-aa63-6d213ad621cd'),
-    UUID_TO_BIN('5490fd49-dd52-4fd7-7d41-d871dcffae55'),
-    UUID_TO_BIN('4822cd01-44ac-041a-36b8-c0542377b750'),
-    UUID_TO_BIN('9365a024-75ce-75e9-756f-1c2c96eadec9'),
-    UUID_TO_BIN('4e37b182-cc1e-ef86-3eb2-de7d5b9db717')
-);
+             UUID_TO_BIN('d4ca6321-8656-3d3f-a362-2ee297b2b813'),
+             UUID_TO_BIN('77951d0c-d781-eac6-f4ff-f13cc5cfc0cf'),
+             UUID_TO_BIN('f0b3ff64-d68e-3fd2-ffc9-5470eb9fea6e'),
+             UUID_TO_BIN('72227c9e-413c-8930-477d-5a90e0a2123c'),
+             UUID_TO_BIN('239e0072-de08-cb26-1484-4776fc27b0fb'),
+             UUID_TO_BIN('7abbfd97-fb03-2366-cfe5-b53738a3d93e'),
+             UUID_TO_BIN('d9bde524-38b2-4262-3338-e4d06a50746d'),
+             UUID_TO_BIN('d63b9402-c42b-cce3-aa63-6d213ad621cd'),
+             UUID_TO_BIN('5490fd49-dd52-4fd7-7d41-d871dcffae55'),
+             UUID_TO_BIN('4822cd01-44ac-041a-36b8-c0542377b750'),
+             UUID_TO_BIN('9365a024-75ce-75e9-756f-1c2c96eadec9'),
+             UUID_TO_BIN('4e37b182-cc1e-ef86-3eb2-de7d5b9db717')
+    );
 
 -- Tier D: very rare (edge-case data for dashboard)
 UPDATE artwork
@@ -147,14 +147,14 @@ SET times_loaded             = 3,
     times_correct_guess  = 0,
     times_bad_guess          = 1
 WHERE id IN (
-    UUID_TO_BIN('b146368d-a855-63ac-6115-04b835c60bb0'),
-    UUID_TO_BIN('62fd0e14-d7fe-0d01-ab00-1eed84b4f294'),
-    UUID_TO_BIN('83092988-7180-21d1-b8a3-cf39ddf39a68'),
-    UUID_TO_BIN('f0447c50-f4c9-ecb2-2695-22669e1469cd'),
-    UUID_TO_BIN('38bb6be4-223e-af7a-7e18-f9ad0c388d3c'),
-    UUID_TO_BIN('67b46720-1589-0d13-3597-f03c7b618094'),
-    UUID_TO_BIN('fa81bfb9-5a07-5e3c-33b4-4efde68981c8')
-);
+             UUID_TO_BIN('b146368d-a855-63ac-6115-04b835c60bb0'),
+             UUID_TO_BIN('62fd0e14-d7fe-0d01-ab00-1eed84b4f294'),
+             UUID_TO_BIN('83092988-7180-21d1-b8a3-cf39ddf39a68'),
+             UUID_TO_BIN('f0447c50-f4c9-ecb2-2695-22669e1469cd'),
+             UUID_TO_BIN('38bb6be4-223e-af7a-7e18-f9ad0c388d3c'),
+             UUID_TO_BIN('67b46720-1589-0d13-3597-f03c7b618094'),
+             UUID_TO_BIN('fa81bfb9-5a07-5e3c-33b4-4efde68981c8')
+    );
 
 -- Seed: card table
 -- Each game has 12 PLAYABLE + 4 ASSASSIN, matching CardService.cardRandomizer.
@@ -177,9 +177,9 @@ VALUES
     (UUID_TO_BIN('a71fe056-43fe-44c3-ad93-5e107646ff1d'), 1, UUID_TO_BIN('0f1cc0e0-e42e-be16-3f71-2022da38cb93'), false, 'PLAYABLE'),
     (UUID_TO_BIN('c35890a2-f2ce-443f-be38-8cc1297959e0'), 1, UUID_TO_BIN('d0ff5b36-bb38-b156-6042-5c8545352c2f'), true,  'PLAYABLE'),
     (UUID_TO_BIN('c9ca8451-8d89-4030-904a-05f624d97785'), 1, UUID_TO_BIN('52ac8996-3460-cf71-cb42-5c4d0aa29b74'), false, 'ASSASSIN'),
-    (UUID_TO_BIN('cd257504-634f-455b-9f50-0004026c717e'), 2, UUID_TO_BIN('65db9e21-83c3-1cc6-7240-1e1996d87f52'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('cd257504-634f-455b-9f50-0004026c717e'), 2, UUID_TO_BIN('65db9e21-83c3-1cc6-7240-1e1996d87f52'), false, 'ASSASSIN'),
     (UUID_TO_BIN('f36df9fe-a662-459a-8a91-b63de19f7a57'), 2, UUID_TO_BIN('d0e36029-27fc-bf4e-357a-55cfbaf7bdfd'), false, 'ASSASSIN'),
-    (UUID_TO_BIN('d6c0e2ef-a8bf-429b-b4b1-5f9cd51f9089'), 2, UUID_TO_BIN('d7df2633-3b40-f570-c906-211503a37cde'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('d6c0e2ef-a8bf-429b-b4b1-5f9cd51f9089'), 2, UUID_TO_BIN('d7df2633-3b40-f570-c906-211503a37cde'), false, 'ASSASSIN'),
     (UUID_TO_BIN('bcd4248f-4301-4579-a469-bc9485b90600'), 2, UUID_TO_BIN('416b87c8-515f-0066-5c44-b7562162f2c0'), false, 'PLAYABLE'),
     (UUID_TO_BIN('b80155e2-2b30-4a4f-bc86-2c21ec424a25'), 2, UUID_TO_BIN('aa870b0d-5a1b-660a-6dc6-56c12109cf6e'), false, 'ASSASSIN'),
     (UUID_TO_BIN('f0942a86-c00b-4f85-9dd9-3f5f43b36f77'), 2, UUID_TO_BIN('93270aaf-16a5-1604-c6c8-0f3c003eb7a1'), false, 'PLAYABLE'),
@@ -194,16 +194,16 @@ VALUES
     (UUID_TO_BIN('a3f5c512-e446-4b35-a7c8-22fcd74c3dc8'), 2, UUID_TO_BIN('77951d0c-d781-eac6-f4ff-f13cc5cfc0cf'), false, 'PLAYABLE'),
     (UUID_TO_BIN('eed5af4c-84b2-428e-9933-b2f97856677c'), 2, UUID_TO_BIN('f0b3ff64-d68e-3fd2-ffc9-5470eb9fea6e'), true,  'PLAYABLE'),
     (UUID_TO_BIN('021b46c8-0211-4463-b45f-f62d86488335'), 3, UUID_TO_BIN('72227c9e-413c-8930-477d-5a90e0a2123c'), true,  'PLAYABLE'),
-    (UUID_TO_BIN('0efceed6-5504-4fb0-9412-2a5a6b7e93dc'), 3, UUID_TO_BIN('239e0072-de08-cb26-1484-4776fc27b0fb'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('0efceed6-5504-4fb0-9412-2a5a6b7e93dc'), 3, UUID_TO_BIN('239e0072-de08-cb26-1484-4776fc27b0fb'), false, 'ASSASSIN'),
     (UUID_TO_BIN('8c394982-39f8-41d6-84d9-700d823d64cc'), 3, UUID_TO_BIN('7abbfd97-fb03-2366-cfe5-b53738a3d93e'), false, 'ASSASSIN'),
-    (UUID_TO_BIN('4d0eff4d-0cb1-4223-9203-78282b7537cb'), 3, UUID_TO_BIN('d9bde524-38b2-4262-3338-e4d06a50746d'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('4d0eff4d-0cb1-4223-9203-78282b7537cb'), 3, UUID_TO_BIN('d9bde524-38b2-4262-3338-e4d06a50746d'), false, 'ASSASSIN'),
     (UUID_TO_BIN('5709c820-2a44-4b12-92ec-7b169b6f2729'), 3, UUID_TO_BIN('d63b9402-c42b-cce3-aa63-6d213ad621cd'), true,  'PLAYABLE'),
     (UUID_TO_BIN('6dda92ed-bce2-4483-8ede-c2aff101f703'), 3, UUID_TO_BIN('5490fd49-dd52-4fd7-7d41-d871dcffae55'), true,  'PLAYABLE'),
     (UUID_TO_BIN('74af3481-bf70-4ed6-b8b0-d357043facfa'), 3, UUID_TO_BIN('4822cd01-44ac-041a-36b8-c0542377b750'), true,  'PLAYABLE'),
     (UUID_TO_BIN('9a91a883-303a-4de4-943e-4fc343a9ce1f'), 3, UUID_TO_BIN('9365a024-75ce-75e9-756f-1c2c96eadec9'), false, 'ASSASSIN'),
-    (UUID_TO_BIN('9c70792d-bd9d-4652-9795-892318ef70bb'), 3, UUID_TO_BIN('4e37b182-cc1e-ef86-3eb2-de7d5b9db717'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('9c70792d-bd9d-4652-9795-892318ef70bb'), 3, UUID_TO_BIN('4e37b182-cc1e-ef86-3eb2-de7d5b9db717'), false, 'ASSASSIN'),
     (UUID_TO_BIN('ac94511a-7ef5-482b-a719-eca5f81515c2'), 3, UUID_TO_BIN('b146368d-a855-63ac-6115-04b835c60bb0'), true,  'PLAYABLE'),
-    (UUID_TO_BIN('c315728b-201a-41ae-9b8c-49deb09bb291'), 3, UUID_TO_BIN('62fd0e14-d7fe-0d01-ab00-1eed84b4f294'), false, 'PLAYABLE'),
+    (UUID_TO_BIN('c315728b-201a-41ae-9b8c-49deb09bb291'), 3, UUID_TO_BIN('62fd0e14-d7fe-0d01-ab00-1eed84b4f294'), false, 'ASSASSIN'),
     (UUID_TO_BIN('13f8b684-38fc-4f43-873a-3c28e2f3ec33'), 3, UUID_TO_BIN('83092988-7180-21d1-b8a3-cf39ddf39a68'), false, 'ASSASSIN'),
     (UUID_TO_BIN('ad8786ce-d340-4cca-af29-4d77ad6621bb'), 3, UUID_TO_BIN('f0447c50-f4c9-ecb2-2695-22669e1469cd'), false, 'PLAYABLE'),
     (UUID_TO_BIN('dc196af3-6ca5-4493-b3a4-21e35c8d564e'), 3, UUID_TO_BIN('38bb6be4-223e-af7a-7e18-f9ad0c388d3c'), false, 'ASSASSIN'),

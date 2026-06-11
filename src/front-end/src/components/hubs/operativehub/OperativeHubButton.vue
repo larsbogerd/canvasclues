@@ -1,18 +1,16 @@
 <script setup>
-import router from "@/router.js";
-
 const props = defineProps({
   gameId: Number,
+  text: String,
 })
 
-function goToOperativePhase() {
-  router.push(`/game/bezoeker/${props.gameId}`)
-}
+const emit = defineEmits(['GoToOperative'])
+
 </script>
 
 <template>
-<button @click="goToOperativePhase">
-  Speel
+<button @click="emit('GoToOperative')">
+  {{text}}
 </button>
 </template>
 
@@ -32,7 +30,6 @@ button{
   font-weight: 700;
   box-shadow: 0 10px 20px color-mix(in srgb, var(--color-primary) 28%, transparent);
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-  align-self: start;
 }
 
 button:hover,

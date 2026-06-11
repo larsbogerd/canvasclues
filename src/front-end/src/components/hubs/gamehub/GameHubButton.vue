@@ -35,8 +35,7 @@ function selectDifficulty(value) {
       <span class="subtext">{{ props.subText }}</span>
 
       <span v-if="props.difficulties.length" class="difficulty-toggle">
-        <span
-            v-for="option in props.difficulties"
+        <span v-for="option in props.difficulties"
             :key="option"
             class="difficulty-option"
             :class="{ active: props.modelValue === option }"
@@ -64,7 +63,6 @@ function selectDifficulty(value) {
   gap: 0.75rem;
   width: min(60%, 360px);
   text-align: left;
-
 }
 
 .eyebrow {
