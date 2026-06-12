@@ -26,8 +26,13 @@ const sortedList = computed(() => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           case 'popular':
             return b.playCount - a.playCount;
-          case 'difficulty':
-            return b.modeName - a.modeName;
+          case 'quality': {
+            return b.qualityRatio - a.qualityRatio;
+          }
+          case 'difficulty': {
+            const order = { makkelijk: 0, gemiddeld: 1, moeilijk: 2 };
+            return order[a.gameMode] - order[b.gameMode];
+          }
           default:
             return 0;
         }
@@ -44,6 +49,7 @@ const sortedList = computed(() => {
         <select class="text-color" v-model="sortBy">
           <option value="newest">Nieuwste</option>
           <option value="popular">Populariteit</option>
+          <option value="quality">Kwaliteit</option>
           <option value="difficulty">Moeilijkheid</option>
         </select>
       </div>
