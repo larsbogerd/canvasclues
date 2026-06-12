@@ -1,6 +1,7 @@
 <script setup>
 
 import OperativeHubCard from "@/components/hubs/operativehub/OperativeHubCard.vue";
+import DifficultyIcon from "@/assets/images/svg-components/DifficultyIcon.vue";
 import {computed, ref} from "vue";
 const sortBy = ref('newest');
 const search = ref('');
@@ -53,12 +54,17 @@ const sortedList = computed(() => {
           <option value="difficulty">Moeilijkheid</option>
         </select>
       </div>
-      <div>
-        <input v-for="difficulty in difficultyOptions"
+      <div class="difficulty-filter-group">
+        <label v-for="(difficulty, i) in difficultyOptions"
                :key="difficulty"
-               type="checkbox"
-               :value="difficulty"
-               v-model="selectedDifficulties" />
+               class="difficulty-filter"
+               :class="{ 'is-active': selectedDifficulties.includes(difficulty) }"
+               :title="difficulty">
+          <input type="checkbox"
+                 :value="difficulty"
+                 v-model="selectedDifficulties" />
+          <DifficultyIcon :level="i + 1" />
+        </label>
       </div>
 
       <div class="search-group">
@@ -72,8 +78,10 @@ const sortedList = computed(() => {
         <OperativeHubCard v-for="(card,index) in sortedList"
                           :game-id="card.gameId"
                           :title="card.hint"
-                          user="John Doe" :game-mode="card.gameMode"
+                          :game-mode="card.gameMode"
                           :score="card.spyScore"
+                          :play-count="card.playCount"
+                          :quality-ratio="card.qualityRatio"
                           :key="index"/>
       </div>
     </div>
@@ -193,6 +201,50 @@ const sortedList = computed(() => {
 .operative-hub_scroll_box_header input {
   width: 140px;
   min-width: 0;
+}
+
+.difficulty-filter-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.difficulty-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 14px;
+  border: 1px solid var(--secondary-border);
+  color: var(--text-primary);
+  opacity: 0.6;
+  transition: opacity 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.difficulty-filter:hover {
+  opacity: 0.75;
+}
+
+.difficulty-filter.is-active {
+  opacity: 1;
+  border-color: var(--color-primary);
+  background-color: var(--color-secondary);
+}
+
+.difficulty-filter input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.difficulty-filter svg {
+  display: block;
+  height: 18px;
+  width: auto;
 }
 
 </style>
