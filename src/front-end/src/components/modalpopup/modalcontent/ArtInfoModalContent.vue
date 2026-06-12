@@ -1,15 +1,15 @@
 <script setup>
+import {computed} from "vue";
+import {htmlToText} from "@/assets/composables/ArtworkDetailsService.js";
 
 const props = defineProps({
   title: String,
   artist: String,
-  medium: String,
-  origin: String,
-  style: String,
-  date: String,
   fullSizeUrl: String,
-  department: String,
+  details: Object,
 })
+
+const shortDescription = computed(() => htmlToText(props.details?.shortDescription))
 </script>
 
 <template>
@@ -39,27 +39,46 @@ const props = defineProps({
       <div class="trait-card">
         <dl class="traits">
 
-          <div class="trait">
+          <div class="trait" v-if="props.details?.dateDisplay">
             <dt>Datum</dt>
-            <dd>{{ props.date }}</dd>
+            <dd>{{ props.details.dateDisplay }}</dd>
           </div>
 
-          <div class="trait">
+          <div class="trait" v-if="props.details?.mediumDisplay">
             <dt>Techniek</dt>
-            <dd>{{ props.medium }}</dd>
+            <dd>{{ props.details.mediumDisplay }}</dd>
           </div>
 
-          <div class="trait">
+          <div class="trait" v-if="props.details?.placeOfOrigin">
             <dt>Herkomst</dt>
-            <dd>{{ props.origin }}</dd>
+            <dd>{{ props.details.placeOfOrigin }}</dd>
           </div>
 
-          <div class="trait">
-            <dt>afdeling</dt>
-            <dd>{{ props.department }}</dd>
+          <div class="trait" v-if="props.details?.departmentTitle">
+            <dt>Afdeling</dt>
+            <dd>{{ props.details.departmentTitle }}</dd>
+          </div>
+
+          <div class="trait" v-if="props.details?.dimensions">
+            <dt>Afmetingen</dt>
+            <dd>{{ props.details.dimensions }}</dd>
+          </div>
+
+          <div class="trait" v-if="props.details?.styleTitle">
+            <dt>Stijl</dt>
+            <dd>{{ props.details.styleTitle }}</dd>
+          </div>
+
+          <div class="trait" v-if="props.details?.artworkTypeTitle">
+            <dt>Type</dt>
+            <dd>{{ props.details.artworkTypeTitle }}</dd>
           </div>
         </dl>
       </div>
+
+      <section class="description-card" v-if="shortDescription">
+        <p class="short-description">{{ shortDescription }}</p>
+      </section>
     </div>
   </div>
 </template>
@@ -176,6 +195,20 @@ const props = defineProps({
   color: var(--text-primary);
   margin: 0;
   align-self: center;
+}
+
+.description-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.short-description {
+  font-family: var(--font-secondary), sans-serif;
+  color: var(--text-primary);
+  line-height: 1.55;
+  white-space: pre-line;
+  margin: 0;
 }
 
 </style>

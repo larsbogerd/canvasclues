@@ -1,5 +1,6 @@
 package nl.vtek.names.art.controller;
 
+import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
@@ -39,5 +40,15 @@ public class ArtworkController {
     @GetMapping("/{id}/stats")
     public ArtworkStatsResponse getArtworkDetail(@PathVariable UUID id) {
         return artworkService.getArtworkDetail(id);
+    }
+
+    @GetMapping("/{id}/details")
+    public ArtworkDetailsResponse getArtworkDetails(@PathVariable UUID id) {
+        return artworkService.getArtworkDetails(id);
+    }
+
+    @GetMapping("/details")
+    public List<ArtworkDetailsResponse> getArtworkDetailsBatch(@RequestParam List<UUID> ids) {
+        return artworkService.getArtworkDetailsBatch(ids);
     }
 }

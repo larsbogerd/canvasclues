@@ -11,10 +11,6 @@ public record CardResponse(
         String imageUrl,
         String title,
         String artistDisplay,
-        String dateDisplay,
-        String mediumDisplay,
-        String placeOfOrigin,
         UUID artworkId,
-        String department,
         String altText
 ) {}

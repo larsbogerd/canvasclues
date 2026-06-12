@@ -1,6 +1,7 @@
 package nl.vtek.names.art.service;
 
 import nl.vtek.names.art.client.ArticClient;
+import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
@@ -108,5 +109,17 @@ public class ArtworkService {
         Artwork artwork = artworkRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Artwork not found: " + id));
         return artworkMapper.toDetailResponse(artwork);
+    }
+
+    public ArtworkDetailsResponse getArtworkDetails(UUID id) {
+        Artwork artwork = artworkRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Artwork not found: " + id));
+        return artworkMapper.toDetailsResponse(artwork);
+    }
+
+    public List<ArtworkDetailsResponse> getArtworkDetailsBatch(List<UUID> ids) {
+        return artworkRepository.findAllById(ids).stream()
+                .map(artworkMapper::toDetailsResponse)
+                .toList();
     }
 }

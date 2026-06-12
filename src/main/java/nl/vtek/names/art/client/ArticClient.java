@@ -26,7 +26,10 @@ public class ArticClient {
             "medium_display",
             "place_of_origin",
             "dimensions",
-            "department_title"
+            "department_title",
+            "style_title",
+            "artwork_type_title",
+            "short_description"
     );
 
     private final RestClient restClient;

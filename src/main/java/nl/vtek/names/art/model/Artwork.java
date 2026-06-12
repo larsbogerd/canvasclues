@@ -35,6 +35,12 @@ public class Artwork {
     private String dimensions;
     @Column(columnDefinition = "TEXT")
     private String departmentTitle;
+    @Column(columnDefinition = "TEXT")
+    private String styleTitle;
+    @Column(columnDefinition = "TEXT")
+    private String artworkTypeTitle;
+    @Column(columnDefinition = "TEXT")
+    private String shortDescription;
 
     private int timesLoaded;
     private int timesSpymasterPick;
@@ -51,7 +57,8 @@ public class Artwork {
 
     public Artwork(UUID id, String title, String artistDisplay, String dateDisplay,
                    String mediumDisplay, String placeOfOrigin, String dimensions,
-                   String departmentTitle) {
+                   String departmentTitle, String styleTitle, String artworkTypeTitle,
+                   String shortDescription) {
         this.id = id;
         this.title = title;
         this.artistDisplay = artistDisplay;
@@ -60,6 +67,9 @@ public class Artwork {
         this.placeOfOrigin = placeOfOrigin;
         this.dimensions = dimensions;
         this.departmentTitle = departmentTitle;
+        this.styleTitle = styleTitle;
+        this.artworkTypeTitle = artworkTypeTitle;
+        this.shortDescription = shortDescription;
     }
 
     public UUID getId() {
@@ -124,6 +134,30 @@ public class Artwork {
 
     public void setDepartmentTitle(String departmentTitle) {
         this.departmentTitle = departmentTitle;
+    }
+
+    public String getStyleTitle() {
+        return styleTitle;
+    }
+
+    public void setStyleTitle(String styleTitle) {
+        this.styleTitle = styleTitle;
+    }
+
+    public String getArtworkTypeTitle() {
+        return artworkTypeTitle;
+    }
+
+    public void setArtworkTypeTitle(String artworkTypeTitle) {
+        this.artworkTypeTitle = artworkTypeTitle;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public int getTimesLoaded() {

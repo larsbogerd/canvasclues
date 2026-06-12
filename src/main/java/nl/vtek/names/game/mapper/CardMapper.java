@@ -24,11 +24,7 @@ public class CardMapper {
                     IiifUrlBuilder.forArtwork(artwork.getId()),
                     artwork.getTitle(),
                     artwork.getArtistDisplay(),
-                    artwork.getDateDisplay(),
-                    artwork.getMediumDisplay(),
-                    artwork.getPlaceOfOrigin(),
                     artwork.getId(),
-                    artwork.getDepartmentTitle(),
                     "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay())
             ));
         }

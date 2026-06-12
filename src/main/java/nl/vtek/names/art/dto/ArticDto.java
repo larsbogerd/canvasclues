@@ -12,5 +12,8 @@ public record ArticDto(
         @JsonProperty("medium_display") String mediumDisplay,
         @JsonProperty("place_of_origin") String placeOfOrigin,
         String dimensions,
-        @JsonProperty("department_title") String departmentTitle
+        @JsonProperty("department_title") String departmentTitle,
+        @JsonProperty("style_title") String styleTitle,
+        @JsonProperty("artwork_type_title") String artworkTypeTitle,
+        @JsonProperty("short_description") String shortDescription
 ) {}

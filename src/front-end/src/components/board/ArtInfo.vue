@@ -2,26 +2,25 @@
 import ExpandIcon from '@/assets/images/svg-components/ExpandIcon.vue'
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import ArtInfoModalContent from "@/components/modalpopup/modalcontent/ArtInfoModalContent.vue";
+import {getArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
 import {ref} from "vue";
 
 const props = defineProps({
   title: String,
   artist: String,
-  medium: String,
-  origin: String,
-  style: String,
-  date: String,
   artworkId: String,
-  department: String,
 })
 const modal = ref(null)
+const details = ref(null)
 
 function fullsizeUrl(id) {
   return `https://www.artic.edu/iiif/2/${id}/full/600,/0/default.jpg`;
 }
 
-function expand(){
+async function expand(){
+  details.value = null;
   modal.value.show();
+  details.value = await getArtworkDetails(props.artworkId);
 }
 
 </script>
@@ -57,21 +56,18 @@ function expand(){
         </div>
       </div>
     </div>
-
-    <base-modal ref="modal">
-      <ArtInfoModalContent
-          :title="props.title"
-          :artist="props.artist"
-          :medium="props.medium"
-          :origin="props.origin"
-          :style="props.style"
-          :date="props.date"
-          :fullSizeUrl="fullsizeUrl(props.artworkId)"
-          :department="props.department"
-      >
-      </ArtInfoModalContent>
-    </base-modal>
   </div>
+
+  <base-modal ref="modal">
+    <ArtInfoModalContent
+        :title="props.title"
+        :artist="props.artist"
+        :fullSizeUrl="fullsizeUrl(props.artworkId)"
+        :details="details"
+    >
+    </ArtInfoModalContent>
+  </base-modal>
+
 </template>
 <style scoped>
 

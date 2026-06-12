@@ -1,6 +1,7 @@
 package nl.vtek.names.art.mapper;
 
 import nl.vtek.names.art.dto.ArticDto;
+import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
@@ -20,7 +21,10 @@ public class ArtworkMapper {
                 dto.mediumDisplay(),
                 dto.placeOfOrigin(),
                 dto.dimensions(),
-                dto.departmentTitle()
+                dto.departmentTitle(),
+                dto.styleTitle(),
+                dto.artworkTypeTitle(),
+                dto.shortDescription()
         );
     }
 
@@ -28,6 +32,20 @@ public class ArtworkMapper {
         return new ArtworkResponse(artwork.getId(), artwork.getTitle(), artwork.getArtistDisplay(),
                 artwork.getDateDisplay(), artwork.getMediumDisplay(),
                 artwork.getPlaceOfOrigin(), IiifUrlBuilder.forArtwork(artwork.getId()));
+    }
+
+    public ArtworkDetailsResponse toDetailsResponse(Artwork artwork) {
+        return new ArtworkDetailsResponse(
+                artwork.getId(),
+                artwork.getDateDisplay(),
+                artwork.getMediumDisplay(),
+                artwork.getPlaceOfOrigin(),
+                artwork.getDepartmentTitle(),
+                artwork.getDimensions(),
+                artwork.getStyleTitle(),
+                artwork.getArtworkTypeTitle(),
+                artwork.getShortDescription()
+        );
     }
 
     public ArtworkStatsListResponse toStatsResponse(Artwork artwork) {

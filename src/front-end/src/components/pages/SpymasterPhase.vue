@@ -5,6 +5,7 @@ import GameGrid from "@/components/board/GameGrid.vue";
 
 import {startGameCall} from "@/assets/composables/StartGameService.js";
 import {submitSpymasterTurn} from "@/assets/composables/SubmitService.js";
+import {prefetchArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
@@ -107,6 +108,7 @@ async function startGame() {
       gameId = await card.gameId;
       emit('game-started', gameId);
     }
+    prefetchArtworkDetails(cards.value.map(card => card.artworkId));
   } catch(error) {
     console.log(error);
   }
@@ -142,11 +144,7 @@ errorMessage.value = "";
       <ArtInfo v-if="activeCard"
                :title="activeCard.title"
                :artist="activeCard.artistDisplay"
-               :date="activeCard.dateDisplay"
-               :medium="activeCard.mediumDisplay"
-               :origin="activeCard.placeOfOrigin"
                :artworkId="activeCard.artworkId"
-               :department="activeCard.department"
       />
       <div v-else class="sidebar-placeholder"></div>
 

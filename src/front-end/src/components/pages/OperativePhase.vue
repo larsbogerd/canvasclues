@@ -6,6 +6,7 @@ import PageHeader from "@/components/header/PageHeader.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import OperativeResultModalContent from "@/components/modalpopup/modalcontent/OperativeResultModalContent.vue";
 import {finishSession, startSession} from "@/assets/composables/SessionService.js";
+import {prefetchArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
 import {submitGuess} from "@/assets/composables/GuessService.js";
 import {submitRating} from "@/assets/composables/SubmitService.js";
 import GameRules from "@/components/board/GameRules.vue";
@@ -57,6 +58,7 @@ onMounted (async () => {
   cards.value = data.cards;
   hint.value = data.hint;
   amount.value = data.spymasterPickCount;
+  prefetchArtworkDetails(data.cards.map(card => card.artworkId));
 });
 
 async function lockIn(cardId) {
@@ -125,12 +127,7 @@ function handleInfoClicked(id) {
         <ArtInfo v-if="activeCard"
                  :title="activeCard.title"
                  :artist="activeCard.artistDisplay"
-                 :medium="activeCard.mediumDisplay"
-                 :origin="activeCard.placeOfOrigin"
-                 :style="activeCard.altText"
-                 :date="activeCard.dateDisplay"
                  :artworkId="activeCard.artworkId"
-                 :department="activeCard.department"
         />
         <div v-else class="sidebar-placeholder"></div>
 
