@@ -1,3 +1,12 @@
+# Local / build-from-source stack: database + back-end + front-end.
+#
+# Common commands (run from the project root):
+#   docker compose up -d db       # ONLY the database — for local IntelliJ development
+#   docker compose up --build     # build & run the whole app  -> http://localhost:8080
+#   docker compose down           # stop everything
+#
+# Server deployment (pre-built images + Cloudflare tunnel) lives in compose.dockge.yaml.
+
 services:
   db:
     image: mysql:8.4
@@ -10,6 +19,53 @@ services:
       MYSQL_USER: $DB_USER
       MYSQL_PASSWORD: $DB_USER_PASSWORD
     volumes:
-      - ./sqldata:/var/lib/mysql:Z
+      # Data lives next to the stack (survives `git pull`; sqldata/ is gitignored).
+      - ./sqldata:/var/lib/mysql
     ports:
+      # Published so a host-run back-end (IntelliJ) can reach it at localhost:3306.
+      # Not needed by the Docker stack itself — safe to remove on a server.
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p$DB_PASS"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: canvasclues-backend
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      # Point at the db service, not localhost.
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME}
+      DB_USER: $DB_USER
+      DB_USER_PASSWORD: $DB_USER_PASSWORD
+      NAME_BACKEND: $NAME_BACKEND
+      PORT_BACKEND: $PORT_BACKEND
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+  frontend:
+    build:
+      context: ./src/front-end
+      dockerfile: Dockerfile
+    container_name: canvasclues-frontend
+    restart: always
+    # Open the app at http://localhost:8080. Change the left number if 8080 is taken.
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+networks:
+  internal:

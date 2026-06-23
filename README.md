@@ -82,10 +82,11 @@ Detailed setup and architecture notes for each app are documented in:
 
 ## 1) Start the database (Docker)
 
-From the root of the repository (where `compose.yaml` is located):
+From the root of the repository (where `compose.yaml` is located), start **only** the
+database service:
 
 ```bash
-docker compose up -d
+docker compose up -d db
 ```
 
 To wipe and compose a fresh database, use the provided scripts from the project root:
@@ -132,11 +133,9 @@ back-end + front-end) with a single command. First copy `.env.example` to `.env`
 fill it in, then from the project root:
 
 ```bash
-docker compose -f docker-compose.prod.yaml up --build
+docker compose up --build
 ```
 
-- `-f docker-compose.prod.yaml` selects the full-stack compose file (instead of the
-  default `compose.yaml`, which only starts the database).
 - `--build` (re)builds the images from source — run it again after pulling new code.
 - Add `-d` to run in the background.
 
@@ -146,7 +145,7 @@ proxies `/api` calls to the back-end, so no separate Vite server is needed.
 Stop it with:
 
 ```bash
-docker compose -f docker-compose.prod.yaml down
+docker compose down
 ```
 
 ---
