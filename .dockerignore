@@ -1,0 +1,12 @@
+target/
+sqldata/
+.git/
+.idea/
+.github/
+docs/
+src/front-end/node_modules/
+src/front-end/dist/
+*.env
+.env
+*.log
+.DS_Store

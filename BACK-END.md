@@ -1,4 +1,4 @@
-# Museum Codenames – Back-end
+# Canvas Clues – Back-end
 
 
 ## Overview
