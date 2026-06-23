@@ -1,7 +1,7 @@
-# Museum Codenames
+# Canvas Clues
 
-In this project we will build a digital version of the board game **Codenames**.  
-Instead of using words, the game uses pictures from real museum objects that are dynamically loaded via an external museum API.
+Canvas Clues is a word-association guessing game played with pictures from real museum
+objects instead of words. Artworks are dynamically loaded via an external museum API.
 
 The game is played on a 4x4 grid containing 16 museum object images.  
 Each round consists of two phases:
@@ -67,10 +67,17 @@ Documentation:
 
 # Build and Test
 
+There are two ways to run the project:
+
+- **Local development** — back-end in IntelliJ + the database in Docker + the Vite dev
+  server. Best for working on the code (hot reload, debugger). Steps 1–3 below.
+- **Full stack in Docker** — everything (database, back-end, front-end) in one command.
+  Best for just running the app. See [Run the full stack with Docker](#run-the-full-stack-with-docker).
+
 Detailed setup and architecture notes for each app are documented in:
 
-- `BACK-END.md`
-- `FRONT-END.md`
+- `/docs/BACK-END.md`
+- `/docs/FRONT-END.md`
 
 
 ## 1) Start the database (Docker)
@@ -116,6 +123,32 @@ Stop the containers when finished:
 ```bash
 docker compose down
 ```
+---
+
+## Run the full stack with Docker
+
+Instead of the three steps above, you can build and run the **whole app** (database +
+back-end + front-end) with a single command. First copy `.env.example` to `.env` and
+fill it in, then from the project root:
+
+```bash
+docker compose -f docker-compose.prod.yaml up --build
+```
+
+- `-f docker-compose.prod.yaml` selects the full-stack compose file (instead of the
+  default `compose.yaml`, which only starts the database).
+- `--build` (re)builds the images from source — run it again after pulling new code.
+- Add `-d` to run in the background.
+
+Then open **http://localhost:8080**. The front-end is served by nginx, which also
+proxies `/api` calls to the back-end, so no separate Vite server is needed.
+
+Stop it with:
+
+```bash
+docker compose -f docker-compose.prod.yaml down
+```
+
 ---
 
 # Contribute

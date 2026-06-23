@@ -1,4 +1,4 @@
-# Museum Codenames – Front-end
+# Canvas Clues – Front-end
 
 ## Overview
 
