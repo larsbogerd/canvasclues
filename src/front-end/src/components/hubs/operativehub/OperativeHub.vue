@@ -11,7 +11,7 @@ import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButto
 import router from "@/router.js";
 import {fetchRandomGameId} from "@/assets/composables/SessionService.js";
 
-const [showScrollBox, toggle] = useToggle()
+const [showScrollBox, toggle] = useToggle(true)
 
 let randomId = 0;
 
@@ -68,12 +68,18 @@ async function goToDailyOperativePhase(randomId) {
   </div>
 
   <button class="toggle-puzzles-button"
+          :class="{ 'is-open': showScrollBox }"
+          :aria-expanded="showScrollBox"
           @click="toggle()">
-    Bekijk alle puzzels
+    <span>{{ showScrollBox ? 'Verberg puzzels' : 'Bekijk alle puzzels' }}</span>
   </button>
 </div>
-      <OperativeScrollBox :list="list"
-                 v-if="showScrollBox"/>
+      <div class="scrollbox-collapse"
+           :class="{ 'is-open': showScrollBox }">
+        <div class="scrollbox-collapse_inner">
+          <OperativeScrollBox :list="list"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -139,6 +145,9 @@ async function goToDailyOperativePhase(randomId) {
 
 .toggle-puzzles-button{
   outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-secondary);
   background-color: var(--color-primary);
   border: none;
@@ -146,7 +155,7 @@ async function goToDailyOperativePhase(randomId) {
   border-radius: 20px;
   padding: 10px 18px;
   margin: 10px 0 0;
-  min-width: 100px;
+  min-width: 150px;
   cursor: pointer;
   font-weight: 700;
   box-shadow: 0 10px 20px color-mix(in srgb, var(--color-primary) 28%, transparent);
@@ -158,6 +167,26 @@ async function goToDailyOperativePhase(randomId) {
   transform: translateY(-1px);
   filter: saturate(1.02);
   box-shadow: 0 14px 24px color-mix(in srgb, var(--color-primary) 38%, transparent);
+}
+
+.scrollbox-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  opacity: 0;
+  transition: grid-template-rows 360ms ease, opacity 280ms ease;
+}
+
+.scrollbox-collapse.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.scrollbox-collapse_inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 </style>

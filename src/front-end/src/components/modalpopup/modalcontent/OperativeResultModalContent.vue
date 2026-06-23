@@ -11,7 +11,7 @@ const props = defineProps({
 });
 
 function RouteToSpymaster() {
-  router.push('/game/curator')
+  router.push('/game')
 }
 
 function NewClue() {
