@@ -76,8 +76,8 @@ There are two ways to run the project:
 
 Detailed setup and architecture notes for each app are documented in:
 
-- `BACK-END.md`
-- `FRONT-END.md`
+- `/docs/BACK-END.md`
+- `/docs/FRONT-END.md`
 
 
 ## 1) Start the database (Docker)
