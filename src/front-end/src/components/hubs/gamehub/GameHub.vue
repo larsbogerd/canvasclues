@@ -6,14 +6,12 @@ import operativeImg from "@/assets/images/icons/Visitor2.png";
 import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
-import {setGameMode} from "@/assets/composables/StartGameService.js";
 
 const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];
 const difficulty = ref('makkelijk');
 
 function goToSpyPhase() {
-  setGameMode(difficulty.value)
-  router.push('/game/curator')
+  router.push(`/game/curator/${difficulty.value}`);
 }
 
 function goToOperativeHub() {

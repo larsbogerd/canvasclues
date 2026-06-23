@@ -10,6 +10,8 @@ Each round consists of two phases:
 
 2. **PICK Phase (Operative)** – The Operative sees the clue and the number of linked images, then selects the images they believe match the hint before ending the turn.
 
+Games are created in one of three difficulty modes — *makkelijk*, *gemiddeld*, or *moeilijk* — which determine the card distribution (such as the number of assassin cards) and the scoring. After finishing a puzzle, players can rate it with a like or dislike, and a statistics dashboard tracks how artworks and hints are used across all games.
+
 The goal of this project is to combine external API integration, back-end game logic, and a modern front-end into one interactive web application.
 
 ---

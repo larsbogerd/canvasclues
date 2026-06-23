@@ -1,12 +1,6 @@
 import ApiClient from "@/assets/composables/ApiClient.js";
 
-let selectedGameMode;
-
-export function setGameMode(gameMode) {
-  selectedGameMode = gameMode;
-}
-
-export async function startGameCall() {
+export async function startGameCall(selectedGameMode) {
   try {
     const response = await ApiClient.post(`/game/start?gameMode=${selectedGameMode}`);
 

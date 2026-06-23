@@ -12,15 +12,43 @@ import StatisticsHints from "@/components/hubs/statistics/hint/StatisticsHints.v
 
 
 const routes = [
-    { path: '/', component: StartingPage},
-    { path: '/game', component: GameHub },
-    { path: '/game/curator', component: SpyView },
-    { path: '/game/bezoeker', component: OperativeHub },
-    { path: '/game/bezoeker/:gameId', component: OperativeView },
-    { path: '/statistics', component: StatisticsHub },
-    { path: '/statistics/artworks', component: StatisticsArtworks },
-    { path: '/statistics/artworks/:artworkId', component: ArtworkStats },
-    { path: '/statistics/hints', component: StatisticsHints}
+    {
+        path: '/',
+        component: StartingPage
+    },
+    {
+        path: '/game',
+        component: GameHub
+    },
+    {
+        path: '/game/curator/:difficulty',
+        component: SpyView,
+        props: true
+    },
+    {
+        path: '/game/bezoeker',
+        component: OperativeHub
+    },
+    {
+        path: '/game/bezoeker/:gameId',
+        component: OperativeView
+    },
+    {
+        path: '/statistics',
+        component: StatisticsHub
+    },
+    {
+        path: '/statistics/artworks',
+        component: StatisticsArtworks
+    },
+    {
+        path: '/statistics/artworks/:artworkId',
+        component: ArtworkStats
+    },
+    {
+        path: '/statistics/hints',
+        component: StatisticsHints
+    }
 ]
 
 const router = createRouter({

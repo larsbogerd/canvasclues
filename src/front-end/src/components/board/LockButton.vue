@@ -10,7 +10,6 @@ const submitFn = inject('submitFn')
 
 function lockIn(){
   submitFn(props.id);
-  console.log(props.id)
 }
 </script>
 

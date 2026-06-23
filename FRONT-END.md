@@ -19,7 +19,7 @@ The front-end is built using **Vue** and is responsible for:
 - javascript ES6+
 - vue v3
 - vite
-- vue-router (hash-based routing)
+- vue-router (HTML5 history mode)
 - axios (HTTP client)
 
 ---
@@ -50,7 +50,7 @@ src/front-end/vite.config.js
 
 ## Routing
 
-Routes are defined in `src/front-end/src/router.js` using hash-based routing (`createWebHashHistory`).
+Routes are defined in `src/front-end/src/router.js` using HTML5 history mode (`createWebHistory`).
 
 | Route                             | Component        | Description |
 |-----------------------------------|------------------|-------------|
@@ -62,6 +62,7 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 | `/statistics`                     | `StatisticsHub`       | Statistics landing page |
 | `/statistics/artworks`            | `StatisticsArtworks`  | Lists every persisted artwork with usage counters, search, pagination, and PDF export |
 | `/statistics/artworks/:artworkId` | `ArtworkStats`        | Detail view for a single artwork: image, metadata, usage stats, and boards it appeared in |
+| `/statistics/hints`               | `StatisticsHints`     | Lists hint occurrence statistics in a sortable table |
 
 ---
 
@@ -69,29 +70,32 @@ Routes are defined in `src/front-end/src/router.js` using hash-based routing (`c
 
 ### Spymaster phase
 
-- On mount, the page calls `POST /api/v1/game/start`.
-- The returned cards are rendered in the grid.
-- On submit, selected card IDs, max score, and hint text are sent together in one call to `POST /api/v1/game/{gameId}/submit`, which flags the picks, stores the hint, and moves the game to `READY`.
+- On mount, the page calls `POST /api/v1/game/start?gameMode={mode}` with the chosen difficulty (`makkelijk`, `gemiddeld`, or `moeilijk`).
+- The returned cards are rendered in the grid; artwork details for the board are prefetched in one batch call for the art-info popup.
+- On submit, selected card IDs, spy score, and hint text are sent together in one call to `POST /api/v1/game/{gameId}/submit`, which flags the picks, stores the hint, and moves the game to `READY`.
 
 ### Operative hub
 
 - On mount, the page calls `GET /api/v1/game/list` to fetch all available puzzles.
-- Games can be sorted by newest, popularity (`playCount`), or difficulty (`maxScore`).
+- Games can be sorted by newest, popularity (`playCount`), quality (like/dislike ratio), or difficulty.
 - A search field filters puzzles by hint text (case-insensitive).
 - Clicking a puzzle navigates to `/game/bezoeker/:gameId`.
+- The game mode cards start a random puzzle for that difficulty via `POST /api/v1/session/start/random/{difficulty}`.
 
 ### Operative phase
 
 - On mount, the page calls `POST /api/v1/session/{gameId}/start`. The single response carries the new `sessionId`, the board (`cards`), the active `hint`, and `spymasterPickCount` (the number of cards the Operative needs to find). No separate hint call is made.
 - The `sessionId` is held in a local ref for the per-guess and finish calls.
-- Each "lock in" action fires `POST /api/v1/session/{sessionId}/guess/{cardId}` (via `GuessService.submitGuess`). The response (`{ correct, score }`) drives the card's right/wrong colouring and updates the sidebar score. The server is the source of truth for the running score.
+- Each "lock in" action fires `POST /api/v1/session/{sessionId}/guess/{cardId}` (via `GuessService.submitGuess`). The response (`{ correct, score, comboStreak, wrongGuesses, assassinGuesses, cardType }`) drives the card's right/wrong colouring and updates the score block (including the combo multiplier). The server is the source of truth for the running score. Two assassin guesses end the session automatically.
 - A `correctAmount` computed value derives "cards left to find" from the board itself (cards coloured `right`); a Vue watcher triggers `finish` automatically once it equals `spymasterPickCount` (after a short delay so the final correct card visually registers).
 - On "Beëindig poging" (or auto-finish), `POST /api/v1/session/{sessionId}/finish` is called with no body, then the result modal is shown.
+- In the result modal the player can rate the puzzle with a like/dislike, sent via `PATCH /api/v1/game/game-quality/submit`.
 
 ### Statistics dashboard
 
 - `/statistics/artworks` calls `GET /api/v1/artwork/statslist` on mount and renders every persisted artwork in a paginated, filterable table with usage counters and pick-ratio.
 - Clicking a row navigates to `/statistics/artworks/:artworkId`, which calls `GET /api/v1/artwork/{id}/stats` and renders the full-size image, metadata (date, medium, dimensions, department, origin), and usage stats.
+- `/statistics/hints` calls `GET /api/v1/hints/stats` on mount and renders hint occurrence statistics in a sortable table.
 
 ---
 
