@@ -17,6 +17,13 @@ import HintCard from "@/components/board/HintCard.vue";
 import SpymasterHintCardHeaderContent from "@/components/board/hintCardContent/SpymasterHintCardHeaderContent.vue";
 import SpymasterHintCardContent from "@/components/board/hintCardContent/SpymasterHintCardContent.vue";
 
+const props = defineProps({
+  difficulty: {
+    type: String,
+    required: true
+  }
+})
+
 const hintInput = ref("");
 const modal = ref(null);
 const cards = ref([]);
@@ -52,14 +59,13 @@ async function submit(input) {
     httpStatus(status);
     modal.value.show();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return error;
   }
 }
 
 function httpStatus(status) {
   if (status === 200) {
-    console.log(status);
     hintInput.value = "";
   }
 
@@ -102,15 +108,15 @@ function giveInputFeedback(input) {
 
 async function startGame() {
   try{
-    cards.value = await startGameCall();
-    console.log("Fetched hints:", cards.value);
+    console.log(props.difficulty);
+    cards.value = await startGameCall(props.difficulty);
     for (const card of cards.value){
       gameId = await card.gameId;
       emit('game-started', gameId);
     }
     prefetchArtworkDetails(cards.value.map(card => card.artworkId));
   } catch(error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -120,7 +126,6 @@ function handleCardClicked(id) {
   } else {
     selectedCards.value.push(id);
   }
-  console.log("Selected cards:", selectedCards.value);
 }
 
 function handleInfoClicked(id) {

@@ -76,7 +76,6 @@ async function lockIn(cardId) {
   score.value = result.score;
   wrongGuesses.value = result.wrongGuesses;
   assassinGuesses.value = result.assassinGuesses;
-  console.log('result:', result);
   tooManyAssassinGuesses();
 }
 
@@ -98,7 +97,7 @@ async function submit() {
     if (result) score.value = result.score;
     modal.value.show();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

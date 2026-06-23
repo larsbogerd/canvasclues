@@ -61,28 +61,31 @@ Contains controllers, DTOs, mappers, entities, repositories, services, and excep
 - `CardType`
 
 The `game.service` package is split into focused services:
-- `GameService` – owns the `Game` aggregate (`createGame`, `markReady`, `updateMaxScore`, `getGameList`)
+- `GameService` – owns the `Game` aggregate (create, mark ready, game list, like/dislike quality rating)
 - `CardService` – board building and card lookup/mutation (`buildBoard`, `updateCards`, `getCardInGame`)
-- `HintService` – hint creation and lookup
-- `StartGameService` – orchestrates `GameService` + `ArtworkService` + `CardService` for `POST /start`
-- `BoardSubmitService` – orchestrates the unified spymaster submit flow (flag cards → set maxScore → create hint → record artwork usage → mark game ready)
-- `SessionService` – owns the Operative session lifecycle: `start` creates a `Session` for a game (links the current hint, increments `playCount`) and bundles the board, hint, and Spymaster-pick count into a single response; `getActiveSession` validates a session is still in progress; `recordGuess` increments the score on a correct guess; `finish` stamps `finishedAt` and flips state to `FINISHED`
-- `GuessSubmitService` – orchestrates per-guess persistence (validate session in progress → validate card belongs to the session's game → `SessionService.recordGuess` + `ArtworkService.recordGuessUsage`)
+- `HintService` – hint creation, lookup, and hint occurrence statistics
+- `ScoreService` – implements the `Scoring` interface: spymaster score calculation/validation and per-guess score updates (combo streak, wrong/assassin guess counters)
+- `SessionService` – owns the Operative session lifecycle: `start` creates a `Session` for a game (links the current hint, increments `playCount`) and bundles the board, hint, and Spymaster-pick count into a single response; `randomStart` picks a random `READY` game for a given difficulty; `finish` stamps `finishedAt` and flips state to `FINISHED`
+- `GameModeRegistry` – resolves a `GameMode` strategy by name; throws `UnknownGameModeException` (400) for unknown modes
+
+Flows that span multiple services live in `game.orchestrator`:
+- `StartGameOrchestrator` – orchestrates `GameService` + `ArtworkService` + `CardService` for `POST /game/start`
+- `BoardSubmitOrchestrator` – orchestrates the unified spymaster submit flow (flag cards → validate & set spy score → create hint → record artwork usage → mark game ready)
+- `GuessSubmitOrchestrator` – orchestrates per-guess persistence (validate session in progress → validate card belongs to the session's game → update score/streak via `ScoreService` → record artwork usage)
 
 API errors follow a small polymorphic hierarchy in `game.exception`:
 - `ResourceNotFoundException` (abstract → 404) — `GameNotFoundException`, `SessionNotFoundException`, `CardNotFoundException`, `HintNotFoundException`, `ArtworkNotFoundException`
 - `ConflictException` (abstract → 409) — `SessionAlreadyFinishedException`
-- `BadRequestException` (abstract → 400) — `CardNotInSessionGameException`
+- `BadRequestException` (abstract → 400) — `CardNotInSessionGameException`, `MinimumSelectedException`, `NullScoreException`, `UnknownGameModeException`
 
-Game difficulty is set by the classes EasyGameModeService & HardGameModeService using the same methods set by interface GameMode:
-Add another gamemode by duplicating a previous GameModeService class and adjust the methods to whatever the gamemode needs
-- `gameModeName`
-- `BoardSize`
-- `getCardDistribution`
-- `handleSpyScore`
-- `calcOperativeScore`
-- `getMultiplier`
-- `recordGuess`
+Game difficulty uses the strategy pattern. The `GameMode` interface (`game.interfaces`) is implemented by `EasyModeStrategy`, `MediumModeStrategy`, and `HardModeStrategy` (`game.strategy`), registered by name (`makkelijk`, `gemiddeld`, `moeilijk`) in `GameModeRegistry`. Each strategy defines:
+- `gameMode()` – the mode name used in the API and database
+- `boardSize()` – number of cards on the board (currently 16 for all modes)
+- `getCardDistribution()` – the list of `CardType`s to deal (e.g. how many assassins)
+
+Scoring rules live in the separate `Scoring` interface (`handleSpyScore`, `calcOperativeScore`, `getMultiplier`, `recordGuess`), implemented by `ScoreService`.
+
+Add another game mode by creating a new strategy class that implements `GameMode`; Spring injects all implementations into the registry automatically, so no other code changes are needed.
 
 
 
@@ -95,13 +98,13 @@ Add another gamemode by duplicating a previous GameModeService class and adjust 
 
 ## Domain Model
 
-- `Game` uses a `Long` primary key and tracks `state`, `maxScore`, `playCount`, `createdAt`, related `cards`, and related `hints`.
+- `Game` uses a `Long` primary key and tracks `state`, `spyScore`, `playCount`, `gameMode`, `likes`, `dislikes`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
-- `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`. `state` (`SessionState` enum: `IN_PROGRESS` / `FINISHED`) starts at `IN_PROGRESS` and flips to `FINISHED` when the Operative ends their attempt. `score` is incremented server-side on each correct guess via the per-guess endpoint, so it's authoritative without the client ever sending a total. `finishedAt` is stamped when `finish` is called.
+- `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`. `state` (`SessionState` enum: `IN_PROGRESS` / `FINISHED`) starts at `IN_PROGRESS` and flips to `FINISHED` when the Operative ends their attempt. `score` is incremented server-side on each correct guess via the per-guess endpoint, so it's authoritative without the client ever sending a total. The session also tracks `comboStreak`, `wrongGuesses`, and `assassinGuesses`. `finishedAt` is stamped when `finish` is called.
 - `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
-- `CardType` currently supports `ASSASIN`, `PLAYABLE`.
+- `CardType` currently supports `ASSASSIN`, `PLAYABLE`.
 - `SessionState` currently supports `IN_PROGRESS` and `FINISHED`.
 
 `Artwork` was split off from `Card` so the same artwork can accumulate usage stats.
@@ -114,23 +117,26 @@ Add another gamemode by duplicating a previous GameModeService class and adjust 
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/v1/game/start` | Creates a new `Game`, fetches 16 artworks, stores them as `Card` records, and returns a `CardResponse[]` |
-| GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` (used by the operative hub) |
-| POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "maxScore": 3, "hintContent": "museum" }`. Flags picked cards, sets `maxScore`, creates the `Hint`, and moves the game to `READY`. |
+| POST | `/api/v1/game/start?gameMode={mode}` | Creates a new `Game` for the given mode (`makkelijk` / `gemiddeld` / `moeilijk`), fetches artworks via the mode's card distribution, stores them as `Card` records, and returns a `CardResponse[]`. `400` for an unknown mode. |
+| GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` including `spyScore`, `playCount`, `qualityRatio`, and `gameMode` (used by the operative hub) |
+| POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "spyScore": 3, "hintContent": "museum" }`. Flags picked cards, sets the spy score, creates the `Hint`, and moves the game to `READY`. |
+| PATCH | `/api/v1/game/game-quality/submit` | Records a like/dislike for a game. Body: `{ "gameId": 1, "rating": true }` (`true` = like, `false` = dislike). Used by the post-game rating modal. |
 
 ### Session
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/v1/session/{gameId}/start` | Creates a new `Session` for the given game, increments `playCount`, and returns a `SessionResponse` with `sessionId`, `cards`, the active `hint` (nullable), and `spymasterPickCount`. Used by the Operative to open a board. Each call creates a new session row. `404` if `gameId` doesn't exist. |
-| POST | `/api/v1/session/{sessionId}/guess/{cardId}` | Persists a single Operative guess. Increments `session.score` if correct, and bumps `artwork.timesCorrectGuess` / `timesBadGuess`. Returns `{ correct, score }`. `404` if session or card not found, `400` if the card doesn't belong to the session's game, `409` if the session is already finished. |
-| POST | `/api/v1/session/{sessionId}/finish` | Stamps `finishedAt` and flips state to `FINISHED`. No body. `404` if `sessionId` doesn't exist, `409` if the session is already finished. |
+| POST | `/api/v1/session/start/random/{difficulty}` | Picks a random `READY` game for the given difficulty and returns its `gameId`. Used by the "random game" entry points in the operative hub. |
+| POST | `/api/v1/session/{sessionId}/guess/{cardId}` | Persists a single Operative guess. Updates `score`, `comboStreak`, `wrongGuesses`, and `assassinGuesses`, and bumps `artwork.timesCorrectGuess` / `timesBadGuess`. Returns `{ correct, score, comboStreak, wrongGuesses, assassinGuesses, cardType }`. `404` if session or card not found, `400` if the card doesn't belong to the session's game, `409` if the session is already finished. |
+| POST | `/api/v1/session/{sessionId}/finish` | Stamps `finishedAt` and flips state to `FINISHED`. No body. Returns `{ score, wrongGuesses, assassinGuesses }`. `404` if `sessionId` doesn't exist, `409` if the session is already finished. |
 
 ### Hint
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/v1/hints/{gameId}` | Returns the hint for a game as `HintResponse`; responds with `404` if none exists |
+| GET | `/api/v1/hints/stats` | Returns hint occurrence statistics as `HintStatsListResponse[]`. Used by the hint statistics dashboard. |
 
 ### Artwork
 
@@ -139,6 +145,8 @@ Add another gamemode by duplicating a previous GameModeService class and adjust 
 | GET | `/api/v1/artwork/test?size=25` | Fetches random artworks from the AIC API for testing. `size` defaults to `25` |
 | GET | `/api/v1/artwork/statslist` | Returns every persisted `Artwork` as `ArtworkStatsListResponse[]`, including usage counters and `pickPercentage`. Used by the statistics dashboard table. |
 | GET | `/api/v1/artwork/{id}/stats` | Returns a single artwork's full detail + usage stats as `ArtworkStatsResponse`. Used by the statistics detail page. |
+| GET | `/api/v1/artwork/{id}/details` | Returns full artwork metadata as `ArtworkDetailsResponse`. Used by the art-info popup on the board. |
+| GET | `/api/v1/artwork/details?ids=a,b,c` | Batch variant of the details endpoint; used by the front-end to prefetch details for a whole board. |
 
 ---
 
@@ -159,22 +167,14 @@ Key properties:
 
 ### Setup your configuration
 
-#### Create .env file:
-- `Step 1:` create .env file called: .env instead of database_info.env in project root folder.
-- `Step 2:` Add the variables from the example.env.
-- `Step 3:` Fill in the proper credentials.
+#### Create a .env file
+- `Step 1:` Copy `.env.example` in the project root to a new file called `.env`.
+- `Step 2:` Fill in the proper credentials.
 
-#### Setup for application.properties:
-Fix notes for bug #173256: Please follow these steps once again and reroute to the
-.env file instead of database_info.env
-- `Step 1:` Head to your current run configuration in my case that is `NameApplication`
-- `Step 2:` Click more actions the triple dot next to. `NameApplication`
-- `Step 3:` Click on edit at the bottom. `
-- A window should pop-up called Run/Debug configurations
-- `Step 4:` Use the Hotkey on windows alt + E or on MacOS I assume CMD + E 
-- `Step 5:` A new bar should pop-up with environment variables.
-- `Step 6:` Choose the folder icon -> + in the pop-up window after
-- `Step 7:` Navigate to the project folder on your system en select the created .env file.
+#### Load the .env file in IntelliJ
+- `Step 1:` Open the run configuration for `NamesApplication` (Run → Edit Configurations…).
+- `Step 2:` In the **Environment variables** field, click the folder icon and select the `.env` file in the project root.
+- `Step 3:` Apply and run the application.
 
 
 ### Database Seeding
