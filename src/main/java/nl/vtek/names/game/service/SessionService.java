@@ -3,6 +3,7 @@ package nl.vtek.names.game.service;
 import nl.vtek.names.game.dto.FinishSessionResponse;
 import nl.vtek.names.game.dto.SessionResponse;
 import nl.vtek.names.game.exception.GameNotFoundException;
+import nl.vtek.names.game.exception.GameNotPlayableException;
 import nl.vtek.names.game.exception.SessionAlreadyFinishedException;
 import nl.vtek.names.game.exception.SessionNotFoundException;
 import nl.vtek.names.game.mapper.SessionMapper;
@@ -39,6 +40,10 @@ public class SessionService {
     public SessionResponse start(Long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
+
+        if (game.getState() != GameState.READY) {
+            throw new GameNotPlayableException(gameId);
+        }
 
         game.setPlayCount(game.getPlayCount() + 1);
         gameRepository.save(game);
