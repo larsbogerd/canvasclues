@@ -3,6 +3,7 @@ import ExpandIcon from '@/assets/images/svg-components/ExpandIcon.vue'
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import ArtInfoModalContent from "@/components/modalpopup/modalcontent/ArtInfoModalContent.vue";
 import {getArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
+import {iiifUrl} from "@/assets/composables/IiifUrl.js";
 import {ref} from "vue";
 
 const props = defineProps({
@@ -14,7 +15,7 @@ const modal = ref(null)
 const details = ref(null)
 
 function fullsizeUrl(id) {
-  return `https://www.artic.edu/iiif/2/${id}/full/600,/0/default.jpg`;
+  return iiifUrl(id, "600,");
 }
 
 async function expand(){

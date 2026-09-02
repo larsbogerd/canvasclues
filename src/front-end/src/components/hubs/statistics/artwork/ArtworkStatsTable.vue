@@ -2,6 +2,7 @@
 import {computed, ref, watch} from "vue";
 import router from "@/router.js";
 import TablePagination from "@/components/hubs/statistics/TablePagination.vue";
+import {iiifUrl} from "@/assets/composables/IiifUrl.js";
 
 const props = defineProps({
   rows: {
@@ -161,7 +162,7 @@ function formatDate(iso) {
 }
 
 function thumbUrl(id) {
-  return `https://www.artic.edu/iiif/2/${id}/full/96,/0/default.jpg`;
+  return iiifUrl(id, "96,");
 }
 
 </script>

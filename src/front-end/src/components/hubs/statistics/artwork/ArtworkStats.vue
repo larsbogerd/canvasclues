@@ -3,6 +3,7 @@ import PageHeader from "@/components/header/PageHeader.vue";
 import router from "@/router.js";
 import { ref, onMounted } from "vue";
 import { getArtworkStats } from "@/assets/composables/StatisticsService.js";
+import { iiifUrl } from "@/assets/composables/IiifUrl.js";
 
 const artworkId = router.currentRoute.value.params.artworkId;
 
@@ -13,7 +14,7 @@ onMounted(async () => {
 });
 
 function fullsizeUrl(id) {
-  return `https://www.artic.edu/iiif/2/${id}/full/1000,/0/default.jpg`;
+  return iiifUrl(id, "1000,");
 }
 
 function formatDate(iso) {
