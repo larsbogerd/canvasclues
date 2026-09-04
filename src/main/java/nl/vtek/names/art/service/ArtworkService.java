@@ -2,7 +2,6 @@ package nl.vtek.names.art.service;
 
 import nl.vtek.names.art.client.ArticClient;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
-import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.mapper.ArtworkMapper;
@@ -90,12 +89,6 @@ public class ArtworkService {
                 .map(artwork -> artworkRepository.findById(artwork.getId())
                         .orElseGet(() -> artworkRepository.save(artwork)))
                 .limit(limit)
-                .toList();
-    }
-
-    public List<ArtworkResponse> searchArtworks(int size) {
-        return fetchAndSaveArtworks(size).stream()
-                .map(artworkMapper::toResponse)
                 .toList();
     }
 

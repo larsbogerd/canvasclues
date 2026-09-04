@@ -100,8 +100,18 @@ This stops containers (if still running), cleans the database, and starts fresh.
 
 ## 2) Run the back-end (Spring Boot)
 
-Open the project in IntelliJ and run `NamesApplication`.
+Open the project in IntelliJ and run `NamesApplication` **with the `dev` profile
+active**. In the run configuration, set *Active profiles* to `dev`, or add the
+environment variable `SPRING_PROFILES_ACTIVE=dev`.
+
 The back-end starts on port **8082**.
+
+> **Why the profile matters.** The `dev` profile recreates the schema on every
+> start and loads the demo data from `data.sql`, which is what you want on a
+> laptop. Those settings live in `application-dev.properties` rather than in the
+> defaults, so that starting the app without a profile can never drop a real
+> database. Without `dev` the app still runs, it just leaves the schema alone
+> and seeds nothing -- so if your board is empty, this is why.
 
 ---
 

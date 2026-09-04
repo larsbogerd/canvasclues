@@ -1,7 +1,6 @@
 package nl.vtek.names.art.controller;
 
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
-import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.service.ArtworkService;
@@ -24,12 +23,6 @@ public class ArtworkController {
 
     public ArtworkController(ArtworkService artworkService) {
         this.artworkService = artworkService;
-    }
-
-    @GetMapping("/test")
-    public List<ArtworkResponse> getArtworks(
-            @RequestParam(defaultValue = "25") int size) {
-        return artworkService.searchArtworks(size);
     }
 
     @GetMapping("/statslist")
