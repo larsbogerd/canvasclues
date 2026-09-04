@@ -16,10 +16,6 @@ The goal of this project is to combine external API integration, back-end game l
 
 ---
 
-# Getting Started
-
-This section explains how to set up the project locally and run it on your own system.
-
 ## Tech Stack
 
 ### Front-end
@@ -54,8 +50,7 @@ Front-end dependencies are managed via **npm** (`package.json`).
 
 ## API references
 
-For the MVP we use image and object metadata from the **Art Institute of Chicago (AIC) API**.
-AIC exposes images using the **IIIF Image API**, which makes it easy to scale later to other IIIF-compatible collections (same structure, different source).
+We use image and object metadata from the **Art Institute of Chicago (AIC) API**. AIC exposes images using the **IIIF Image API**.
 
 Documentation:
 
@@ -69,10 +64,8 @@ Documentation:
 
 There are two ways to run the project:
 
-- **Local development** — back-end in IntelliJ + the database in Docker + the Vite dev
-  server. Best for working on the code (hot reload, debugger). Steps 1–3 below.
-- **Full stack in Docker** — everything (database, back-end, front-end) in one command.
-  Best for just running the app. See [Run the full stack with Docker](#run-the-full-stack-with-docker).
+- **Local development** — Best for working on the code (hot reload, debugger). Steps 1–3 below.
+- **Full stack in Docker** — See [Run the full stack with Docker](#run-the-full-stack-with-docker).
 
 Detailed setup and architecture notes for each app are documented in:
 
@@ -82,8 +75,7 @@ Detailed setup and architecture notes for each app are documented in:
 
 ## 1) Start the database (Docker)
 
-From the root of the repository (where `compose.yaml` is located), start **only** the
-database service:
+From the root of the repository, start **only** the database service:
 
 ```bash
 docker compose up -d db
@@ -100,25 +92,24 @@ This stops containers (if still running), cleans the database, and starts fresh.
 
 ## 2) Run the back-end (Spring Boot)
 
-Open the project in IntelliJ and run `NamesApplication` **with the `dev` profile
+Open the project and run `NamesApplication` **with the `dev` profile
 active**. In the run configuration, set *Active profiles* to `dev`, or add the
 environment variable `SPRING_PROFILES_ACTIVE=dev`.
 
 The back-end starts on port **8082**.
 
 > **Why the profile matters.** The `dev` profile recreates the schema on every
-> start and loads the demo data from `data.sql`, which is what you want on a
-> laptop. Those settings live in `application-dev.properties` rather than in the
+> start and loads the demo data from `data.sql`, which is what you want when testing.
+> Those settings live in `application-dev.properties` rather than in the
 > defaults, so that starting the app without a profile can never drop a real
 > database. Without `dev` the app still runs, it just leaves the schema alone
-> and seeds nothing -- so if your board is empty, this is why.
+> and seeds nothing. So if your board is empty, this is why.
 
 ---
 
 ## 3) Run the front-end (Vue)
 
 From the project root:
-> Make sure the back-end is running first.
 
 ```bash
 cd src/front-end
@@ -139,17 +130,19 @@ docker compose down
 ## Run the full stack with Docker
 
 Instead of the three steps above, you can build and run the **whole app** (database +
-back-end + front-end) with a single command. First copy `.env.example` to `.env` and
-fill it in, then from the project root:
+back-end + front-end) with a single command.
+From the project root:
 
 ```bash
 docker compose up --build
 ```
 
 - `--build` (re)builds the images from source — run it again after pulling new code.
+- The defaults are throwaway dev credentials and the stack seeds itself with demo
+  boards, so you get a playable app. Copy `.env.example` to `.env` to override them.
 - Add `-d` to run in the background.
 
-Then open **http://localhost:8080**. The front-end is served by nginx, which also
+Then open **http://localhost:1337**. The front-end is served by nginx, which also
 proxies `/api` calls to the back-end, so no separate Vite server is needed.
 
 Stop it with:
