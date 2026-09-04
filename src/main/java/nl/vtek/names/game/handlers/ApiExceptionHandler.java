@@ -3,6 +3,8 @@ package nl.vtek.names.game.handlers;
 import nl.vtek.names.game.exception.BadRequestException;
 import nl.vtek.names.game.exception.ConflictException;
 import nl.vtek.names.game.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -14,6 +16,8 @@ import java.util.InputMismatchException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     /**
      * Single 404 handler for any {@link ResourceNotFoundException} subclass.
@@ -46,7 +50,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        log.error("Unhandled exception", exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
