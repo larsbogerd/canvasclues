@@ -2,11 +2,9 @@ package nl.vtek.names.art.mapper;
 
 import nl.vtek.names.art.dto.ArticDto;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
-import nl.vtek.names.art.dto.ArtworkResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.model.Artwork;
-import nl.vtek.names.art.util.IiifUrlBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,11 +26,6 @@ public class ArtworkMapper {
         );
     }
 
-    public ArtworkResponse toResponse(Artwork artwork) {
-        return new ArtworkResponse(artwork.getId(), artwork.getTitle(), artwork.getArtistDisplay(),
-                artwork.getDateDisplay(), artwork.getMediumDisplay(),
-                artwork.getPlaceOfOrigin(), IiifUrlBuilder.forArtwork(artwork.getId()));
-    }
 
     public ArtworkDetailsResponse toDetailsResponse(Artwork artwork) {
         return new ArtworkDetailsResponse(
