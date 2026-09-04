@@ -1,0 +1,99 @@
+# Run Canvas Clues from the published images -- no clone, no build, no toolchain.
+#
+#   docker compose -f compose.ghcr.yaml up -d      ->  http://localhost:8080
+#   docker compose -f compose.ghcr.yaml down       ->  stop
+#   docker compose -f compose.ghcr.yaml down -v    ->  stop and delete the database
+#
+# Every value below has a working default, so this file runs as-is with no .env.
+# The defaults are throwaway credentials for a database that is only reachable
+# from inside this stack (no published port) -- fine for a demo, not for a real
+# deployment. Override anything by exporting it or putting it in a .env file.
+#
+# This is also the tracked counterpart to the server stack: same images, same
+# profile, same wiring. `compose.yaml` builds from source instead and is the one
+# to use while developing.
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: canvasclues-mysql
+    restart: always
+    environment:
+      TZ: ${DB_LANG:-Europe/Amsterdam}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-canvasclues-root}
+      MYSQL_DATABASE: ${DB_NAME:-canvasclues_db}
+      MYSQL_USER: ${DB_USER:-app}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD:-canvasclues-app}
+    volumes:
+      # Named volume, so the data survives `down` but is not littered in the
+      # working directory. `down -v` removes it.
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASS:-canvasclues-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  backend:
+    image: ghcr.io/larsbogerd/canvasclues-backend:${IMAGE_TAG:-latest}
+    container_name: canvasclues-backend
+    restart: always
+    environment:
+      # Defaults to prod, which never touches an existing schema and never
+      # seeds -- so a fresh stack starts with an empty game list. That is the
+      # safe default, and it is also what makes rolling back to an older image
+      # tag survivable: those jars carry a destructive default of their own.
+      #
+      # For a demo you probably want the seeded boards instead:
+      #     SPRING_PROFILE=dev docker compose -f compose.ghcr.yaml up -d
+      # The dev profile RECREATES THE SCHEMA on every start. Never point it at
+      # a database you care about.
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-prod}
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME:-canvasclues_db}
+      DB_USER: ${DB_USER:-app}
+      DB_USER_PASSWORD: ${DB_USER_PASSWORD:-canvasclues-app}
+      NAME_BACKEND: ${NAME_BACKEND:-canvasclues}
+      # Must stay 8082: the front-end's nginx proxies /api/ to backend:8082.
+      PORT_BACKEND: ${PORT_BACKEND:-8082}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+  frontend:
+    image: ghcr.io/larsbogerd/canvasclues-frontend:${IMAGE_TAG:-latest}
+    container_name: canvasclues-frontend
+    restart: always
+    ports:
+      # Change the left number if 8080 is taken.
+      - "${PORT_FRONTEND:-8080}:80"
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+  # Only starts when asked for:
+  #   docker compose -f compose.ghcr.yaml --profile tunnel up -d
+  # Needs TUNNEL_TOKEN set. Not used for local runs.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: canvasclues-tunnel
+    restart: always
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on:
+      - frontend
+    networks:
+      - internal
+
+volumes:
+  db-data:
+
+networks:
+  internal:

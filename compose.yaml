@@ -5,7 +5,7 @@
 #   docker compose up --build     # build & run the whole app  -> http://localhost:8080
 #   docker compose down           # stop everything
 #
-# Server deployment (pre-built images + Cloudflare tunnel) lives in compose.dockge.yaml.
+# Server deployment (published GHCR images + Cloudflare tunnel) lives in compose.ghcr.yaml.
 
 services:
   db:

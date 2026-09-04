@@ -136,6 +136,33 @@ docker compose down
 ```
 ---
 
+## Just run it (no clone, no build)
+
+Every push to `main` publishes images to GHCR, and both are public. To run the
+app without cloning anything, grab [`compose.ghcr.yaml`](compose.ghcr.yaml) and:
+
+```bash
+docker compose -f compose.ghcr.yaml up -d
+```
+
+Then open **http://localhost:8080**. No `.env` needed -- every value has a
+working default. Takes about 30 seconds instead of a full Maven and npm build.
+
+That starts on the `prod` profile, which never seeds, so the game list will be
+empty and you build a board yourself through the curator flow. For the seeded
+demo boards instead:
+
+```bash
+SPRING_PROFILE=dev docker compose -f compose.ghcr.yaml up -d
+```
+
+> The `dev` profile recreates the schema on every start. Fine for a throwaway
+> demo stack, never point it at a database you care about.
+
+Stop and delete it again with `docker compose -f compose.ghcr.yaml down -v`.
+
+---
+
 ## Run the full stack with Docker
 
 Instead of the three steps above, you can build and run the **whole app** (database +
