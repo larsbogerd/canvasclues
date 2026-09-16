@@ -23,12 +23,12 @@ function goToGameHubPhase() {
     </div>
 
     <div class="content">
-      <h1 class="title">Canvas Clues</h1>
-      <p class="description">
+      <h1 class="title deal-in" style="--i: 0">Canvas Clues</h1>
+      <p class="description deal-in" style="--i: 1">
         Vind de verborgen verbanden tussen meesterwerken!
       </p>
-      <ServiceNotice />
-      <div class="button-group">
+      <ServiceNotice class="deal-in" style="--i: 2" />
+      <div class="button-group deal-in" style="--i: 3">
         <button-base @click="goToGameHubPhase"
                      id="primary-btn">Start een spel</button-base>
         <button-base @click="modal?.show()"

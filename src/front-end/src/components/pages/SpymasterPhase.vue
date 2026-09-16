@@ -193,11 +193,11 @@ errorMessage.value = "";
 
     </div>
   </div>
-  </div>
   <BaseModal ref="modal">
       <SpymasterResultModalContent
           :score="selectedCards.length * 20"/>
   </BaseModal>
+  </div>
 </template>
 
 <style scoped>

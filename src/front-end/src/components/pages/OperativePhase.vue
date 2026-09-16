@@ -176,7 +176,6 @@ function handleInfoClicked(id) {
         </div>
       </div>
     </div>
-  </div>
 
   <BaseModal ref="modal">
     <GameQualityModalContent v-if="showResultModal === false"
@@ -190,6 +189,7 @@ function handleInfoClicked(id) {
                                  :gameOver="assassinGuesses >= 2">
     </OperativeResultModalContent>
   </BaseModal>
+  </div>
 </template>
 
 <style scoped>

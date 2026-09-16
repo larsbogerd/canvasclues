@@ -28,6 +28,7 @@ function goToOperativeHub() {
       <h1 class="main-text">Wat wil je doen?</h1>
       <div class="game-hub-button">
         <GameHubButton role-name="spymaster"
+                       class="deal-in" style="--i: 0"
                        eyeBrow="Creëer"
                        Phase="Curator"
                        sub-text="Stel een nieuwe collectie samen en begeleid bezoekers met jouw hints"
@@ -38,6 +39,7 @@ function goToOperativeHub() {
                        @button-click="goToSpyPhase"/>
 
         <GameHubButton role-name="Bezoeker"
+                       class="deal-in" style="--i: 1"
                        eyeBrow="Ontcijfer"
                        Phase="Bezoeker"
                        sub-text="Betreed een bestaande collectie en ontcijfer de hint van de curator"

@@ -44,6 +44,7 @@ async function goToDailyOperativePhase(randomId) {
 <div class="operative-hub_container">
   <div class="operative-hub_header">
       <GameModeCard game-mode="Willekeurige clue"
+                    class="deal-in" style="--i: 0"
                     description="Laat Canvas Clues een puzzel voor je kiezen">
         <div class="difficulty-select-container">
           <OperativeHubButton class="difficulty-button"
@@ -61,6 +62,7 @@ async function goToDailyOperativePhase(randomId) {
       </GameModeCard>
 
       <GameModeCard game-mode="Dagelijkse clue"
+                    class="deal-in" style="--i: 1"
                     description="Speel de dagelijkse hint">
         <OperativeHubButton @GoToOperative="goToDailyOperativePhase(1)"
                             text="Speel"/>

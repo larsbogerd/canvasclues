@@ -13,12 +13,12 @@ import router from "@/router.js";
       </button>
       <h1 class="text-color">Inzichten & statistieken</h1>
       <div class="cards">
-        <button class="card"
+        <button class="card deal-in" style="--i: 0"
                 @click="router.push('/statistics/artworks')">
           <h2>Kunstwerken</h2>
           <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
         </button>
-        <button class="card"
+        <button class="card deal-in" style="--i: 1"
         @click="router.push('/statistics/hints')">
           <h2>Hints</h2>
           <p>Populariteit, pick-ratio's en gebruiksgeschiedenis</p>
