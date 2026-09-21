@@ -31,6 +31,11 @@ export default defineConfig({
           Referer: 'https://www.artic.edu/',
         },
       },
+      '/img/met': {
+        target: 'https://images.metmuseum.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img\/met/, ''),
+      },
       '/img/cma': {
         target: 'https://openaccess-cdn.clevelandart.org',
         changeOrigin: true,
