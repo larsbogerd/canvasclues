@@ -5,25 +5,30 @@ import nl.vtek.names.game.dto.SessionResponse;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Session;
 import nl.vtek.names.game.model.Hint;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class SessionMapper {
-    private SessionMapper() {
-        /* This utility class should not be instantiated */
+
+    private final CardMapper cardMapper;
+
+    public SessionMapper(CardMapper cardMapper) {
+        this.cardMapper = cardMapper;
     }
 
-    public static SessionResponse toSessionResponse(Session session, List<Card> cards, Hint hint) {
+    public SessionResponse toSessionResponse(Session session, List<Card> cards, Hint hint) {
         int spymasterPickCount = (int) cards.stream().filter(Card::isSpymasterPick).count();
         return new SessionResponse(
                 session.getId(),
-                CardMapper.toCardResponse(cards),
+                cardMapper.toCardResponse(cards),
                 hint == null ? null : HintMapper.toHintResponse(hint),
                 spymasterPickCount
         );
     }
 
-    public static FinishSessionResponse toFinishSessionResponse(Session session) {
+    public FinishSessionResponse toFinishSessionResponse(Session session) {
         return new FinishSessionResponse(
                 session.getScore(),
                 session.getWrongGuesses(),

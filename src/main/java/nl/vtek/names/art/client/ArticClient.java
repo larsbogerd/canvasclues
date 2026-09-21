@@ -1,6 +1,10 @@
 package nl.vtek.names.art.client;
 
+import nl.vtek.names.art.dto.ArticDto;
 import nl.vtek.names.art.dto.ArticResponse;
+import nl.vtek.names.art.source.ArtSource;
+import nl.vtek.names.art.source.SourceArtwork;
+import nl.vtek.names.art.util.IiifUrlBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -13,11 +17,13 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
-public class ArticClient {
+public class ArticClient implements ArtSource {
 
     public static final String SOURCE_KEY = "artic";
 
     private static final Logger log = LoggerFactory.getLogger(ArticClient.class);
+
+    private static final String IIIF_BASE_PATH = "/iiif/2";
 
     private static final String FIELDS = String.join(",",
             "id",
@@ -42,7 +48,24 @@ public class ArticClient {
                 .build();
     }
 
-    public ArticResponse searchArtworks(int size) {
+    @Override
+    public String key() {
+        return SOURCE_KEY;
+    }
+
+    @Override
+    public String imageUrlTemplate(String imageId) {
+        return IiifUrlBuilder.template(IIIF_BASE_PATH, imageId);
+    }
+
+    @Override
+    public List<SourceArtwork> fetchArtworks(int size) {
+        return searchArtworks(size).pulledData().stream()
+                .map(ArticClient::toSourceArtwork)
+                .toList();
+    }
+
+    private ArticResponse searchArtworks(int size) {
         int maxFrom = 1000 - size;
         Map<String, Object> query = Map.of(
                 "query", Map.of(
@@ -70,5 +93,21 @@ public class ArticClient {
             log.error("Artic API failed: {}", e.getMessage());
             throw new RuntimeException("Failed to fetch artworks from Artic API", e);
         }
+    }
+
+    private static SourceArtwork toSourceArtwork(ArticDto dto) {
+        return new SourceArtwork(
+                dto.id() == null ? null : dto.id().toString(),
+                dto.title(),
+                dto.artistDisplay(),
+                dto.dateDisplay(),
+                dto.mediumDisplay(),
+                dto.placeOfOrigin(),
+                dto.dimensions(),
+                dto.departmentTitle(),
+                dto.styleTitle(),
+                dto.artworkTypeTitle(),
+                dto.shortDescription()
+        );
     }
 }

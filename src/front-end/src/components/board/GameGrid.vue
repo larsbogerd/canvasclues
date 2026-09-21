@@ -1,6 +1,7 @@
 <script setup>
 
 import BoardCard from "@/components/board/BoardCard.vue";
+import {imageUrl} from "@/assets/composables/ImageUrl.js";
 const prop = defineProps({
       cards: Array,
       activeInfoId: String,
@@ -16,7 +17,7 @@ const emit = defineEmits(['card-clicked', 'info-clicked'])
   <div class="grid">
     <BoardCard v-for="(card,index) in prop.cards"
                 :id="card.id"
-                :img-url="card.imageUrl"
+                :img-url="imageUrl(card.imageUrlTemplate, '!500,500')"
                 :alt-text="card.altText"
                 :color="card.color"
                 :info-active="card.id === prop.activeInfoId"

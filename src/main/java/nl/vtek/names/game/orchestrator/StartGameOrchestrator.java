@@ -21,15 +21,18 @@ public class StartGameOrchestrator {
     private final ArtworkService artworkService;
     private final CardService cardService;
     private final GameModeRegistry gameModeRegistry;
+    private final CardMapper cardMapper;
 
     public StartGameOrchestrator(GameService gameService,
                                  ArtworkService artworkService,
                                  CardService cardService,
-                                 GameModeRegistry gameModeRegistry) {
+                                 GameModeRegistry gameModeRegistry,
+                                 CardMapper cardMapper) {
         this.gameService = gameService;
         this.artworkService = artworkService;
         this.cardService = cardService;
         this.gameModeRegistry = gameModeRegistry;
+        this.cardMapper = cardMapper;
     }
 
     public List<CardResponse> startGame(String modeName) {
@@ -37,6 +40,6 @@ public class StartGameOrchestrator {
         Game game = gameService.createGame(modeName);
         List<Artwork> artworks = artworkService.fetchAndSaveArtworks(gameMode.boardSize());
         List<Card> cards = cardService.buildBoard(game, artworks, gameMode);
-        return CardMapper.toCardResponse(cards);
+        return cardMapper.toCardResponse(cards);
     }
 }

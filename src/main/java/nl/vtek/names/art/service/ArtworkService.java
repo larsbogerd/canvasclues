@@ -1,16 +1,18 @@
 package nl.vtek.names.art.service;
 
-import nl.vtek.names.art.client.ArticClient;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.mapper.ArtworkMapper;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.art.repository.ArtworkRepository;
+import nl.vtek.names.art.source.ArtSource;
+import nl.vtek.names.art.source.ArtSourceRegistry;
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.repository.GameRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,16 +24,19 @@ import java.util.UUID;
 @Service
 public class ArtworkService {
 
-    private final ArticClient articClient;
+    private final ArtSourceRegistry artSources;
+    private final String sourceKey;
     private final ArtworkMapper artworkMapper;
     private final ArtworkRepository artworkRepository;
     private final GameRepository gameRepository;
 
-    public ArtworkService(ArticClient articClient,
+    public ArtworkService(ArtSourceRegistry artSources,
+                          @Value("${art.source}") String sourceKey,
                           ArtworkMapper artworkMapper,
                           ArtworkRepository artworkRepository,
                           GameRepository gameRepository) {
-        this.articClient = articClient;
+        this.artSources = artSources;
+        this.sourceKey = sourceKey;
         this.artworkMapper = artworkMapper;
         this.artworkRepository = artworkRepository;
         this.gameRepository = gameRepository;
@@ -78,8 +83,9 @@ public class ArtworkService {
     }
 
     private List<Artwork> fetchArtworks(int size) {
-        return articClient.searchArtworks(size).pulledData().stream()
-                .map(artworkMapper::toEntity)
+        ArtSource source = artSources.get(sourceKey);
+        return source.fetchArtworks(size).stream()
+                .map(dto -> artworkMapper.toEntity(dto, source.key()))
                 .filter(artwork -> artwork.getExternalImageId() != null)
                 .toList();
     }

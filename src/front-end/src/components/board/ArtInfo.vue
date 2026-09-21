@@ -3,7 +3,7 @@ import ExpandIcon from '@/assets/images/svg-components/ExpandIcon.vue'
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import ArtInfoModalContent from "@/components/modalpopup/modalcontent/ArtInfoModalContent.vue";
 import {getArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
-import {iiifUrl} from "@/assets/composables/IiifUrl.js";
+import {imageUrl} from "@/assets/composables/ImageUrl.js";
 import {ref} from "vue";
 
 const props = defineProps({
@@ -11,14 +11,14 @@ const props = defineProps({
   artist: String,
   // Our own primary key: used to look the artwork up in our API.
   artworkId: String,
-  // The source API's image id: used to build IIIF image URLs.
-  imageId: String,
+  // Image URL with a {size} placeholder, built by the back-end.
+  imageUrlTemplate: String,
 })
 const modal = ref(null)
 const details = ref(null)
 
-function fullsizeUrl(id) {
-  return iiifUrl(id, "600,");
+function fullsizeUrl() {
+  return imageUrl(props.imageUrlTemplate, "600,");
 }
 
 async function expand(){
@@ -49,12 +49,12 @@ async function expand(){
         <div class="image-panel">
           <img
               class="artwork-blur"
-              :src="fullsizeUrl(props.imageId)"
+              :src="fullsizeUrl()"
               alt=""
               aria-hidden="true"
           />
           <img class="artwork-img"
-               :src="fullsizeUrl(props.imageId)"
+               :src="fullsizeUrl()"
                :alt="props.title"
           />
         </div>
@@ -66,7 +66,7 @@ async function expand(){
     <ArtInfoModalContent
         :title="props.title"
         :artist="props.artist"
-        :fullSizeUrl="fullsizeUrl(props.imageId)"
+        :fullSizeUrl="fullsizeUrl()"
         :details="details"
     >
     </ArtInfoModalContent>

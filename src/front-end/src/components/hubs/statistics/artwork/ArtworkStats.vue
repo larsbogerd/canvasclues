@@ -3,7 +3,7 @@ import PageHeader from "@/components/header/PageHeader.vue";
 import router from "@/router.js";
 import { ref, onMounted } from "vue";
 import { getArtworkStats } from "@/assets/composables/StatisticsService.js";
-import { iiifUrl } from "@/assets/composables/IiifUrl.js";
+import { imageUrl } from "@/assets/composables/ImageUrl.js";
 
 const artworkId = router.currentRoute.value.params.artworkId;
 
@@ -13,8 +13,8 @@ onMounted(async () => {
   artwork.value = await getArtworkStats(artworkId);
 });
 
-function fullsizeUrl(id) {
-  return iiifUrl(id, "1000,");
+function fullsizeUrl(template) {
+  return imageUrl(template, "1000,");
 }
 
 function formatDate(iso) {
@@ -43,13 +43,13 @@ function formatDate(iso) {
         <section class="image-panel">
           <img
               class="artwork-blur"
-              :src="fullsizeUrl(artwork.imageId)"
+              :src="fullsizeUrl(artwork.imageUrlTemplate)"
               alt=""
               aria-hidden="true"
           />
           <img
               class="artwork-img"
-              :src="fullsizeUrl(artwork.imageId)"
+              :src="fullsizeUrl(artwork.imageUrlTemplate)"
               :alt="artwork.title"
           />
         </section>

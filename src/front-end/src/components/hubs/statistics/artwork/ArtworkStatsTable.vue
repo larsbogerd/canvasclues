@@ -2,7 +2,7 @@
 import {computed, ref, watch} from "vue";
 import router from "@/router.js";
 import TablePagination from "@/components/hubs/statistics/TablePagination.vue";
-import {iiifUrl} from "@/assets/composables/IiifUrl.js";
+import {imageUrl} from "@/assets/composables/ImageUrl.js";
 
 const props = defineProps({
   rows: {
@@ -161,8 +161,8 @@ function formatDate(iso) {
   });
 }
 
-function thumbUrl(id) {
-  return iiifUrl(id, "96,");
+function thumbUrl(template) {
+  return imageUrl(template, "96,");
 }
 
 </script>
@@ -244,7 +244,7 @@ function thumbUrl(id) {
           <td>
             <img
                 class="thumb"
-                :src="thumbUrl(artwork.imageId)"
+                :src="thumbUrl(artwork.imageUrlTemplate)"
                 :alt="artwork.title"
                 loading="lazy"
             />
