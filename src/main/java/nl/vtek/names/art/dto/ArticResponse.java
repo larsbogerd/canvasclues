@@ -4,5 +4,4 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record ArticResponse(@JsonProperty("data") List<ArticDto> pulledData
-) {}
+public record ArticResponse(@JsonProperty("data") List<ArticItem> items) {}
