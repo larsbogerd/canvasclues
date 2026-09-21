@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+/** Art Institute of Chicago (Artic) API. */
 @Component
 public class ArticClient implements ArtSource {
 

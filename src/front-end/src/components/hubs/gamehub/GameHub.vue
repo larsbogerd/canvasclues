@@ -7,7 +7,7 @@ import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
 
-const sources = ['artic', 'smk'];
+const sources = ['artic', 'smk', 'cma'];
 const source = ref('artic');
 
 const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];
