@@ -1,6 +1,7 @@
 <script setup>
 import InputField from "@/components/board/InputField.vue";
 import {onMounted, ref, watch} from "vue";
+import {useRoute} from "vue-router";
 import GameGrid from "@/components/board/GameGrid.vue";
 
 import {startGameCall} from "@/assets/composables/StartGameService.js";
@@ -16,6 +17,8 @@ import SpymasterModalContent from "@/components/modalpopup/modalcontent/Spymaste
 import HintCard from "@/components/board/HintCard.vue";
 import SpymasterHintCardHeaderContent from "@/components/board/hintCardContent/SpymasterHintCardHeaderContent.vue";
 import SpymasterHintCardContent from "@/components/board/hintCardContent/SpymasterHintCardContent.vue";
+
+const route = useRoute()
 
 const props = defineProps({
   difficulty: {
@@ -109,7 +112,7 @@ function giveInputFeedback(input) {
 async function startGame() {
   try{
     console.log(props.difficulty);
-    cards.value = await startGameCall(props.difficulty);
+    cards.value = await startGameCall(route.query.source, props.difficulty);
     for (const card of cards.value){
       gameId = await card.gameId;
       emit('game-started', gameId);

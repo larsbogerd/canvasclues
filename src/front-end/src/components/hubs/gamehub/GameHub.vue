@@ -7,11 +7,17 @@ import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
 
+const sources = ['artic', 'smk'];
+const source = ref('artic');
+
 const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];
 const difficulty = ref('makkelijk');
 
 function goToSpyPhase() {
-  router.push(`/game/curator/${difficulty.value}`);
+  router.push({
+    path: `/game/curator/${difficulty.value}`,
+    query: source.value ? {source: source.value} : {},
+  });
 }
 
 function goToOperativeHub() {
@@ -33,6 +39,8 @@ function goToOperativeHub() {
                        sub-text="Stel een nieuwe collectie samen en begeleid bezoekers met jouw hints"
                     :imgUrl="spymasterImg"
                        altText="Spymaster"
+                    :sources="sources"
+                    v-model:source="source"
                     :difficulties="difficulties"
                        v-model="difficulty"
                        @button-click="goToSpyPhase"/>

@@ -1,8 +1,11 @@
 import ApiClient from "@/assets/composables/ApiClient.js";
 
-export async function startGameCall(selectedGameMode) {
+export async function startGameCall(source, selectedGameMode) {
   try {
-    const response = await ApiClient.post(`/game/start?gameMode=${selectedGameMode}`);
+    const query = new URLSearchParams();
+    if (source) query.set('source', source);
+    query.set('gameMode', selectedGameMode);
+    const response = await ApiClient.post(`/game/start?${query}`);
 
     return response.data;
   } catch (error) {
