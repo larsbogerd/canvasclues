@@ -7,12 +7,10 @@ import nl.vtek.names.art.mapper.ArtworkMapper;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.art.repository.ArtworkRepository;
 import nl.vtek.names.art.source.ArtSource;
-import nl.vtek.names.art.source.ArtSourceRegistry;
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Game;
 import nl.vtek.names.game.repository.GameRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,19 +22,13 @@ import java.util.UUID;
 @Service
 public class ArtworkService {
 
-    private final ArtSourceRegistry artSources;
-    private final String sourceKey;
     private final ArtworkMapper artworkMapper;
     private final ArtworkRepository artworkRepository;
     private final GameRepository gameRepository;
 
-    public ArtworkService(ArtSourceRegistry artSources,
-                          @Value("${art.source}") String sourceKey,
-                          ArtworkMapper artworkMapper,
+    public ArtworkService(ArtworkMapper artworkMapper,
                           ArtworkRepository artworkRepository,
                           GameRepository gameRepository) {
-        this.artSources = artSources;
-        this.sourceKey = sourceKey;
         this.artworkMapper = artworkMapper;
         this.artworkRepository = artworkRepository;
         this.gameRepository = gameRepository;
@@ -75,15 +67,14 @@ public class ArtworkService {
         artworkRepository.saveAll(toUpdate);
     }
 
-    public List<Artwork> fetchAndSaveArtworks(int size) {
-        List<Artwork> fetched = fetchArtworks(size + 4);
+    public List<Artwork> fetchAndSaveArtworks(int size, ArtSource source) {
+        List<Artwork> fetched = fetchArtworks(size + 4, source);
         List<Artwork> saved = new ArrayList<>(sendArtworksToDatabase(fetched, size));
         Collections.shuffle(saved);
         return saved;
     }
 
-    private List<Artwork> fetchArtworks(int size) {
-        ArtSource source = artSources.get(sourceKey);
+    private List<Artwork> fetchArtworks(int size, ArtSource source) {
         return source.fetchArtworks(size).stream()
                 .map(dto -> artworkMapper.toEntity(dto, source.key()))
                 .filter(artwork -> artwork.getExternalImageId() != null)

@@ -37,6 +37,8 @@ public class Game {
 
     private String gameMode;
 
+    private String source;
+
     private int likes;
 
     private int dislikes;
@@ -107,6 +109,14 @@ public class Game {
 
     public void setPlayCount(int playCount) {
         this.playCount = playCount;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getGameMode() {

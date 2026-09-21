@@ -9,5 +9,6 @@ public record GameResponse(
         LocalDateTime createdAt,
         int playCount,
         Double qualityRatio,
-        String gameMode
+        String gameMode,
+        String source
 ) {}
