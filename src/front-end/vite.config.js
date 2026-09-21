@@ -35,11 +35,6 @@ export default defineConfig({
         target: 'https://openaccess-cdn.clevelandart.org',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/img\/cma/, ''),
-      },
-      '/img/smk': {
-        target: 'https://iip.smk.dk',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/img\/smk/, '/iiif/jp2'),
       }
     }
   }
