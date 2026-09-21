@@ -1,7 +1,5 @@
 package nl.vtek.names.art.util;
 
-import java.util.UUID;
-
 public class IiifUrlBuilder {
 
     private static final String IIIF_ARTIC_BASE_URL = "/iiif/2";
@@ -10,7 +8,7 @@ public class IiifUrlBuilder {
         /* This utility class should not be instantiated */
     }
 
-    public static String forArtwork(UUID artworkId) {
-        return "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, artworkId);
+    public static String forArtwork(String imageId) {
+        return "%s/%s/full/!500,500/0/default.jpg".formatted(IIIF_ARTIC_BASE_URL, imageId);
     }
 }

@@ -2,6 +2,8 @@ package nl.vtek.names.art.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import nl.vtek.names.game.model.Card;
@@ -13,14 +15,16 @@ import java.util.UUID;
 @Entity
 public class Artwork {
 
-    /**
-     * Uses the ArtIC API's {@code image_id} (a UUID) as our local primary key.
-     * This lets us deduplicate artworks across game sessions without a separate lookup,
-     * and is also the value plugged into {@link nl.vtek.names.art.util.IiifUrlBuilder}
-     * to build the IIIF image URL.
-     */
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false, length = 32)
+    private String source;
+
+    @Column(name = "external_image_id", nullable = false)
+    private String externalImageId;
+
     @Column(columnDefinition = "TEXT")
     private String title;
     @Column(columnDefinition = "TEXT")
@@ -55,11 +59,12 @@ public class Artwork {
     public Artwork() {
     }
 
-    public Artwork(UUID id, String title, String artistDisplay, String dateDisplay,
-                   String mediumDisplay, String placeOfOrigin, String dimensions,
+    public Artwork(String source, String externalImageId, String title, String artistDisplay,
+                   String dateDisplay, String mediumDisplay, String placeOfOrigin, String dimensions,
                    String departmentTitle, String styleTitle, String artworkTypeTitle,
                    String shortDescription) {
-        this.id = id;
+        this.source = source;
+        this.externalImageId = externalImageId;
         this.title = title;
         this.artistDisplay = artistDisplay;
         this.dateDisplay = dateDisplay;
@@ -78,6 +83,22 @@ public class Artwork {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getExternalImageId() {
+        return externalImageId;
+    }
+
+    public void setExternalImageId(String externalImageId) {
+        this.externalImageId = externalImageId;
     }
 
     public String getTitle() {

@@ -43,13 +43,13 @@ function formatDate(iso) {
         <section class="image-panel">
           <img
               class="artwork-blur"
-              :src="fullsizeUrl(artwork.id)"
+              :src="fullsizeUrl(artwork.imageId)"
               alt=""
               aria-hidden="true"
           />
           <img
               class="artwork-img"
-              :src="fullsizeUrl(artwork.id)"
+              :src="fullsizeUrl(artwork.imageId)"
               :alt="artwork.title"
           />
         </section>

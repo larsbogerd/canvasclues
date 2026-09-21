@@ -80,13 +80,14 @@ public class ArtworkService {
     private List<Artwork> fetchArtworks(int size) {
         return articClient.searchArtworks(size).pulledData().stream()
                 .map(artworkMapper::toEntity)
-                .filter(artwork -> artwork.getId() != null)
+                .filter(artwork -> artwork.getExternalImageId() != null)
                 .toList();
     }
 
     private List<Artwork> sendArtworksToDatabase(List<Artwork> artworks, int limit) {
         return artworks.stream()
-                .map(artwork -> artworkRepository.findById(artwork.getId())
+                .map(artwork -> artworkRepository
+                        .findBySourceAndExternalImageId(artwork.getSource(), artwork.getExternalImageId())
                         .orElseGet(() -> artworkRepository.save(artwork)))
                 .limit(limit)
                 .toList();

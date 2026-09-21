@@ -21,10 +21,11 @@ public class CardMapper {
                     card.getId(),
                     card.getGame().getId(),
                     card.getType(),
-                    IiifUrlBuilder.forArtwork(artwork.getId()),
+                    IiifUrlBuilder.forArtwork(artwork.getExternalImageId()),
                     artwork.getTitle(),
                     artwork.getArtistDisplay(),
                     artwork.getId(),
+                    artwork.getExternalImageId(),
                     "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay())
             ));
         }

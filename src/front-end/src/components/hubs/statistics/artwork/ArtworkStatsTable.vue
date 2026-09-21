@@ -244,7 +244,7 @@ function thumbUrl(id) {
           <td>
             <img
                 class="thumb"
-                :src="thumbUrl(artwork.id)"
+                :src="thumbUrl(artwork.imageId)"
                 :alt="artwork.title"
                 loading="lazy"
             />

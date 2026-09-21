@@ -1,5 +1,6 @@
 package nl.vtek.names.art.mapper;
 
+import nl.vtek.names.art.client.ArticClient;
 import nl.vtek.names.art.dto.ArticDto;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
@@ -12,7 +13,8 @@ public class ArtworkMapper {
 
     public Artwork toEntity(ArticDto dto) {
         return new Artwork(
-                dto.id(),
+                ArticClient.SOURCE_KEY,
+                dto.id() == null ? null : dto.id().toString(),
                 dto.title(),
                 dto.artistDisplay(),
                 dto.dateDisplay(),
@@ -44,6 +46,7 @@ public class ArtworkMapper {
     public ArtworkStatsListResponse toStatsResponse(Artwork artwork) {
         return new ArtworkStatsListResponse(
                 artwork.getId(),
+                artwork.getExternalImageId(),
                 artwork.getTitle(),
                 artwork.getArtistDisplay(),
                 artwork.getTimesLoaded(),
@@ -60,6 +63,7 @@ public class ArtworkMapper {
     public ArtworkStatsResponse toDetailResponse(Artwork artwork) {
         return new ArtworkStatsResponse(
                 artwork.getId(),
+                artwork.getExternalImageId(),
                 artwork.getTitle(),
                 artwork.getArtistDisplay(),
                 artwork.getDateDisplay(),

@@ -127,6 +127,7 @@ function handleInfoClicked(id) {
                  :title="activeCard.title"
                  :artist="activeCard.artistDisplay"
                  :artworkId="activeCard.artworkId"
+                 :imageId="activeCard.imageId"
         />
         <div v-else class="sidebar-placeholder"></div>
 

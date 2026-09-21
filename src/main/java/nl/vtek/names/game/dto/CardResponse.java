@@ -12,5 +12,6 @@ public record CardResponse(
         String title,
         String artistDisplay,
         UUID artworkId,
+        String imageId,
         String altText
 ) {}

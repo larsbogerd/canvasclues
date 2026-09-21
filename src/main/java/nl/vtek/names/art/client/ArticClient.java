@@ -15,6 +15,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 public class ArticClient {
 
+    public static final String SOURCE_KEY = "artic";
+
     private static final Logger log = LoggerFactory.getLogger(ArticClient.class);
 
     private static final String FIELDS = String.join(",",

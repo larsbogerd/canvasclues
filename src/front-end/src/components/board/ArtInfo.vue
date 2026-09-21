@@ -9,7 +9,10 @@ import {ref} from "vue";
 const props = defineProps({
   title: String,
   artist: String,
+  // Our own primary key: used to look the artwork up in our API.
   artworkId: String,
+  // The source API's image id: used to build IIIF image URLs.
+  imageId: String,
 })
 const modal = ref(null)
 const details = ref(null)
@@ -46,12 +49,12 @@ async function expand(){
         <div class="image-panel">
           <img
               class="artwork-blur"
-              :src="fullsizeUrl(props.artworkId)"
+              :src="fullsizeUrl(props.imageId)"
               alt=""
               aria-hidden="true"
           />
           <img class="artwork-img"
-               :src="fullsizeUrl(props.artworkId)"
+               :src="fullsizeUrl(props.imageId)"
                :alt="props.title"
           />
         </div>
@@ -63,7 +66,7 @@ async function expand(){
     <ArtInfoModalContent
         :title="props.title"
         :artist="props.artist"
-        :fullSizeUrl="fullsizeUrl(props.artworkId)"
+        :fullSizeUrl="fullsizeUrl(props.imageId)"
         :details="details"
     >
     </ArtInfoModalContent>
