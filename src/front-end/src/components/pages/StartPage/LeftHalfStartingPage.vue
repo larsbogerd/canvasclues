@@ -6,7 +6,6 @@ import ButtonBase from "@/components/global-components/ButtonBase.vue";
 import ArticLogo from "@/assets/images/svg-components/ArticLogo.vue"
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import StartingPageModalContent from "@/components/modalpopup/modalcontent/StartingPageModalContent.vue";
-import ServiceNotice from "@/components/global-components/ServiceNotice.vue";
 
 const router = useRouter()
 const modal = ref(null)
@@ -27,7 +26,6 @@ function goToGameHubPhase() {
       <p class="description">
         Vind de verborgen verbanden tussen meesterwerken!
       </p>
-      <ServiceNotice />
       <div class="button-group">
         <button-base @click="goToGameHubPhase"
                      id="primary-btn">Start een spel</button-base>

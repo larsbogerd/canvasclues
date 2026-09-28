@@ -10,6 +10,11 @@
 
 // `size` is a IIIF size spec, e.g. "600," (width 600, height auto) or
 // "!500,500" (fit inside a 500x500 box).
+// The board tile and the art-info panel must ask for the same size: for IIIF sources each
+// size is a separate derivative the museum renders on first request, so two sizes meant two
+// cold renders per artwork, and the panel could finish before the tile it belongs to.
+export const CARD_IMAGE_SIZE = '500,';
+
 export function imageUrl(template, size) {
     return template ? template.replace('{size}', size) : '';
 }

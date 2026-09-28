@@ -1,5 +1,7 @@
 <script setup>
 import ArtInfo from "@/components/board/ArtInfo.vue";
+import BoardStatus from "@/components/board/BoardStatus.vue";
+import SourceCredit from "@/components/board/SourceCredit.vue";
 import {computed, onMounted, provide, ref, watch} from "vue";
 import GameGrid from "@/components/board/GameGrid.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
@@ -19,6 +21,7 @@ import GameQualityModalContent from "@/components/modalpopup/modalcontent/GameQu
 const modal = ref(null)
 const sessionId = ref(null);
 const cards = ref([]);
+const boardState = ref('loading');
 const hint = ref(null);
 const selectedCardId = ref(null);
 const activeCard = ref(null);
@@ -52,14 +55,23 @@ provide("handleCardClickedFn", handleCardClicked)
 
 watch(correctAmount, autoFinishWhenAllFound);
 
-onMounted (async () => {
-  const data = await startSession();
-  sessionId.value = data.sessionId;
-  cards.value = data.cards;
-  hint.value = data.hint;
-  amount.value = data.spymasterPickCount;
-  prefetchArtworkDetails(data.cards.map(card => card.artworkId));
-});
+onMounted(loadSession);
+
+async function loadSession() {
+  boardState.value = 'loading';
+  try {
+    const data = await startSession();
+    sessionId.value = data.sessionId;
+    cards.value = data.cards;
+    hint.value = data.hint;
+    amount.value = data.spymasterPickCount;
+    prefetchArtworkDetails(data.cards.map(card => card.artworkId));
+    boardState.value = 'ready';
+  } catch (error) {
+    console.error(error);
+    boardState.value = 'error';
+  }
+}
 
 async function lockIn(cardId) {
   const result = await submitGuess(sessionId.value, cardId);
@@ -131,7 +143,8 @@ function handleInfoClicked(id) {
         />
         <div v-else class="sidebar-placeholder"></div>
 
-        <GameGrid class="grid"
+        <GameGrid v-if="boardState === 'ready'"
+                  class="grid"
                   :cards="cards"
                   :active-info-id="activeCard?.id"
                   :selected-ids="selectedCardId ? [selectedCardId] : []"
@@ -140,6 +153,12 @@ function handleInfoClicked(id) {
                   @info-clicked="handleInfoClicked"
         >
         </GameGrid>
+        <BoardStatus v-else
+                     class="grid"
+                     :state="boardState"
+                     title="Deze puzzel laadt niet"
+                     message="Deze puzzel kon niet worden geladen. Probeer het opnieuw."
+                     @retry="loadSession"/>
 
         <div class="sidebar">
           <HintCard
@@ -176,6 +195,9 @@ function handleInfoClicked(id) {
 
         </div>
       </div>
+      <SourceCredit v-if="boardState === 'ready'"
+                    class="board-credit"
+                    :source="cards[0]?.source"/>
     </div>
   </div>
 
@@ -240,6 +262,13 @@ function handleInfoClicked(id) {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+}
+
+.board-credit {
+  position: fixed;
+  left: 24px;
+  bottom: 16px;
+  text-align: left;
 }
 
 .sidebar-placeholder {

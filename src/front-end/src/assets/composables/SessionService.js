@@ -6,13 +6,9 @@ async function getGameId() {
 }
 
 export async function startSession() {
-    try {
-        const id = await getGameId();
-        const response = await ApiClient.post(`/session/${id}/start`);
-        return response.data;
-    } catch (error) {
-        console.log(error.response?.data ?? error);
-    }
+    const id = await getGameId();
+    const response = await ApiClient.post(`/session/${id}/start`);
+    return response.data;
 }
 
 export async function fetchRandomGameId(difficulty) {

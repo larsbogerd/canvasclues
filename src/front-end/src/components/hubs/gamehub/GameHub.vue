@@ -6,8 +6,9 @@ import operativeImg from "@/assets/images/icons/Visitor2.png";
 import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
+import {ART_SOURCE_KEYS} from "@/assets/composables/ArtSources.js";
 
-const sources = ['artic', 'cma', 'met'];
+const sources = ART_SOURCE_KEYS;
 const source = ref('artic');
 
 const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];

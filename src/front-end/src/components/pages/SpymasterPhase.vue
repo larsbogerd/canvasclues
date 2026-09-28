@@ -9,6 +9,8 @@ import {submitSpymasterTurn} from "@/assets/composables/SubmitService.js";
 import {prefetchArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
 
 import ArtInfo from "@/components/board/ArtInfo.vue";
+import BoardStatus from "@/components/board/BoardStatus.vue";
+import SourceCredit from "@/components/board/SourceCredit.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import SpymasterResultModalContent from "@/components/modalpopup/modalcontent/SpymasterResultModalContent.vue";
@@ -30,6 +32,7 @@ const props = defineProps({
 const hintInput = ref("");
 const modal = ref(null);
 const cards = ref([]);
+const boardState = ref('loading');
 const selectedCards = ref([]);
 const activeCard = ref(null);
 const emit = defineEmits(['game-started']);
@@ -110,16 +113,18 @@ function giveInputFeedback(input) {
 }
 
 async function startGame() {
+  boardState.value = 'loading';
   try{
-    console.log(props.difficulty);
     cards.value = await startGameCall(route.query.source, props.difficulty);
     for (const card of cards.value){
       gameId = await card.gameId;
       emit('game-started', gameId);
     }
     prefetchArtworkDetails(cards.value.map(card => card.artworkId));
+    boardState.value = 'ready';
   } catch(error) {
     console.error(error);
+    boardState.value = 'error';
   }
 }
 
@@ -157,12 +162,19 @@ errorMessage.value = "";
       />
       <div v-else class="sidebar-placeholder"></div>
 
-      <GameGrid class="grid" phase="spymaster"
+      <GameGrid v-if="boardState === 'ready'"
+                 class="grid" phase="spymaster"
                  :cards="cards"
                  :active-info-id="activeCard?.id"
                  :selected-ids="selectedCards"
                  @card-clicked="handleCardClicked"
                  @info-clicked="handleInfoClicked"/>
+      <BoardStatus v-else
+                   class="grid"
+                   :state="boardState"
+                   title="Het museum reageert niet"
+                   message="De kunstwerken konden niet worden opgehaald. Probeer het opnieuw, of kies een ander museum."
+                   @retry="startGame"/>
 
       <div class="sidebar">
         <HintCard>
@@ -196,6 +208,10 @@ errorMessage.value = "";
       </div>
 
     </div>
+
+    <SourceCredit v-if="boardState === 'ready'"
+                  class="board-credit"
+                  :source="cards[0]?.source"/>
   </div>
   </div>
   <BaseModal ref="modal">
@@ -233,6 +249,13 @@ errorMessage.value = "";
   height: var(--layout-height);
   box-sizing: border-box;
   padding: var(--layout-padding);
+}
+
+.board-credit {
+  position: fixed;
+  left: 24px;
+  bottom: 16px;
+  text-align: left;
 }
 
 .sidebar-placeholder {

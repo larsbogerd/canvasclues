@@ -3,7 +3,7 @@ import ExpandIcon from '@/assets/images/svg-components/ExpandIcon.vue'
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import ArtInfoModalContent from "@/components/modalpopup/modalcontent/ArtInfoModalContent.vue";
 import {getArtworkDetails} from "@/assets/composables/ArtworkDetailsService.js";
-import {imageUrl} from "@/assets/composables/ImageUrl.js";
+import {CARD_IMAGE_SIZE, imageUrl} from "@/assets/composables/ImageUrl.js";
 import {ref} from "vue";
 
 const props = defineProps({
@@ -18,7 +18,7 @@ const modal = ref(null)
 const details = ref(null)
 
 function fullsizeUrl() {
-  return imageUrl(props.imageUrlTemplate, "600,");
+  return imageUrl(props.imageUrlTemplate, CARD_IMAGE_SIZE);
 }
 
 async function expand(){

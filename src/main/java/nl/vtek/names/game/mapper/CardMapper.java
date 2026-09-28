@@ -30,7 +30,8 @@ public class CardMapper {
                     artwork.getTitle(),
                     artwork.getArtistDisplay(),
                     artwork.getId(),
-                    "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay())
+                    "%s — %s, %s".formatted(artwork.getTitle(), artwork.getArtistDisplay(), artwork.getDateDisplay()),
+                    artwork.getSource()
             ));
         }
 
