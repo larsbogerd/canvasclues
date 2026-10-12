@@ -144,7 +144,6 @@ Add another game mode by creating a new strategy class that implements `GameMode
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/v1/artwork/test?size=25` | Fetches random artworks from the AIC API for testing. `size` defaults to `25` |
 | GET | `/api/v1/artwork/statslist` | Returns every persisted `Artwork` as `ArtworkStatsListResponse[]`, including usage counters and `pickPercentage`. Used by the statistics dashboard table. |
 | GET | `/api/v1/artwork/{id}/stats` | Returns a single artwork's full detail + usage stats as `ArtworkStatsResponse`. Used by the statistics detail page. |
 | GET | `/api/v1/artwork/{id}/details` | Returns full artwork metadata as `ArtworkDetailsResponse`. Used by the art-info popup on the board. |
@@ -200,6 +199,5 @@ Documentation: https://docs.spring.io/spring-data/jpa/reference/jpa/query-method
 
 ## Future Improvements (TBD)
 
-- Add more integration tests for the game and hint endpoints
 - Add OpenAPI or similar API documentation
 - Wire the unused `HintNotFoundException` and `ArtworkNotFoundException` into the services that fetch those entities
