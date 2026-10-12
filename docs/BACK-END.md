@@ -7,7 +7,7 @@ The back-end is built using **Spring Boot 4.0.2** and is responsible for:
 
 - Game setup and persistence
 - Managing game state transitions
-- Integration with the external museum API (AIC)
+- Integration with external museum APIs (Cleveland Museum of Art, The Met, Art Institute of Chicago)
 - Database communication (MySQL)
 - Exposing REST endpoints to the front-end
 
@@ -49,7 +49,9 @@ The back-end starts on port **8082**.
 ## Package Structure
 
 ### `art` – Artwork fetching & persistence
-Calls the Art Institute of Chicago API, maps responses to the `Artwork` entity, and persists artworks so their gameplay usage (times loaded, times picked by spymaster, correct/bad guesses, first/last used) can be tracked for the statistics dashboard.
+Fetches artworks from a museum API, maps responses to the `Artwork` entity, and persists artworks so their gameplay usage (times loaded, times picked by spymaster, correct/bad guesses, first/last used) can be tracked for the statistics dashboard.
+
+Each museum is an `ArtSource` (`art.source`) implemented by a client in `art.client` — `CmaClient`, `MetClient`, `ArticClient` — that returns source-neutral `SourceArtwork` records. `ArtSourceRegistry` resolves a source by key, falling back to the `art.source` property (default `cma`); an unknown key is a `400`. Images are proxied same-origin under `/img/<source key>/` by nginx and the Vite dev server. Adding a museum means a new client plus a matching proxy block.
 
 ### `game` – Game logic & persistence
 Contains controllers, DTOs, mappers, entities, repositories, services, and exception handling for:
@@ -92,17 +94,17 @@ Add another game mode by creating a new strategy class that implements `GameMode
 `game.handlers.ApiExceptionHandler` has one `@ExceptionHandler` per abstract parent. Spring dispatches on the runtime subclass, so adding a new concrete exception needs no handler change.
 
 ### `art/util` – Utility classes
-`IiifUrlBuilder` builds the IIIF image URL from an artwork id; used by both `ArtworkMapper` and `CardMapper` so the URL format lives in one place.
+`IiifUrlBuilder` builds an IIIF image URL template — with a `{size}` placeholder for the front-end to fill in — from a proxy path and an image id. It's the default for `ArtSource.imageUrlTemplate`; sources without IIIF (CMA, the Met) override it with a fixed URL.
 
 ---
 
 ## Domain Model
 
-- `Game` uses a `Long` primary key and tracks `state`, `spyScore`, `playCount`, `gameMode`, `likes`, `dislikes`, `createdAt`, related `cards`, and related `hints`.
+- `Game` uses a `Long` primary key and tracks `state`, `spyScore`, `playCount`, `gameMode`, `source` (the museum its board came from), `likes`, `dislikes`, `createdAt`, related `cards`, and related `hints`.
 - `Card` uses a UUID primary key, belongs to a `Game`, and references an `Artwork` via `artwork_id`.
 - `Hint` uses a UUID primary key and belongs to a `Game`.
 - `Session` uses a UUID primary key, belongs to a `Game` (required), and optionally references the `Hint` that was active at start. `startedAt` is set by Hibernate via `@CreationTimestamp`. `state` (`SessionState` enum: `IN_PROGRESS` / `FINISHED`) starts at `IN_PROGRESS` and flips to `FINISHED` when the Operative ends their attempt. `score` is incremented server-side on each correct guess via the per-guess endpoint, so it's authoritative without the client ever sending a total. The session also tracks `comboStreak`, `wrongGuesses`, and `assassinGuesses`. `finishedAt` is stamped when `finish` is called.
-- `Artwork` uses a UUID primary key (the ArtIC `image_id`) and stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
+- `Artwork` uses a generated UUID primary key; `source` + `external_image_id` (the museum's own image id) are a unique natural key used for deduplication. It stores the artwork's metadata (title, artist, date, medium, place of origin, dimensions, department) plus usage counters (`timesLoaded`, `timesSpymasterPick`, `timesCorrectGuess`, `timesBadGuess`) and timestamps (`firstUsedAt`, `lastUsedAt`).
 - `GameState` currently supports `CREATING`, `READY`, and `ARCHIVED`.
 - `CardType` currently supports `ASSASSIN`, `PLAYABLE`.
 - `SessionState` currently supports `IN_PROGRESS` and `FINISHED`.
@@ -117,8 +119,8 @@ Add another game mode by creating a new strategy class that implements `GameMode
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/v1/game/start?gameMode={mode}` | Creates a new `Game` for the given mode (`makkelijk` / `gemiddeld` / `moeilijk`), fetches artworks via the mode's card distribution, stores them as `Card` records, and returns a `CardResponse[]`. `400` for an unknown mode. |
-| GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` including `spyScore`, `playCount`, `qualityRatio`, and `gameMode` (used by the operative hub) |
+| POST | `/api/v1/game/start?gameMode={mode}&source={source}` | Creates a new `Game` for the given mode (`makkelijk` / `gemiddeld` / `moeilijk`), fetches artworks from the given museum (`source` optional, defaults to `art.source`), stores them as `Card` records, and returns a `CardResponse[]`. `400` for an unknown mode or source. |
+| GET | `/api/v1/game/list` | Returns all games in `READY` state as `GameResponse[]` including `spyScore`, `playCount`, `qualityRatio`, `gameMode`, and `source` (used by the operative hub) |
 | POST | `/api/v1/game/{gameId}/submit` | Unified spymaster submit. Body: `{ "cardIds": ["uuid"], "spyScore": 3, "hintContent": "museum" }`. Flags picked cards, sets the spy score, creates the `Hint`, and moves the game to `READY`. |
 | PATCH | `/api/v1/game/game-quality/submit` | Records a like/dislike for a game. Body: `{ "gameId": 1, "rating": true }` (`true` = like, `false` = dislike). Used by the post-game rating modal. |
 
