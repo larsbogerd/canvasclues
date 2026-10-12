@@ -3,6 +3,7 @@ import OperativeHubButton from "@/components/hubs/operativehub/OperativeHubButto
 import DifficultyIcon from "@/assets/images/svg-components/DifficultyIcon.vue";
 import {computed} from "vue";
 import router from "@/router.js";
+import {ART_SOURCES} from "@/assets/composables/ArtSources.js";
 
 const props = defineProps({
   gameId: Number,
@@ -11,6 +12,7 @@ const props = defineProps({
   score: Number,
   playCount: Number,
   qualityRatio: Number,
+  source: String,
 })
 
 const DIFFICULTY_LEVEL = { makkelijk: 1, gemiddeld: 2, moeilijk: 3 }
@@ -18,6 +20,8 @@ const difficultyLevel = computed(() => DIFFICULTY_LEVEL[props.gameMode])
 
 const qualityLabel = computed(() =>
     props.qualityRatio == null ? null : `${Math.round(props.qualityRatio)}%`)
+
+const museum = computed(() => ART_SOURCES[props.source]);
 
 const playLabel = computed(() =>
     props.playCount > 0 ? `${props.playCount}× gespeeld` : 'Nog niet gespeeld')
@@ -38,7 +42,10 @@ function goToOperativePhase() {
         </span>
         <span v-else class="quality-badge quality-badge--empty">nieuw</span>
       </div>
-      <DifficultyIcon class="hub-difficulty" :level="difficultyLevel" :title="props.gameMode" />
+      <div class="card-subrow">
+        <DifficultyIcon class="hub-difficulty" :level="difficultyLevel" :title="props.gameMode" />
+        <span v-if="museum" class="museum-badge" :title="museum.name">{{ museum.shortName }}</span>
+      </div>
       <p class="hub-meta">{{ playLabel }}</p>
       <p class="hub-meta">Hoogste score: {{ props.score }}</p>
       <OperativeHubButton @GoToOperative="goToOperativePhase"
@@ -111,6 +118,27 @@ function goToOperativePhase() {
 .quality-badge--empty{
   font-weight: 500;
   color: var(--text-tertiary);
+}
+
+.card-subrow{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Same shape as the quality badge, but quieter: it's context, not a rating. */
+.museum-badge{
+  flex-shrink: 0;
+  font-family: var(--font-secondary),sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--text-eyebrow);
+  background-color: var(--color-bg-base);
+  border-radius: 999px;
+  padding: 3px 10px;
 }
 
 .hub-difficulty{

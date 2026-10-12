@@ -7,13 +7,6 @@ const props = defineProps({
   imgUrl: String,
   altText: String,
 
-  sources: {
-    type: Array,
-    default: () => [],
-  },
-
-  source: String,
-
   difficulties: {
     type: Array,
     default: () => [],
@@ -23,12 +16,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(
-    ['button-click', 'update:source', 'update:modelValue']
+    ['button-click', 'update:modelValue']
 )
-
-function selectSource(value) {
-  emit('update:source', value);
-}
 
 function selectDifficulty(value) {
   emit('update:modelValue', value);
@@ -37,26 +26,13 @@ function selectDifficulty(value) {
 </script>
 
 <template>
-  <div @click="emit('button-click')"
-       @keydown.enter="emit('button-click')"
-       @keydown.space.prevent="emit('button-click')"
-       role="button"
-       tabindex="0"
-       class="toggle-puzzles-button">
+  <button @click="emit('button-click')"
+          class="toggle-puzzles-button">
 
     <span class="text-block">
       <span class="eyebrow">{{ props.eyeBrow }}</span>
       <span class="h1">{{ props.Phase }}</span>
       <span class="subtext">{{ props.subText }}</span>
-
-      <span v-if="props.sources.length" class="source-select">
-        <select :value="props.source"
-                @click.stop
-                @keydown.stop
-                @change.stop="selectSource($event.target.value)">
-          <option v-for="option in props.sources" :key="option" :value="option">{{ option }}</option>
-        </select>
-      </span>
 
       <span v-if="props.difficulties.length" class="difficulty-toggle">
         <span v-for="option in props.difficulties"
@@ -75,7 +51,7 @@ function selectDifficulty(value) {
     <span class="icon-wrap">
       <img :src="props.imgUrl" :alt="props.altText" />
     </span>
-  </div>
+  </button>
 </template>
 
 <style scoped>

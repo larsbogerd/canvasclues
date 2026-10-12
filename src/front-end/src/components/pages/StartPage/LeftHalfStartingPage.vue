@@ -2,8 +2,6 @@
 import { useRouter } from 'vue-router'
 import {ref} from "vue";
 import ButtonBase from "@/components/global-components/ButtonBase.vue";
-// import ArticLogo from "@/components/pages/StartPage/ArticLogo.vue";
-import ArticLogo from "@/assets/images/svg-components/ArticLogo.vue"
 import BaseModal from "@/components/modalpopup/BaseModal.vue";
 import StartingPageModalContent from "@/components/modalpopup/modalcontent/StartingPageModalContent.vue";
 
@@ -17,9 +15,6 @@ function goToGameHubPhase() {
 
 <template>
   <div class="left">
-    <div class="header">
-      <ArticLogo class="artic-logo" />
-    </div>
 
     <div class="content">
       <h1 class="title">Canvas Clues</h1>
@@ -42,10 +37,6 @@ function goToGameHubPhase() {
 </template>
 
 <style scoped>
-.artic-logo{
-  color: var(--logo-artic);
-  display: block;
-}
 .left {
   flex: 1;
   display: flex;
@@ -54,16 +45,7 @@ function goToGameHubPhase() {
   padding: 0 2rem;
 }
 
-.header {
-  position: absolute;
-  top: 1.5rem;
-  left: 2rem;
-}
 
-.header :deep(svg) {
-  width: clamp(80px, 5vw, 120px);
-  height: clamp(80px, 5vw, 120px);
-}
 
 .content {
   max-width: 550px;

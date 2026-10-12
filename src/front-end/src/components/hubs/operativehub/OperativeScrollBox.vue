@@ -82,6 +82,7 @@ const sortedList = computed(() => {
                           :score="card.spyScore"
                           :play-count="card.playCount"
                           :quality-ratio="card.qualityRatio"
+                          :source="card.source"
                           :key="index"/>
       </div>
     </div>
