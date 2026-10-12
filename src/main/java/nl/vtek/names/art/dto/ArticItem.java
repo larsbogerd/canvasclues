@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
-public record ArticDto(
-        @JsonProperty("image_id") UUID id,
+public record ArticItem(
+        @JsonProperty("image_id") UUID imageId,
         String title,
         @JsonProperty("artist_display") String artistDisplay,
         @JsonProperty("date_display") String dateDisplay,

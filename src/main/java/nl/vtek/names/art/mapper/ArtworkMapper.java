@@ -1,18 +1,26 @@
 package nl.vtek.names.art.mapper;
 
-import nl.vtek.names.art.dto.ArticDto;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.model.Artwork;
+import nl.vtek.names.art.source.ArtSourceRegistry;
+import nl.vtek.names.art.source.SourceArtwork;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ArtworkMapper {
 
-    public Artwork toEntity(ArticDto dto) {
+    private final ArtSourceRegistry artSources;
+
+    public ArtworkMapper(ArtSourceRegistry artSources) {
+        this.artSources = artSources;
+    }
+
+    public Artwork toEntity(SourceArtwork dto, String source) {
         return new Artwork(
-                dto.id(),
+                source,
+                dto.imageId(),
                 dto.title(),
                 dto.artistDisplay(),
                 dto.dateDisplay(),
@@ -44,6 +52,7 @@ public class ArtworkMapper {
     public ArtworkStatsListResponse toStatsResponse(Artwork artwork) {
         return new ArtworkStatsListResponse(
                 artwork.getId(),
+                artSources.imageUrlTemplate(artwork),
                 artwork.getTitle(),
                 artwork.getArtistDisplay(),
                 artwork.getTimesLoaded(),
@@ -60,6 +69,7 @@ public class ArtworkMapper {
     public ArtworkStatsResponse toDetailResponse(Artwork artwork) {
         return new ArtworkStatsResponse(
                 artwork.getId(),
+                artSources.imageUrlTemplate(artwork),
                 artwork.getTitle(),
                 artwork.getArtistDisplay(),
                 artwork.getDateDisplay(),

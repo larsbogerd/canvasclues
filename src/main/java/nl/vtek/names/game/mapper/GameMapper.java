@@ -21,7 +21,8 @@ public class GameMapper {
                 game.getCreatedAt(),
                 game.getPlayCount(),
                 calculateQualityRatio(game),
-                game.getGameMode()
+                game.getGameMode(),
+                game.getSource()
         );
     }
 

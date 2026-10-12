@@ -1,5 +1,5 @@
 <script setup>
-import {computed} from "vue";
+import {computed, ref, watch} from "vue";
 import infoIcon from '@/assets/images/icons/info.svg'
 import LockButton from "@/components/board/LockButton.vue";
 import AssassinLabel from "@/components/board/AssassinLabel.vue";
@@ -16,6 +16,10 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['card-clicked', 'info-clicked'])
+
+// Artic renders IIIF sizes on demand, so a cold image can take ten seconds or more.
+const imageState = ref('loading');
+watch(() => props.imgUrl, () => { imageState.value = 'loading'; });
 
 const revealed = computed(() =>
   ['right', 'wrong', 'wrongassassin'].includes(props.color)
@@ -43,11 +47,19 @@ function handleOperativeClick() {
        @click="handleSpymasterClick"
        :class="[props.type, { active: props.selected, 'info-shown': infoActive }]">
 
+    <div v-if="imageState === 'loading'" class="image-skeleton" aria-hidden="true"></div>
+    <div v-else-if="imageState === 'failed'" class="image-fallback">
+      <span>Afbeelding niet beschikbaar</span>
+    </div>
+
     <AssassinLabel v-if="props.type ==='ASSASSIN'">
     </AssassinLabel>
 
     <img :src="props.imgUrl"
-         :alt="props.altText" draggable="false"/>
+         :alt="props.altText" draggable="false"
+         :class="{ 'image-hidden': imageState !== 'loaded' }"
+         @load="imageState = 'loaded'"
+         @error="imageState = 'failed'"/>
 
     <button class="info-btn"
             @click.stop="emit('info-clicked', props.id)">
@@ -61,9 +73,17 @@ function handleOperativeClick() {
        @click="handleOperativeClick"
        :class="[props.color, { active: props.selected, 'info-shown': infoActive }]">
 
+    <div v-if="imageState === 'loading'" class="image-skeleton" aria-hidden="true"></div>
+    <div v-else-if="imageState === 'failed'" class="image-fallback">
+      <span>Afbeelding niet beschikbaar</span>
+    </div>
+
     <img :src="props.imgUrl"
          :alt="props.altText"
-         draggable="false"/>
+         draggable="false"
+         :class="{ 'image-hidden': imageState !== 'loaded' }"
+         @load="imageState = 'loaded'"
+         @error="imageState = 'failed'"/>
 
     <LockButton v-if="!revealed"
                 :id="props.id">
@@ -171,6 +191,44 @@ img {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: opacity 250ms ease;
+}
+
+img.image-hidden {
+  opacity: 0;
+}
+
+.image-skeleton,
+.image-fallback {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-secondary);
+}
+
+.image-skeleton {
+  background: linear-gradient(100deg, var(--color-secondary) 40%, var(--color-bg-base) 50%, var(--color-secondary) 60%);
+  background-size: 200% 100%;
+  animation: image-shimmer 1.4s linear infinite;
+}
+
+@keyframes image-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-skeleton { animation: none; }
+}
+
+.image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12%;
+  text-align: center;
+  font-family: var(--font-secondary), sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
 }
 
 </style>

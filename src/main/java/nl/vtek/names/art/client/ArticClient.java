@@ -1,6 +1,9 @@
 package nl.vtek.names.art.client;
 
+import nl.vtek.names.art.dto.ArticItem;
 import nl.vtek.names.art.dto.ArticResponse;
+import nl.vtek.names.art.source.ArtSource;
+import nl.vtek.names.art.source.SourceArtwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -12,8 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+/** Art Institute of Chicago (Artic) API. */
 @Component
-public class ArticClient {
+public class ArticClient implements ArtSource {
+
+    public static final String SOURCE_KEY = "artic";
 
     private static final Logger log = LoggerFactory.getLogger(ArticClient.class);
 
@@ -40,7 +46,19 @@ public class ArticClient {
                 .build();
     }
 
-    public ArticResponse searchArtworks(int size) {
+    @Override
+    public String key() {
+        return SOURCE_KEY;
+    }
+
+    @Override
+    public List<SourceArtwork> fetchArtworks(int size) {
+        return searchArtworks(size).items().stream()
+                .map(ArticClient::toSourceArtwork)
+                .toList();
+    }
+
+    private ArticResponse searchArtworks(int size) {
         int maxFrom = 1000 - size;
         Map<String, Object> query = Map.of(
                 "query", Map.of(
@@ -68,5 +86,21 @@ public class ArticClient {
             log.error("Artic API failed: {}", e.getMessage());
             throw new RuntimeException("Failed to fetch artworks from Artic API", e);
         }
+    }
+
+    private static SourceArtwork toSourceArtwork(ArticItem item) {
+        return new SourceArtwork(
+                item.imageId() == null ? null : item.imageId().toString(),
+                item.title(),
+                item.artistDisplay(),
+                item.dateDisplay(),
+                item.mediumDisplay(),
+                item.placeOfOrigin(),
+                item.dimensions(),
+                item.departmentTitle(),
+                item.styleTitle(),
+                item.artworkTypeTitle(),
+                item.shortDescription()
+        );
     }
 }

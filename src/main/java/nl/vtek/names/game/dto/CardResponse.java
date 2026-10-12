@@ -8,9 +8,10 @@ public record CardResponse(
         UUID id,
         Long gameId,
         CardType type,
-        String imageUrl,
+        String imageUrlTemplate,
         String title,
         String artistDisplay,
         UUID artworkId,
-        String altText
+        String altText,
+        String source
 ) {}

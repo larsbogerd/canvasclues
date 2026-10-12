@@ -1,7 +1,7 @@
 # Canvas Clues
 
 Canvas Clues is a word-association guessing game played with pictures from real museum
-objects instead of words. Artworks are dynamically loaded via an external museum API.
+objects instead of words. Artworks are dynamically loaded from public museum APIs.
 
 The game is played on a 4x4 grid containing 16 museum object images.  
 Each round consists of two phases:
@@ -50,10 +50,18 @@ Front-end dependencies are managed via **npm** (`package.json`).
 
 ## API references
 
-We use image and object metadata from the **Art Institute of Chicago (AIC) API**. AIC exposes images using the **IIIF Image API**.
+Each board is built from one museum, chosen per game:
+
+| Source key | Museum | Images |
+|---|---|---|
+| `cma` (default) | **Cleveland Museum of Art** | one fixed-size derivative per artwork |
+| `met` | **The Metropolitan Museum of Art** | one fixed-size derivative per artwork |
+| `artic` | **Art Institute of Chicago (AIC)** | **IIIF Image API**, any size |
 
 Documentation:
 
+* Cleveland Museum of Art Open Access API: [https://openaccess-api.clevelandart.org/](https://openaccess-api.clevelandart.org/)
+* The Met Collection API: [https://metmuseum.github.io/](https://metmuseum.github.io/)
 * AIC API documentation: [https://api.artic.edu/docs/](https://api.artic.edu/docs/)
 
 * IIIF Image API (v3.0): [https://iiif.io/api/image/3.0/](https://iiif.io/api/image/3.0/)

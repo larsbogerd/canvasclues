@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record ArtworkStatsResponse(
         UUID id,
+        String imageUrlTemplate,
         String title,
         String artistDisplay,
         String dateDisplay,

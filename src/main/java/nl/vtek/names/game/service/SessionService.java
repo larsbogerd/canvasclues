@@ -28,13 +28,16 @@ public class SessionService {
     private final GameRepository gameRepository;
     private final SessionRepository sessionRepository;
     private final HintRepository hintRepository;
+    private final SessionMapper sessionMapper;
 
     public SessionService(GameRepository gameRepository,
                           SessionRepository sessionRepository,
-                          HintRepository hintRepository) {
+                          HintRepository hintRepository,
+                          SessionMapper sessionMapper) {
         this.gameRepository = gameRepository;
         this.sessionRepository = sessionRepository;
         this.hintRepository = hintRepository;
+        this.sessionMapper = sessionMapper;
     }
 
     public SessionResponse start(Long gameId) {
@@ -51,7 +54,7 @@ public class SessionService {
         Hint hint = hintRepository.findByGame_Id(gameId).orElse(null);
         Session session = sessionRepository.save(new Session(game, hint));
 
-        return SessionMapper.toSessionResponse(session, game.getCards(), hint);
+        return sessionMapper.toSessionResponse(session, game.getCards(), hint);
     }
 
     public Long randomStart(String difficulty) {
@@ -87,6 +90,6 @@ public class SessionService {
         session.setState(SessionState.FINISHED);
         Session saved = sessionRepository.save(session);
 
-        return SessionMapper.toFinishSessionResponse(saved);
+        return sessionMapper.toFinishSessionResponse(saved);
     }
 }

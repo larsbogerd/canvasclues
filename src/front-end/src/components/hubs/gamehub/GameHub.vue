@@ -6,12 +6,17 @@ import operativeImg from "@/assets/images/icons/Visitor2.png";
 import spymasterImg from "@/assets/images/icons/Curator2.png";
 import Footer from "@/components/global-components/Footer.vue";
 import PageHeader from "@/components/header/PageHeader.vue";
+import MuseumPicker from "@/components/hubs/gamehub/MuseumPicker.vue";
+import {selectedSource} from "@/assets/composables/SelectedSource.js";
 
 const difficulties = ['makkelijk', 'gemiddeld', 'moeilijk'];
 const difficulty = ref('makkelijk');
 
 function goToSpyPhase() {
-  router.push(`/game/curator/${difficulty.value}`);
+  router.push({
+    path: `/game/curator/${difficulty.value}`,
+    query: {source: selectedSource.value},
+  });
 }
 
 function goToOperativeHub() {
@@ -25,7 +30,10 @@ function goToOperativeHub() {
     <PageHeader>
     </PageHeader>
     <div class="game-hub">
-      <h1 class="main-text">Wat wil je doen?</h1>
+      <h1 class="main-text">Kies je museum</h1>
+      <MuseumPicker/>
+      <!-- Read with the card titles: "Speel als Curator / Bezoeker". -->
+      <h2 class="role-heading">Speel als</h2>
       <div class="game-hub-button">
         <GameHubButton role-name="spymaster"
                        eyeBrow="Creëer"
@@ -62,7 +70,10 @@ function goToOperativeHub() {
 .game-hub {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* "safe": when the cards stack on a small window, start at the top and scroll rather than
+     centring the overflow up underneath the header. */
+  justify-content: safe center;
+  overflow-y: auto;
   align-items: center;
   width: 100%;
   flex: 1;
@@ -85,6 +96,14 @@ function goToOperativeHub() {
   margin-bottom: 1.5rem;
   font-size: clamp(3rem, 4vw, 4.5rem);
   color: var(--text-primary);
+}
+
+.role-heading {
+  margin: 0 0 1rem;
+  font-family: var(--font-main), serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text-secondary);
 }
 
 .footer-element {

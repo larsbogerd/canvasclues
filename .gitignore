@@ -127,3 +127,6 @@ sqldata/
 
 # PID folders
 .pids/
+
+# Claude Code local config
+.claude/

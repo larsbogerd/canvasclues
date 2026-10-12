@@ -21,14 +21,25 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      // Mirrors the /iiif/ block in nginx.conf so artwork images work the same
-      // way in dev as in Docker.
-      '/iiif': {
+      // Mirrors the /img/<source>/ blocks in nginx.conf so artwork images work the
+      // same way in dev as in Docker.
+      '/img/artic': {
         target: 'https://www.artic.edu',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img\/artic/, '/iiif/2'),
         headers: {
           Referer: 'https://www.artic.edu/',
         },
+      },
+      '/img/met': {
+        target: 'https://images.metmuseum.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img\/met/, ''),
+      },
+      '/img/cma': {
+        target: 'https://openaccess-cdn.clevelandart.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img\/cma/, ''),
       }
     }
   }

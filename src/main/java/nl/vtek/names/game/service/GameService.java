@@ -20,9 +20,10 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Game createGame(String modeName) {
+    public Game createGame(String modeName, String source) {
         Game game = new Game();
         game.setGameMode(modeName);
+        game.setSource(source);
         return gameRepository.save(game);
     }
 

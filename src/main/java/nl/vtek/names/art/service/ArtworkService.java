@@ -1,12 +1,12 @@
 package nl.vtek.names.art.service;
 
-import nl.vtek.names.art.client.ArticClient;
 import nl.vtek.names.art.dto.ArtworkDetailsResponse;
 import nl.vtek.names.art.dto.ArtworkStatsListResponse;
 import nl.vtek.names.art.dto.ArtworkStatsResponse;
 import nl.vtek.names.art.mapper.ArtworkMapper;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.art.repository.ArtworkRepository;
+import nl.vtek.names.art.source.ArtSource;
 import nl.vtek.names.game.exception.GameNotFoundException;
 import nl.vtek.names.game.model.Card;
 import nl.vtek.names.game.model.Game;
@@ -22,16 +22,13 @@ import java.util.UUID;
 @Service
 public class ArtworkService {
 
-    private final ArticClient articClient;
     private final ArtworkMapper artworkMapper;
     private final ArtworkRepository artworkRepository;
     private final GameRepository gameRepository;
 
-    public ArtworkService(ArticClient articClient,
-                          ArtworkMapper artworkMapper,
+    public ArtworkService(ArtworkMapper artworkMapper,
                           ArtworkRepository artworkRepository,
                           GameRepository gameRepository) {
-        this.articClient = articClient;
         this.artworkMapper = artworkMapper;
         this.artworkRepository = artworkRepository;
         this.gameRepository = gameRepository;
@@ -70,23 +67,24 @@ public class ArtworkService {
         artworkRepository.saveAll(toUpdate);
     }
 
-    public List<Artwork> fetchAndSaveArtworks(int size) {
-        List<Artwork> fetched = fetchArtworks(size + 4);
+    public List<Artwork> fetchAndSaveArtworks(int size, ArtSource source) {
+        List<Artwork> fetched = fetchArtworks(size + 4, source);
         List<Artwork> saved = new ArrayList<>(sendArtworksToDatabase(fetched, size));
         Collections.shuffle(saved);
         return saved;
     }
 
-    private List<Artwork> fetchArtworks(int size) {
-        return articClient.searchArtworks(size).pulledData().stream()
-                .map(artworkMapper::toEntity)
-                .filter(artwork -> artwork.getId() != null)
+    private List<Artwork> fetchArtworks(int size, ArtSource source) {
+        return source.fetchArtworks(size).stream()
+                .map(dto -> artworkMapper.toEntity(dto, source.key()))
+                .filter(artwork -> artwork.getExternalImageId() != null)
                 .toList();
     }
 
     private List<Artwork> sendArtworksToDatabase(List<Artwork> artworks, int limit) {
         return artworks.stream()
-                .map(artwork -> artworkRepository.findById(artwork.getId())
+                .map(artwork -> artworkRepository
+                        .findBySourceAndExternalImageId(artwork.getSource(), artwork.getExternalImageId())
                         .orElseGet(() -> artworkRepository.save(artwork)))
                 .limit(limit)
                 .toList();
