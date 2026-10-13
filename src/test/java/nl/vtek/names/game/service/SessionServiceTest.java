@@ -131,6 +131,17 @@ class SessionServiceTest {
     }
 
     @Test
+    void finish_withoutFindingACard_addsNoBonus() {
+        Session session = session(0, 0, 0);
+        given(sessionRepository.findById(session.getId())).willReturn(Optional.of(session));
+        given(sessionRepository.save(session)).willReturn(session);
+
+        sessionService.finish(session.getId());
+
+        assertThat(session.getScore()).isZero();
+    }
+
+    @Test
     void finishIfAssassinated_oneAssassin_keepsPlaying() {
         Session session = session(0, 0, 1);
 

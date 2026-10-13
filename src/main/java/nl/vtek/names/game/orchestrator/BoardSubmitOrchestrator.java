@@ -33,10 +33,10 @@ public class BoardSubmitOrchestrator {
 
     @Transactional
     public void submit(Long gameId, BoardSubmitRequest request) {
+        scoreService.handleSpyScore(gameId, request.spyScore());
         cardService.updateCards(request.cardIds(), true);
         hintService.createHint(gameId, request.hintContent());
         artworkService.recordArtworkUsage(gameId);
         gameService.markReady(gameId);
-        scoreService.handleSpyScore(gameId, request.spyScore());
     }
 }
