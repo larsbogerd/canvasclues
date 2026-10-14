@@ -39,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -109,7 +110,8 @@ class GameFlowIntegrationTest {
         assertThat(games).anyMatch(game -> game.gameId().equals(gameId)
                 && "zonnebloem".equals(game.hint()) && "fake".equals(game.source()));
 
-        SessionResponse session = read(mockMvc.perform(post("/api/v1/session/{id}/start", gameId)),
+        SessionResponse session = read(mockMvc.perform(post("/api/v1/session/{id}/start", gameId))
+                        .andExpect(jsonPath("$.cards[*].type").doesNotExist()),
                 new TypeReference<>() {});
         assertThat(session.cards()).hasSize(16);
         assertThat(session.spymasterPickCount()).isEqualTo(3);
