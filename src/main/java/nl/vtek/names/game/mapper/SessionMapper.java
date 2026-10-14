@@ -22,7 +22,7 @@ public class SessionMapper {
         int spymasterPickCount = (int) cards.stream().filter(Card::isSpymasterPick).count();
         return new SessionResponse(
                 session.getId(),
-                cardMapper.toCardResponse(cards),
+                cardMapper.toSessionCardResponse(cards),
                 hint == null ? null : HintMapper.toHintResponse(hint),
                 spymasterPickCount
         );
