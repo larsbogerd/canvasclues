@@ -21,4 +21,13 @@ public interface ArtSource {
     default String imageUrlTemplate(String imageId) {
         return IiifUrlBuilder.template("/img/" + key(), imageId);
     }
+
+    /**
+     * Requests the board-size derivative once before the artwork enters the pool, for sources
+     * that render derivatives on demand. Returns false when the image can't be served, which
+     * keeps the artwork out of the pool.
+     */
+    default boolean warmImage(String imageId) {
+        return true;
+    }
 }

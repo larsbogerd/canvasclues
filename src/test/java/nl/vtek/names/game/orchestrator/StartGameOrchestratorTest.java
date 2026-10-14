@@ -53,7 +53,7 @@ class StartGameOrchestratorTest {
     private StartGameOrchestrator orchestrator;
 
     @Test
-    void startGame_fetchesArtworksFromTheResolvedSourceAndRecordsIt() {
+    void startGame_drawsArtworksFromTheResolvedSourceAndRecordsIt() {
         EasyModeStrategy mode = new EasyModeStrategy();
         ArtSource source = mock(ArtSource.class);
         given(source.key()).willReturn("met");
@@ -63,7 +63,7 @@ class StartGameOrchestratorTest {
         List<CardResponse> responses = List.of();
         given(gameModeRegistry.getMode("makkelijk")).willReturn(mode);
         given(artSources.resolve("met")).willReturn(source);
-        given(artworkService.fetchAndSaveArtworks(16, source)).willReturn(artworks);
+        given(artworkService.drawArtworks(16, source)).willReturn(artworks);
         given(gameService.createGame("makkelijk", "met")).willReturn(game);
         given(cardService.buildBoard(game, artworks, mode)).willReturn(cards);
         given(cardMapper.toCardResponse(cards)).willReturn(responses);
@@ -86,7 +86,7 @@ class StartGameOrchestratorTest {
         ArtSource source = mock(ArtSource.class);
         given(gameModeRegistry.getMode("makkelijk")).willReturn(new EasyModeStrategy());
         given(artSources.resolve(null)).willReturn(source);
-        given(artworkService.fetchAndSaveArtworks(any(Integer.class), any())).willThrow(new RuntimeException("museum down"));
+        given(artworkService.drawArtworks(any(Integer.class), any())).willThrow(new RuntimeException("museum down"));
 
         assertThatThrownBy(() -> orchestrator.startGame("makkelijk", null)).hasMessage("museum down");
 

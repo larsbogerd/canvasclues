@@ -43,7 +43,7 @@ public class StartGameOrchestrator {
     public List<CardResponse> startGame(String modeName, String requestedSource) {
         GameMode gameMode = gameModeRegistry.getMode(modeName);
         ArtSource source = artSources.resolve(requestedSource);
-        List<Artwork> artworks = artworkService.fetchAndSaveArtworks(gameMode.boardSize(), source);
+        List<Artwork> artworks = artworkService.drawArtworks(gameMode.boardSize(), source);
         Game game = gameService.createGame(modeName, source.key());
         List<Card> cards = cardService.buildBoard(game, artworks, gameMode);
         return cardMapper.toCardResponse(cards);

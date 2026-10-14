@@ -2,6 +2,7 @@ package nl.vtek.names.art.client;
 
 import nl.vtek.names.art.source.SourceArtwork;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -11,9 +12,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withResourceNotFound;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class ArticClientTest {
@@ -43,6 +46,23 @@ class ArticClientTest {
         server.verify();
         assertThat(artworks).extracting(SourceArtwork::imageId).containsExactly(IMAGE_ID, null);
         assertThat(artworks.getFirst().styleTitle()).isEqualTo("Impressionism");
+    }
+
+    @Test
+    void warmImage_requestsTheBoardSizeWithTheRefererCloudflareWants() {
+        server.expect(requestTo("https://www.artic.edu/iiif/2/%s/full/500,/0/default.jpg".formatted(IMAGE_ID)))
+                .andExpect(header(HttpHeaders.REFERER, "https://www.artic.edu/"))
+                .andRespond(withSuccess(new byte[] {1}, MediaType.IMAGE_JPEG));
+
+        assertThat(client.warmImage(IMAGE_ID)).isTrue();
+        server.verify();
+    }
+
+    @Test
+    void warmImage_reissuedImageId_keepsTheArtworkOutOfThePool() {
+        server.expect(requestTo(startsWith("https://www.artic.edu/iiif/2/"))).andRespond(withResourceNotFound());
+
+        assertThat(client.warmImage(IMAGE_ID)).isFalse();
     }
 
     @Test

@@ -5,6 +5,7 @@ import nl.vtek.names.game.exception.UnknownArtSourceException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public class ArtSourceRegistry {
 
     public ArtSource resolve(String requestedKey) {
         return get(requestedKey == null || requestedKey.isBlank() ? defaultKey : requestedKey);
+    }
+
+    public Collection<ArtSource> all() {
+        return sources.values();
     }
 
     public ArtSource get(String key) {

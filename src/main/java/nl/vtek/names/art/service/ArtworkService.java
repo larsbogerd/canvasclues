@@ -67,7 +67,30 @@ public class ArtworkService {
         artworkRepository.saveAll(toUpdate);
     }
 
-    public List<Artwork> fetchAndSaveArtworks(int size, ArtSource source) {
+    /** Draws a board from the pool, falling back to the source itself while the pool is too small. */
+    public List<Artwork> drawArtworks(int size, ArtSource source) {
+        List<Artwork> pooled = artworkRepository.findRandomBySource(source.key(), size);
+        if (pooled.size() == size) {
+            return pooled;
+        }
+        return fetchAndSaveArtworks(size, source);
+    }
+
+    public int topUpPool(ArtSource source, int targetSize, int batchSize) {
+        if (artworkRepository.countBySource(source.key()) >= targetSize) {
+            return 0;
+        }
+        return fetchArtworks(batchSize, source).stream()
+                .filter(artwork -> artworkRepository
+                        .findBySourceAndExternalImageId(artwork.getSource(), artwork.getExternalImageId())
+                        .isEmpty())
+                .filter(artwork -> source.warmImage(artwork.getExternalImageId()))
+                .map(artworkRepository::save)
+                .toList()
+                .size();
+    }
+
+    private List<Artwork> fetchAndSaveArtworks(int size, ArtSource source) {
         List<Artwork> fetched = fetchArtworks(size + 4, source);
         List<Artwork> saved = new ArrayList<>(sendArtworksToDatabase(fetched, size));
         Collections.shuffle(saved);
