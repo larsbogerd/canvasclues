@@ -165,6 +165,8 @@ Key properties:
 - `server.port=8082` – application port
 - `spring.jpa.hibernate.ddl-auto=create` – recreates tables on startup
 - `spring.sql.init.mode=always` + `spring.jpa.defer-datasource-initialization=true` – runs `data.sql` after Hibernate sets up the schema
+- `art.source` – the museum a board comes from when the request names none (`cma`)
+- `art.pool.target-size` / `art.pool.refill-delay` / `art.pool.enabled` – the background artwork pool (see the README)
 
 ### Setup your configuration
 

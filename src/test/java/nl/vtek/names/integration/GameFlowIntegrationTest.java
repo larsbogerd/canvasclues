@@ -54,6 +54,12 @@ class GameFlowIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private FakeSource fakeSource;
+
+    @Autowired
+    private FakeSource pooledSource;
+
+    @Autowired
     private ArtworkRepository artworkRepository;
 
     @Autowired
@@ -138,6 +144,32 @@ class GameFlowIntegrationTest {
         assertThat(pickedArtwork.getTimesLoaded()).isEqualTo(1);
         assertThat(pickedArtwork.getTimesSpymasterPick()).isEqualTo(1);
         assertThat(pickedArtwork.getTimesCorrectGuess()).isEqualTo(1);
+    }
+
+    @Test
+    void startGame_drawsFromThePoolWithoutCallingTheMuseum() throws Exception {
+        String source = "pooled";
+        for (int i = 0; i < 20; i++) {
+            artworkRepository.save(new Artwork(source, "pooled-" + i, "Pooled " + i, "Artist", "1900",
+                    null, null, null, null, null, null, null));
+        }
+        int callsBefore = pooledSource.calls.get();
+
+        List<CardResponse> board = startGame("moeilijk", source);
+
+        assertThat(board).hasSize(16).allMatch(card -> card.source().equals(source));
+        assertThat(board).extracting(CardResponse::artworkId).doesNotHaveDuplicates();
+        assertThat(pooledSource.calls.get()).isEqualTo(callsBefore);
+    }
+
+    @Test
+    void startGame_emptyPool_fetchesLiveAndKeepsTheArtworks() throws Exception {
+        int callsBefore = fakeSource.calls.get();
+
+        startGame("gemiddeld", "fake");
+
+        assertThat(fakeSource.calls.get()).isEqualTo(callsBefore + 1);
+        assertThat(artworkRepository.countBySource("fake")).isEqualTo(16);
     }
 
     @Test
@@ -230,6 +262,11 @@ class GameFlowIntegrationTest {
         @Bean
         FakeSource fakeSource() {
             return new FakeSource("fake");
+        }
+
+        @Bean
+        FakeSource pooledSource() {
+            return new FakeSource("pooled");
         }
     }
 

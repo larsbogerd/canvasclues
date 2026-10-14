@@ -6,6 +6,7 @@ import nl.vtek.names.art.source.ArtSource;
 import nl.vtek.names.art.source.SourceArtwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -49,6 +50,27 @@ public class ArticClient implements ArtSource {
     @Override
     public String key() {
         return SOURCE_KEY;
+    }
+
+    /**
+     * Artic renders IIIF derivatives on first request (up to ~14s cold, ~0.2s warm), and its
+     * Cloudflare 403s image requests without this Referer. The size must match
+     * CARD_IMAGE_SIZE in the front-end's ImageUrl.js, or the board still gets a cold render.
+     */
+    @Override
+    public boolean warmImage(String imageId) {
+        try {
+            restClient
+                    .get()
+                    .uri("https://www.artic.edu/iiif/2/{id}/full/500,/0/default.jpg", imageId)
+                    .header(HttpHeaders.REFERER, "https://www.artic.edu/")
+                    .retrieve()
+                    .toBodilessEntity();
+            return true;
+        } catch (RestClientException e) {
+            log.warn("Artic image {} failed to warm: {}", imageId, e.getMessage());
+            return false;
+        }
     }
 
     @Override

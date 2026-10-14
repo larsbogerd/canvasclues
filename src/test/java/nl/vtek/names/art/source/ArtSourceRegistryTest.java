@@ -36,6 +36,11 @@ class ArtSourceRegistryTest {
     }
 
     @Test
+    void all_listsEverySource() {
+        assertThat(registry.all()).extracting(ArtSource::key).containsExactlyInAnyOrder("artic", "cma", "met");
+    }
+
+    @Test
     void imageUrlTemplate_iiifSourceGetsASizePlaceholder() {
         assertThat(registry.imageUrlTemplate(artwork("artic", "abc-123")))
                 .isEqualTo("/img/artic/abc-123/full/{size}/0/default.jpg");

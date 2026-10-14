@@ -13,6 +13,7 @@
 // The board tile and the art-info panel must ask for the same size: for IIIF sources each
 // size is a separate derivative the museum renders on first request, so two sizes meant two
 // cold renders per artwork, and the panel could finish before the tile it belongs to.
+// ArticClient.warmImage pre-renders this size for pooled artworks; change both together.
 export const CARD_IMAGE_SIZE = '500,';
 
 export function imageUrl(template, size) {
