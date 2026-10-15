@@ -53,11 +53,13 @@ class ArtworkServiceTest {
         artworkService = new ArtworkService(
                 new ArtworkMapper(mock(ArtSourceRegistry.class)), artworkRepository, gameRepository);
         lenient().when(source.key()).thenReturn("met");
+        lenient().when(source.minPoolSize()).thenReturn(64);
     }
 
     @Test
-    void drawArtworks_fullPool_neverCallsTheMuseum() {
+    void drawArtworks_poolAtItsMinimum_neverCallsTheMuseum() {
         List<Artwork> pooled = artworks(16);
+        given(artworkRepository.countBySource("met")).willReturn(64L);
         given(artworkRepository.findRandomBySource("met", 16)).willReturn(pooled);
 
         assertThat(artworkService.drawArtworks(16, source)).isSameAs(pooled);
@@ -66,8 +68,8 @@ class ArtworkServiceTest {
     }
 
     @Test
-    void drawArtworks_shortPool_fetchesLiveAndStoresTheResult() {
-        given(artworkRepository.findRandomBySource("met", 16)).willReturn(artworks(5));
+    void drawArtworks_poolBelowItsMinimum_fetchesLiveAndStoresTheResult() {
+        given(artworkRepository.countBySource("met")).willReturn(40L);
         given(source.fetchArtworks(20)).willReturn(sourceArtworks(20));
         given(artworkRepository.findBySourceAndExternalImageId(eq("met"), anyString())).willReturn(Optional.empty());
         given(artworkRepository.save(any(Artwork.class))).willAnswer(call -> call.getArgument(0));
@@ -81,7 +83,6 @@ class ArtworkServiceTest {
     @Test
     void drawArtworks_liveFetch_reusesArtworksAlreadyStored() {
         Artwork stored = new Artwork();
-        given(artworkRepository.findRandomBySource("met", 2)).willReturn(List.of());
         given(source.fetchArtworks(6)).willReturn(sourceArtworks(2));
         given(artworkRepository.findBySourceAndExternalImageId("met", "img-0")).willReturn(Optional.of(stored));
         given(artworkRepository.findBySourceAndExternalImageId("met", "img-1")).willReturn(Optional.empty());
@@ -95,7 +96,6 @@ class ArtworkServiceTest {
 
     @Test
     void drawArtworks_liveFetch_dropsArtworksWithoutAnImage() {
-        given(artworkRepository.findRandomBySource("met", 2)).willReturn(List.of());
         SourceArtwork imageless = new SourceArtwork(null, "t", null, null, null, null, null, null, null, null, null);
         List<SourceArtwork> fetched = new ArrayList<>(sourceArtworks(2));
         fetched.addFirst(imageless);
@@ -112,7 +112,7 @@ class ArtworkServiceTest {
     void topUpPool_fullPool_doesNothing() {
         given(artworkRepository.countBySource("met")).willReturn(200L);
 
-        assertThat(artworkService.topUpPool(source, 200, 16)).isZero();
+        assertThat(artworkService.topUpPool(source, 200)).isZero();
 
         verify(source, never()).fetchArtworks(anyInt());
     }
@@ -120,6 +120,7 @@ class ArtworkServiceTest {
     @Test
     void topUpPool_storesNewWarmedArtworksOnly() {
         given(artworkRepository.countBySource("met")).willReturn(10L);
+        given(source.poolBatchSize()).willReturn(3);
         given(source.fetchArtworks(3)).willReturn(sourceArtworks(3));
         given(artworkRepository.findBySourceAndExternalImageId("met", "img-0")).willReturn(Optional.of(new Artwork()));
         given(artworkRepository.findBySourceAndExternalImageId("met", "img-1")).willReturn(Optional.empty());
@@ -128,7 +129,7 @@ class ArtworkServiceTest {
         given(source.warmImage("img-2")).willReturn(true);
         given(artworkRepository.save(any(Artwork.class))).willAnswer(call -> call.getArgument(0));
 
-        assertThat(artworkService.topUpPool(source, 200, 3)).isEqualTo(1);
+        assertThat(artworkService.topUpPool(source, 200)).isEqualTo(1);
 
         verify(source, never()).warmImage("img-0");
         verify(artworkRepository).save(any(Artwork.class));

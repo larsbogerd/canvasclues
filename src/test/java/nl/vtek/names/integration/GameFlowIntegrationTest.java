@@ -147,7 +147,7 @@ class GameFlowIntegrationTest {
     @Test
     void startGame_drawsFromThePoolWithoutCallingTheMuseum() throws Exception {
         String source = "pooled";
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 64; i++) {
             artworkRepository.save(new Artwork(source, "pooled-" + i, "Pooled " + i, "Artist", "1900",
                     null, null, null, null, null, null, null));
         }
@@ -158,6 +158,19 @@ class GameFlowIntegrationTest {
         assertThat(board).hasSize(16).allMatch(card -> card.source().equals(source));
         assertThat(board).extracting(CardResponse::artworkId).doesNotHaveDuplicates();
         assertThat(pooledSource.calls.get()).isEqualTo(callsBefore);
+    }
+
+    @Test
+    void startGame_poolOfOneBoard_stillFetchesLive() throws Exception {
+        for (int i = 0; i < 16; i++) {
+            artworkRepository.save(new Artwork("pooled", "pooled-" + i, "Pooled " + i, "Artist", "1900",
+                    null, null, null, null, null, null, null));
+        }
+        int callsBefore = pooledSource.calls.get();
+
+        startGame("makkelijk", "pooled");
+
+        assertThat(pooledSource.calls.get()).isEqualTo(callsBefore + 1);
     }
 
     @Test

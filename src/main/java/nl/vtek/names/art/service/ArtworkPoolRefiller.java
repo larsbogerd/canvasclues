@@ -31,10 +31,9 @@ public class ArtworkPoolRefiller {
 
     @Scheduled(fixedDelayString = "${art.pool.refill-delay}")
     public void refill() {
-        int batchSize = 16;
         for (ArtSource source : artSources.all()) {
             try {
-                int added = artworkService.topUpPool(source, targetSize, batchSize);
+                int added = artworkService.topUpPool(source, targetSize);
                 if (added > 0) {
                     log.info("Added {} artworks to the {} pool", added, source.key());
                 }

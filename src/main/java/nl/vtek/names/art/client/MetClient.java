@@ -44,6 +44,21 @@ public class MetClient implements ArtSource {
         return "/img/%s/%s".formatted(SOURCE_KEY, imageId);
     }
 
+    /**
+     * Every artwork costs the Met a request, and its bot protection blocks after ~80 in a couple
+     * of minutes. Small batches keep the refill slow, and a lower minimum hands boards to the
+     * pool sooner so fewer of them are fetched live while it fills.
+     */
+    @Override
+    public int poolBatchSize() {
+        return 16;
+    }
+
+    @Override
+    public int minPoolSize() {
+        return 32;
+    }
+
     @Override
     public List<SourceArtwork> fetchArtworks(int size) {
         return searchArtworks(size).stream()

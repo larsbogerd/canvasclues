@@ -69,18 +69,18 @@ public class ArtworkService {
 
     /** Draws a board from the pool, falling back to the source itself while the pool is too small. */
     public List<Artwork> drawArtworks(int size, ArtSource source) {
-        List<Artwork> pooled = artworkRepository.findRandomBySource(source.key(), size);
-        if (pooled.size() == size) {
-            return pooled;
+        long pooled = artworkRepository.countBySource(source.key());
+        if (pooled >= Math.max(size, source.minPoolSize())) {
+            return artworkRepository.findRandomBySource(source.key(), size);
         }
         return fetchAndSaveArtworks(size, source);
     }
 
-    public int topUpPool(ArtSource source, int targetSize, int batchSize) {
+    public int topUpPool(ArtSource source, int targetSize) {
         if (artworkRepository.countBySource(source.key()) >= targetSize) {
             return 0;
         }
-        return fetchArtworks(batchSize, source).stream()
+        return fetchArtworks(source.poolBatchSize(), source).stream()
                 .filter(artwork -> artworkRepository
                         .findBySourceAndExternalImageId(artwork.getSource(), artwork.getExternalImageId())
                         .isEmpty())
