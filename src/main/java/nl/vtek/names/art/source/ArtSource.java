@@ -30,4 +30,17 @@ public interface ArtSource {
     default boolean warmImage(String imageId) {
         return true;
     }
+
+    /** How many artworks one pool top-up asks the source for. */
+    default int poolBatchSize() {
+        return 100;
+    }
+
+    /**
+     * Boards are drawn from the pool only once it holds this many artworks; below that they
+     * are fetched live. Drawing from a pool barely bigger than a board repeats the same board.
+     */
+    default int minPoolSize() {
+        return 64;
+    }
 }

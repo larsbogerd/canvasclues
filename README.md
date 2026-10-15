@@ -70,8 +70,9 @@ Documentation:
 
 Boards are not fetched from a museum while the player waits. A background job tops up a
 pool of stored artworks per museum, and a new board draws 16 of them at random. Only while
-a museum's pool holds fewer than 16 artworks (e.g. right after the `dev` profile wiped the
-database) is a board fetched live, and those artworks join the pool too.
+a museum's pool is still small (fewer than 64 artworks, e.g. right after the `dev` profile
+wiped the database) is a board fetched live, and those artworks join the pool too. Drawing
+from a pool barely bigger than one board would deal the same paintings every game.
 
 For Artic the job also requests each image once at board size before the artwork enters the
 pool, so players never wait on a cold IIIF render, and artworks whose image no longer loads
@@ -80,7 +81,7 @@ are left out.
 | Environment variable | Default | Meaning |
 |---|---|---|
 | `ART_POOL_TARGET_SIZE` | `200` | artworks per museum before the job stops fetching |
-| `ART_POOL_REFILL_DELAY` | `60s` | pause between top-ups (16 artworks per museum each) |
+| `ART_POOL_REFILL_DELAY` | `60s` | pause between top-ups (100 artworks per museum each, 16 for the Met) |
 | `ART_POOL_ENABLED` | `true` | turn the background job off |
 
 ---

@@ -9,8 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,10 +28,10 @@ class ArtworkPoolRefillerTest {
         ArtSource cma = mock(ArtSource.class);
         given(artic.key()).willReturn("artic");
         given(artSources.all()).willReturn(List.of(artic, cma));
-        given(artworkService.topUpPool(eq(artic), eq(150), anyInt())).willThrow(new RuntimeException("521"));
+        given(artworkService.topUpPool(artic, 150)).willThrow(new RuntimeException("521"));
 
         new ArtworkPoolRefiller(artSources, artworkService, 150).refill();
 
-        verify(artworkService).topUpPool(eq(cma), eq(150), anyInt());
+        verify(artworkService).topUpPool(cma, 150);
     }
 }
