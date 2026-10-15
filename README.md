@@ -71,7 +71,7 @@ Documentation:
 Boards are not fetched from a museum while the player waits. A background job tops up a
 pool of stored artworks per museum, and a new board draws 16 of them at random. Only while
 a museum's pool is still small (fewer than 64 artworks, e.g. right after the `dev` profile
-wiped the database) is a board fetched live, and those artworks join the pool too. Drawing
+wiped the database; 16 for the Met, to stay under its bot protection) is a board fetched live, and those artworks join the pool too. Drawing
 from a pool barely bigger than one board would deal the same paintings every game.
 
 For Artic the job also requests each image once at board size before the artwork enters the

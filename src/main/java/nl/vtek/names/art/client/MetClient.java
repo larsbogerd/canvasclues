@@ -46,8 +46,9 @@ public class MetClient implements ArtSource {
 
     /**
      * Every artwork costs the Met a request, and its bot protection blocks after ~80 in a couple
-     * of minutes. Small batches keep the refill slow, and a lower minimum hands boards to the
-     * pool sooner so fewer of them are fetched live while it fills.
+     * of minutes. Small batches keep the refill slow, and the minimum is one board: three live
+     * boards in a row plus a refill (~100 requests) got the whole stack blocked, which is worse
+     * than repeating paintings for the first minutes after a wipe.
      */
     @Override
     public int poolBatchSize() {
@@ -56,7 +57,7 @@ public class MetClient implements ArtSource {
 
     @Override
     public int minPoolSize() {
-        return 32;
+        return 16;
     }
 
     @Override
