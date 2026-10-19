@@ -22,6 +22,8 @@ export const selectedSource = {
         current = key
         try {
             localStorage.setItem(STORAGE_KEY, key)
-        } catch {}
+        } catch {
+            // Storage blocked (private mode): the choice lasts for this visit only.
+        }
     },
 }
