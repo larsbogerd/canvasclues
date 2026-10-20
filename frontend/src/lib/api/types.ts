@@ -1,5 +1,6 @@
 export type SourceKey = 'artic' | 'cma' | 'met'
-export type GameMode = 'makkelijk' | 'gemiddeld' | 'moeilijk'
+export const GAME_MODES = ['makkelijk', 'gemiddeld', 'moeilijk'] as const
+export type GameMode = (typeof GAME_MODES)[number]
 export type CardType = 'PLAYABLE' | 'ASSASSIN'
 
 export interface Card {

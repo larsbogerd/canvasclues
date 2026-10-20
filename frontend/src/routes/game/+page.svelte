@@ -10,7 +10,7 @@
     import curatorImage from '#lib/images/Curator2.png'
     import visitorImage from '#lib/images/Visitor2.png'
 
-    let difficulty: GameMode = $state('makkelijk')
+    let difficulty = $state<GameMode>('makkelijk')
 </script>
 
 <div class="page">
@@ -27,7 +27,11 @@
                 description="Stel een nieuwe collectie samen en begeleid bezoekers met jouw hints"
                 image={curatorImage}
                 onclick={() =>
-                    goto(resolve('/game/curator/[difficulty]', { difficulty }))}
+                    goto(
+                        resolve('/game/curator/[difficulty=gameMode]', {
+                            difficulty,
+                        }),
+                    )}
             >
                 <DifficultyPicker bind:value={difficulty} />
             </RoleCard>

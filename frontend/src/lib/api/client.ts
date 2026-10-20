@@ -55,8 +55,6 @@ export const api = {
 
     startSession: (gameId: number) =>
         request<Session>('POST', `/session/${gameId}/start`),
-    randomGameId: (gameMode: GameMode) =>
-        request<number>('POST', `/session/start/random/${gameMode}`),
     guess: (sessionId: string, cardId: string) =>
         request<GuessResult>('POST', `/session/${sessionId}/guess/${cardId}`),
     finishSession: (sessionId: string) =>

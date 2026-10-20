@@ -1,13 +1,11 @@
 <script lang="ts">
-    import type { GameMode } from '#lib/api/types.ts'
-
-    const MODES: GameMode[] = ['makkelijk', 'gemiddeld', 'moeilijk']
+    import { GAME_MODES, type GameMode } from '#lib/api/types.ts'
 
     let { value = $bindable() }: { value: GameMode } = $props()
 </script>
 
 <span class="modes" role="radiogroup" aria-label="Moeilijkheid">
-    {#each MODES as mode (mode)}
+    {#each GAME_MODES as mode (mode)}
         <button
             type="button"
             class:active={value === mode}
