@@ -3,6 +3,7 @@ package nl.vtek.names.game.mapper;
 import nl.vtek.names.art.model.Artwork;
 import nl.vtek.names.art.source.ArtSourceRegistry;
 import nl.vtek.names.game.dto.CardResponse;
+import nl.vtek.names.game.dto.SessionCardResponse;
 import nl.vtek.names.game.model.Card;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +37,20 @@ public class CardMapper {
         }
 
         return responses;
+    }
+
+    public List<SessionCardResponse> toSessionCardResponse(List<Card> cards) {
+        return toCardResponse(cards).stream()
+                .map(card -> new SessionCardResponse(
+                        card.id(),
+                        card.gameId(),
+                        card.imageUrlTemplate(),
+                        card.title(),
+                        card.artistDisplay(),
+                        card.artworkId(),
+                        card.altText(),
+                        card.source()
+                ))
+                .toList();
     }
 }

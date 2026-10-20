@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public record SessionResponse(
         UUID sessionId,
-        List<CardResponse> cards,
+        List<SessionCardResponse> cards,
         HintResponse hint,
         int spymasterPickCount
 )

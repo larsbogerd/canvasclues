@@ -161,6 +161,20 @@ docker compose down
 
 ---
 
+## Run the tests
+
+```bash
+./mvnw test
+```
+
+The tests need neither Docker nor network access: they run against an in-memory H2
+database (the `test` profile in `src/test/resources`) and never call the museum APIs. The
+museum clients are tested with `MockRestServiceServer` against JSON in each museum's response shape, and the
+integration test plays a whole game through the REST API with a fake museum. GitHub Actions
+runs the same command on every pull request.
+
+---
+
 # Contribute
 
 ## Branching

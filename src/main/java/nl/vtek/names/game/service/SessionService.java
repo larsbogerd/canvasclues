@@ -82,7 +82,7 @@ public class SessionService {
     public FinishSessionResponse finish(UUID sessionId) {
         Session session = getActiveSession(sessionId);
 
-        if (session.getWrongGuesses() == 0 && session.getAssassinGuesses() == 0) {
+        if (session.getScore() > 0 && session.getWrongGuesses() == 0 && session.getAssassinGuesses() == 0) {
             session.setScore(session.getScore() + 20);
         }
 
