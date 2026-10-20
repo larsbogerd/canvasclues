@@ -1,0 +1,101 @@
+.modal-title {
+    font-family: var(--font-main), serif;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: center;
+    margin: 0 0 clamp(12px, 1.5vw, 24px);
+}
+
+.modal-sub-title {
+    font-family: var(--font-secondary), serif;
+    font-size: clamp(0.5rem, 0.8vw, 0.8rem);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0 0 clamp(12px, 1.5vw, 24px);
+}
+
+.modal-body {
+    font-family: var(--font-secondary), sans-serif;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.modal-body p {
+    margin: 0 0 0.6em;
+}
+
+.modal-body--centered {
+    text-align: center;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid var(--button-border);
+    margin: clamp(16px, 2vw, 28px) 0;
+}
+
+.modal-stats {
+    display: flex;
+    justify-content: center;
+    gap: clamp(12px, 1.5vw, 24px);
+}
+
+.modal-stat {
+    flex: 1;
+    text-align: center;
+    padding: clamp(12px, 1.2vw, 20px);
+    background: var(--color-bg-base);
+    border-radius: 12px;
+}
+
+.modal-stat--solo {
+    max-width: clamp(160px, 16vw, 220px);
+    margin-inline: auto;
+}
+
+.modal-stat-value {
+    font-family: var(--font-main), serif;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.modal-stat-label {
+    font-family: var(--font-secondary), sans-serif;
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+    font-weight: 400;
+    color: var(--text-eyebrow);
+    margin-top: 4px;
+}
+
+.modal-detail {
+    font-family: var(--font-secondary), sans-serif;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    color: var(--text-eyebrow);
+    text-align: center;
+    margin-top: clamp(8px, 1vw, 14px);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 1vw, 16px);
+    margin-top: clamp(16px, 2vw, 32px);
+}
+
+.modal-actions button {
+    padding: 0.6rem 1.5rem;
+}
+
+.modal-actions button:not(:only-child) {
+    flex: 1;
+}
+
+.score {
+    color: var(--color-primary);
+}
