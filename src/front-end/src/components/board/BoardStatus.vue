@@ -12,18 +12,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['retry'])
-
-// A real card gets its size from its artwork image. An empty tile has no intrinsic size, so the
-// board column would shrink-wrap around it; a transparent image with one gives it the same room.
-const SIZER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'/%3E";
 </script>
 
 <template>
   <div class="board-status" :aria-busy="props.state === 'loading'">
     <div class="tiles" aria-hidden="true">
-      <div v-for="n in 16" :key="n" class="tile" :class="{ shimmer: props.state === 'loading' }">
-        <img class="sizer" :src="SIZER" alt=""/>
-      </div>
+      <div v-for="n in 16" :key="n" class="tile" :class="{ shimmer: props.state === 'loading' }"></div>
     </div>
 
     <div v-if="props.state === 'error'" class="error-card" role="alert">
@@ -52,12 +46,6 @@ const SIZER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   border-radius: 15%;
   background-color: var(--color-secondary);
   opacity: 0.7;
-}
-
-.sizer {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .shimmer {
