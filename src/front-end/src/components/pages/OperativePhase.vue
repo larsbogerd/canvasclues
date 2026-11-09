@@ -240,8 +240,12 @@ function handleInfoClicked(id) {
 .layout {
   --layout-height: 85vh;
   --layout-padding: 20px;
+  /* The board column gets a definite maximum instead of sizing from its content. Firefox counts
+     percentage-width images as zero width when sizing a column, so a content-sized board column
+     collapsed to nothing there; Chrome happened to use the images' natural size. */
+  --board-size: calc(var(--layout-height) - var(--layout-padding) * 2);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, var(--board-size)) auto;
   grid-template-rows: 1fr;
   align-items: start;
   gap: 32px;
@@ -252,9 +256,8 @@ function handleInfoClicked(id) {
 
 
 .grid {
-  justify-self: center;
+  width: 100%;
   height: 100%;
-  max-width: calc(var(--layout-height) - var(--layout-padding) * 2);
 }
 
 .sidebar {
